@@ -1,0 +1,101 @@
+namespace ca.mcgill.ecse.fashionstoremanagement.model;
+
+class FashionStoreManagement {
+  1 <@>- * User users;
+  1 <@>- * Employee employees;
+  1 <@>- * Customer customers;
+  1 <@>- 0..1 Manager manager;
+  1 <@>- * Order orders;
+  1 <@>- * Item items;
+  1 <@>- * SizedItem sizedItems;
+  1 <@>- * Shipment shipments;
+  1 <@>- * OrderItem orderItems;
+  1 <@>- * ShipmentItem shipmentItems;
+}
+
+class User {
+  unique username;
+  password;
+  name;
+  phoneNumber;
+}
+
+class UserRole {
+  abstract;
+}
+
+class Customer {
+  isA UserRole;
+  address;
+  Integer loyaltyPoints;
+}
+
+class Employee {
+  isA UserRole;
+}
+
+class Manager {
+  isA UserRole;
+}
+
+class Item {
+  unique name;
+  double price;
+  Integer loyaltyPoints;
+}
+
+class SpecialItem {
+  isA Item;
+  enum ItemAvailabilityType { seasonal, limitedEdition }
+  ItemAvailabilityType availabilityType;
+  Date startDate;
+  Date endDate;
+}
+
+class SizedItem {
+  autounique productId;
+  enum Size {XS, S, M, L, XL}
+  Size size;
+  Integer quantityInInventory;
+}
+
+class Order {
+  autounique orderNumber;
+  Date datePlaced;
+  enum DeliveryDeadline { sameDay, inOneDay, inTwoDays, inThreeDays }
+  DeliveryDeadline deadline;
+}
+
+class Shipment {
+  autounique shipmentNumber;
+  Date dateOrdered;
+  Date dateArrived;
+}
+
+associationClass OrderItem {
+  Integer quantity;
+  * Order order;
+  * SizedItem item;
+}
+
+associationClass ShipmentItem {
+  Integer quantity;
+  * Shipment shipment;
+  * SizedItem item;
+}
+
+association {
+  1 User user -- 0..2 UserRole roles;
+}
+
+association {
+  1 Customer orderPlacer -- * Order ordersPlaced;
+}
+
+association {
+  0..1 Employee orderAssignee -- * Order ordersAssigned;
+}
+
+association {
+  0..5 SizedItem sizedItems -- 1 Item item;
+}
