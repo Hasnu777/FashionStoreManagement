@@ -17,8 +17,9 @@ public class ItemController {
 		fm.addSizedItem(sizedItemToAdd);
 	}
 
-	public static void updateItemPrice(String name, double newPrice) throws FashionStoreException {
-		throw new RuntimeException("TODO");
+	public static void updateItemPrice(String name, double newPrice) {
+		Item itemToUpdate = Item.getWithName(name);
+		itemToUpdate.setPrice(newPrice);
 	}
 
 	public static void updateItemPoints(String name, int newPoints) throws FashionStoreException {
