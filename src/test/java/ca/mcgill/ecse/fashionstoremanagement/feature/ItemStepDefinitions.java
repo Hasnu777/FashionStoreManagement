@@ -49,9 +49,7 @@ public class ItemStepDefinitions extends StepDefinitions {
     @When("the manager attempts to add a new item with name {string}, price {double}, points {int}, size {string}, and quantity {int}")
     public void theManagerAttemptsToAddANewItemWithNamePricePricePointsPointsSizeAndQuantityQuantity(String name, double price, int points, String size, int quantity) {
         try {
-            Item item = this.getSystem().addItem(name, price, points);
-            SizedItem.Size sizeEnum = SizedItem.Size.valueOf(size);
-            item.addSizedItem(sizeEnum, quantity, this.getSystem());
+            ItemController.addItem(name, price, points, size, quantity);
         }
         catch (FashionStoreException e) {
             StepDefinitions.error = e;
@@ -61,8 +59,7 @@ public class ItemStepDefinitions extends StepDefinitions {
     @When("the manager attempts to update the price of item {string} to {double}")
     public void theManagerAttemptsToUpdateThePriceOfItemToNewPrice(String name, double price) {
         try {
-            Item item = Item.getWithName(name);
-            item.setPrice(price);
+            ItemController.updateItemPrice(name, price);
         }
         catch (FashionStoreException e) {
             StepDefinitions.error = e;
@@ -72,8 +69,7 @@ public class ItemStepDefinitions extends StepDefinitions {
     @When("the manager attempts to update the point value of item {string} to {int}")
     public void theManagerAttemptsToUpdateThePointValueOfItemToNewPoints(String name, int points) {
         try {
-            Item item = Item.getWithName(name);
-            item.setLoyaltyPoints(points);
+            ItemController.updateItemPoints(name, points);
         }
         catch (FashionStoreException e) {
             StepDefinitions.error = e;
@@ -83,8 +79,7 @@ public class ItemStepDefinitions extends StepDefinitions {
     @When("the manager attempts to delete the item {string}")
     public void theManagerAttemptsToDeleteTheItem(String name) {
         try {
-            Item item = Item.getWithName(name);
-            item.delete();
+            ItemController.deleteItem(name);
         }
         catch (FashionStoreException e) {
             StepDefinitions.error = e;
@@ -135,7 +130,7 @@ public class ItemStepDefinitions extends StepDefinitions {
         assertNotNull(item, "there should be an item with the given name");
 
         SizedItem.Size sizeEnum = SizedItem.Size.valueOf(size);
-        assertNotNull(size, "the size should be a valid value");
+        assertNotNull(sizeEnum, "the size should be a valid value");
 
         SizedItem itemFound = null;
         for (SizedItem s : item.getSizedItems()) {
