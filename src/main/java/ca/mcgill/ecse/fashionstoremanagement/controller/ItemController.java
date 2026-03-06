@@ -37,16 +37,31 @@ public class ItemController {
 
 	public static void updateItemPrice(String name, double newPrice) {
 		Item itemToUpdate = Item.getWithName(name);
+		if (itemToUpdate == null) {
+			throw new FashionStoreException("there is no item called \"" + name + "\"");
+		}
+		if (newPrice <= 0) {
+			throw new FashionStoreException("price must be positive");
+		}
 		itemToUpdate.setPrice(newPrice);
 	}
 
 	public static void updateItemPoints(String name, int newPoints) {
 		Item itemToUpdate = Item.getWithName(name);
+		if (itemToUpdate == null) {
+			throw new FashionStoreException("there is no item called \"" + name + "\"");
+		}
+		if (newPoints < 1 || newPoints > 5) {
+			throw new FashionStoreException("points must be between one and five");
+		}
 		itemToUpdate.setLoyaltyPoints(newPoints);
 	}
 
 	public static void deleteItem(String name) throws FashionStoreException {
 		Item itemToDelete = Item.getWithName(name);
+		if (itemToDelete == null) {
+			throw new FashionStoreException("there is no item called \"" + name + "\"");
+		}
 		itemToDelete.delete();
 	}
 
