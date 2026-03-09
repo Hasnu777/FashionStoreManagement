@@ -99,14 +99,14 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @When("the manager attempts to delete the shipment with ID {string}")
     public void the_manager_attempts_to_delete_the_shipment_with_id(String id) {
-            try{
-                int shipmentNumber = shipmentIdToNumber.get(id.trim());
-                ShipmentController.deleteShipment(shipmentNumber);
+        try{
+            int shipmentNumber = shipmentIdToNumber.get(id.trim());
+            ShipmentController.deleteShipment(shipmentNumber);
 
-            }
-            catch (FashionStoreException e){
-                StepDefinitions.error = e;
-            }
+        }
+        catch (FashionStoreException e){
+            StepDefinitions.error = e;
+        }
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -114,13 +114,13 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @When("the manager attempts to delete the non-existent shipment with shipment number {int}")
     public void the_manager_attempts_to_delete_the_non_existent_shipment_with_shipment_number(Integer number) {
-            try {
-                ShipmentController.deleteShipment(number);
-            }
-            catch(FashionStoreException e){
-                StepDefinitions.error = e;
+        try {
+            ShipmentController.deleteShipment(number);
+        }
+        catch(FashionStoreException e){
+            StepDefinitions.error = e;
 
-            }
+        }
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -130,13 +130,13 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @When("the manager attempts to add sized item {string} of size {string} to the shipment with ID {int}")
     public void theManagerAttemptsToAddSizedItemOfSizeToTheShipmentWithID(String itemName, String sizeStr, Integer shipmentId) {
-            try{
-                ShipmentController.addSizedItemToShipment(shipmentId, itemName, sizeStr);
+        try{
+            ShipmentController.addSizedItemToShipment(shipmentId, itemName, sizeStr);
 
-            }
-            catch(FashionStoreException e){
-                StepDefinitions.error = e;
-            }
+        }
+        catch(FashionStoreException e){
+            StepDefinitions.error = e;
+        }
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -145,13 +145,13 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @When("the manager attempts to set the quantity of sized item {string} of size {string} in the shipment with ID {int} to {int}")
     public void theManagerAttemptsToSetTheQuantityOfSizedItemOfSizeInTheShipmentWithIDShipmentIdToNewQty(String item, String size, int shipmentId, int newQuantity) {
-            try{
-                ShipmentController.updateQuantityInShipment(shipmentId, item, size, newQuantity);
+        try{
+            ShipmentController.updateQuantityInShipment(shipmentId, item, size, newQuantity);
 
-            }
-            catch(FashionStoreException e){
-                StepDefinitions.error = e;
-            }
+        }
+        catch(FashionStoreException e){
+            StepDefinitions.error = e;
+        }
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -159,9 +159,9 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("a new shipment shall exist")
     public void a_new_shipment_shall_exist() {
-            assertNotEquals(-1, lastCreatedShipmentNumber);
-            Shipment shipment = ShipmentController.getShipment(lastCreatedShipmentNumber);
-            assertNotNull(shipment);
+        assertNotEquals(-1, lastCreatedShipmentNumber);
+        Shipment shipment = ShipmentController.getShipment(lastCreatedShipmentNumber);
+        assertNotNull(shipment);
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -169,9 +169,9 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the newly-created shipment shall have {int} items")
     public void the_newly_created_shipment_shall_have_items(Integer expectedCount) {
-            Shipment shipment = ShipmentController.getShipment(lastCreatedShipmentNumber);
-            assertNotNull(shipment);
-            assertEquals(expectedCount, shipment.numberOfShipmentItems());
+        Shipment shipment = ShipmentController.getShipment(lastCreatedShipmentNumber);
+        assertNotNull(shipment);
+        assertEquals(expectedCount, shipment.numberOfShipmentItems());
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -179,9 +179,9 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the newly-created shipment shall not have been ordered yet")
     public void the_newly_created_shipment_shall_not_have_been_ordered_yet() {
-            Shipment shipment = ShipmentController.getShipment(lastCreatedShipmentNumber);
-            assertNotNull(shipment);
-            assertNull(shipment.getDateOrdered());
+        Shipment shipment = ShipmentController.getShipment(lastCreatedShipmentNumber);
+        assertNotNull(shipment);
+        assertNull(shipment.getDateOrdered());
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -189,12 +189,12 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("no shipment shall exist with ID {string}")
     public void no_shipment_shall_exist_with_id(String id) {
-            Integer shipmentNumber = shipmentIdToNumber.get(id.trim());
-            if(shipmentNumber == null){
-                return;
-            }
-            Shipment shipment = ShipmentController.getShipment(shipmentNumber);
-            assertNull(shipment);
+        Integer shipmentNumber = shipmentIdToNumber.get(id.trim());
+        if(shipmentNumber == null){
+            return;
+        }
+        Shipment shipment = ShipmentController.getShipment(shipmentNumber);
+        assertNull(shipment);
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -202,8 +202,8 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("no shipment shall exist with shipment number {int}")
     public void no_shipment_shall_exist_with_shipment_number(Integer number) {
-            Shipment shipment = ShipmentController.getShipment(number);
-            assertNull(shipment);
+        Shipment shipment = ShipmentController.getShipment(number);
+        assertNull(shipment);
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -211,9 +211,9 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("a shipment shall exist with ID {string}")
     public void a_shipment_shall_exist_with_id(String id) {
-            int shipmentNumber = shipmentIdToNumber.get(id.trim());
-            Shipment shipment = ShipmentController.getShipment(shipmentNumber);
-            assertNotNull(shipment);
+        int shipmentNumber = shipmentIdToNumber.get(id.trim());
+        Shipment shipment = ShipmentController.getShipment(shipmentNumber);
+        assertNotNull(shipment);
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -221,7 +221,7 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the total number of shipments shall be {int}")
     public void the_total_number_of_shipments_shall_be(Integer expectedCount) {
-            assertEquals(expectedCount, getSystem().numberOfShipments());
+        assertEquals(expectedCount, getSystem().numberOfShipments());
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -229,19 +229,19 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall include {int} {string} of size {string}")
     public void theShipmentWithIDShallIncludeOfSize(Integer shipmentId, Integer expectedQuantity, String itemName, String sizeStr) {
-            Shipment shipment = ShipmentController.getShipment(shipmentId);
-            assertNotNull(shipment);
+        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        assertNotNull(shipment);
 
-            SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
-            assertNotNull(sizedItem);
+        SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
+        assertNotNull(sizedItem);
 
-            for(ShipmentItem si : shipment.getShipmentItems()){
-                if(si.getItem().equals(sizedItem)){
-                    assertEquals(expectedQuantity, si.getQuantity());
-                    return;
-                }
+        for(ShipmentItem si : shipment.getShipmentItems()){
+            if(si.getItem().equals(sizedItem)){
+                assertEquals(expectedQuantity, si.getQuantity());
+                return;
             }
-            fail("Shipment does not contain " + itemName + "of size" + sizeStr);
+        }
+        fail("Shipment does not contain " + itemName + "of size" + sizeStr);
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -249,9 +249,9 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall include {int} distinct sized items")
     public void theShipmentWithIDShallIncludeDistinctSizedItems(Integer shipmentId, Integer expectedCount) {
-            Shipment shipment = ShipmentController.getShipment(shipmentId);
-            assertNotNull(shipment);
-            assertEquals(expectedCount, shipment.numberOfShipmentItems());
+        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        assertNotNull(shipment);
+        assertEquals(expectedCount, shipment.numberOfShipmentItems());
 
         // Write code here that turns the phrase above into concrete actions
 
@@ -259,8 +259,8 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("no shipment shall exist with number {int}")
     public void noShipmentShallExistWithNumber(Integer shipmentId) {
-            Shipment shipment = ShipmentController.getShipment(shipmentId);
-            assertNull(shipment);
+        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        assertNull(shipment);
 
 
         // Write code here that turns the phrase above into concrete actions
@@ -269,8 +269,8 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("no sized item shall exist with name {string} and size {string}")
     public void noSizedItemShallExistWithNameAndSize(String itemName, String sizeStr) {
-            SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
-            assertNull(sizedItem);
+        SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
+        assertNull(sizedItem);
 
 
         // Write code here that turns the phrase above into concrete actions
@@ -279,20 +279,20 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall not include any sized items called {string} of size {string}")
     public void theShipmentWithIDShallNotIncludeAnySizedItemsCalledOfSize(Integer shipmentId, String itemName, String sizeStr) {
-            Shipment shipment = ShipmentController.getShipment(shipmentId);
-            assertNotNull(shipment);
+        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        assertNotNull(shipment);
 
-            SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
-            if(sizedItem == null){
-                return;
-            }
-            for(ShipmentItem si : shipment.getShipmentItems()){
-                if(si.getItem().equals(sizedItem)){
-                    fail("Shipment should not contain " + itemName + "of size " + sizeStr);
-
-                }
+        SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
+        if(sizedItem == null){
+            return;
+        }
+        for(ShipmentItem si : shipment.getShipmentItems()){
+            if(si.getItem().equals(sizedItem)){
+                fail("Shipment should not contain " + itemName + "of size " + sizeStr);
 
             }
+
+        }
 
         // Write code here that turns the phrase above into concrete actions
     }
