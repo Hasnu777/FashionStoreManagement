@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.fashionstoremanagement.feature;
 
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
+import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.ShipmentController;
 import ca.mcgill.ecse.fashionstoremanagement.model.Item;
 import ca.mcgill.ecse.fashionstoremanagement.model.Shipment;
@@ -37,7 +38,7 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Given("the following shipments exist")
     public void the_following_shipments_exist(DataTable dataTable) {
-        FashionStoreManagement system = getSystem();
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for(Map<String, String> row : rows){
@@ -52,7 +53,6 @@ public class ShipmentStepDefinitions extends StepDefinitions {
             }
             Shipment shipment = new Shipment(dateOrdered, null, system);
             shipmentIdToNumber.put(shipmentId, shipment.getShipmentNumber());
-
         }
 
         // Write code here that turns the phrase above into concrete actions
@@ -71,6 +71,7 @@ public class ShipmentStepDefinitions extends StepDefinitions {
             int quantity = Integer.parseInt(row.get("quantity"));
 
             int shipmentNumber = shipmentIdToNumber.get(shipmentId);
+
             Shipment shipment = ShipmentController.getShipment(shipmentNumber);
             assertNotNull(shipment);
 
@@ -131,7 +132,15 @@ public class ShipmentStepDefinitions extends StepDefinitions {
     @When("the manager attempts to add sized item {string} of size {string} to the shipment with ID {int}")
     public void theManagerAttemptsToAddSizedItemOfSizeToTheShipmentWithID(String itemName, String sizeStr, Integer shipmentId) {
         try{
-            ShipmentController.addSizedItemToShipment(shipmentId, itemName, sizeStr);
+            Integer shipmentNumber = shipmentIdToNumber.get(shipmentId);
+            if (shipmentNumber == null) {
+                ShipmentController.addSizedItemToShipment(shipmentId, itemName, sizeStr);
+
+            }
+            else {
+                ShipmentController.addSizedItemToShipment(shipmentNumber, itemName, sizeStr);
+
+            }
 
         }
         catch(FashionStoreException e){
@@ -314,7 +323,7 @@ public class ShipmentStepDefinitions extends StepDefinitions {
             return null;
         }
         for(SizedItem si : system.getSizedItems()){
-            if(si.getItem().getName().equals(itemName) && si.getSize() == size){
+            if(si.getItem().getName().equals(itemName) && si.getSize().equals(size)){
                 return si;
             }
 

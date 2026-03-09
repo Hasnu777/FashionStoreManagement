@@ -81,15 +81,8 @@ public class ShipmentController {
 
     public static void addSizedItemToShipment(int shipmentNumber, String itemName, String sizeStr) throws FashionStoreException {
         //throw new RuntimeException("TODO");
-//        try{
-//            Shipment ship = getShipment(shipmentNumber);
-//            Item existingItem = Item.getWithName(itemName);
-//            existingItem.addSizedItem(SizedItem.Size.valueOf(sizeStr), 1, existingItem.getFashionStoreManagement());
-//        } catch (Exception e){
-//            throw new FashionStoreException("Unable to add sized item");
-//        }
         FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
-
+        System.out.println(shipmentNumber);
         Shipment shipment = getShipment(shipmentNumber);
         if (shipment == null) {
             throw new FashionStoreException("there is no shipment with number \"" + shipmentNumber + "\"");

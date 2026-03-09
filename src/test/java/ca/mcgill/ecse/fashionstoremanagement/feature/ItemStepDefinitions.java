@@ -33,16 +33,33 @@ public class ItemStepDefinitions extends StepDefinitions {
 
         // Iterate through list and create each item in the system
         for (Map<String, String> row : itemMap) {
-            Item item = this.getSystem().addItem(
-                    row.get("name"),
-                    Double.parseDouble(row.get("price")),
-                    Integer.parseInt(row.get("points"))
-            );
-            item.addSizedItem(
-                    SizedItem.Size.valueOf(row.get("size")),
-                    Integer.parseInt(row.get("quantityInInventory")),
-                    this.getSystem()
-            );
+            Item createdItem = null;
+            try {
+                Item item = this.getSystem().addItem(
+                        row.get("name"),
+                        Double.parseDouble(row.get("price")),
+                        Integer.parseInt(row.get("points"))
+                );
+                createdItem = item;
+            }
+            catch (Exception e) {}
+            if (createdItem == null) {
+                FashionStoreManagement fm = getSystem();
+                List<Item> items = fm.getItems();
+                for (Item item : items) {
+                    if (item.getName().equals(row.get("name"))) {
+                        createdItem = item;
+                        break;
+                    }
+                }
+            }
+            if (createdItem != null) {
+                createdItem.addSizedItem(
+                        SizedItem.Size.valueOf(row.get("size")),
+                        Integer.parseInt(row.get("quantityInInventory")),
+                        this.getSystem()
+                );
+            }
         }
     }
 
