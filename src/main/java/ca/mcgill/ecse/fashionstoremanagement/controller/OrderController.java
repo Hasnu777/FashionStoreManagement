@@ -5,65 +5,158 @@ import ca.mcgill.ecse.fashionstoremanagement.model.*;
 import java.util.List;
 
 public class OrderController {
-    
     public static Order createOrder(String customerUsername, String deadline) throws FashionStoreException {
-        // throw new RuntimeException("TODO");
-        try {
-            Order o = new Order(null, null, null, null);
-            return o;
-        } catch(Exception e){
-            throw new FashionStoreException("Could not create order");
+        if (customerUsername == null || customerUsername.isEmpty()) {
+            throw new FashionStoreException("there is no user with username \"" + customerUsername + "\"");
         }
+        if (deadline == null || deadline.isEmpty() || deadline.equals("NULL")) {
+            throw new FashionStoreException("delivery deadline is required");
+        }
+
+        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+        User user = User.getWithUsername(customerUsername);
+
+        // Check if the user actually exists before checking their roles
+        if (user == null) {
+            throw new FashionStoreException("there is no user with username \"" + customerUsername + "\"");
+        }
+
+        Customer customer = findCustomer(user);
+
+        return new Order(null, Order.DeliveryDeadline.valueOf(deadline), fm, customer);
     }
     
     public static void deleteOrder(int orderNumber) throws FashionStoreException {
-        // throw new RuntimeException("TODO");
-        try {
-            getOrder(orderNumber).delete();
-        } catch (Exception e) {
-            throw new FashionStoreException("Order doesn't exist");
+        Order orderToDelete = getOrder(orderNumber);
+
+        if (orderToDelete == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
+
+        // Prevent deleting an order that is already placed
+        if (orderToDelete.getDatePlaced() != null) {
+            throw new FashionStoreException("cannot delete an order which has already been placed");
+        }
+
+        orderToDelete.delete();
     }
     
     public static Order getOrder(int orderNumber) {
-        // throw new RuntimeException("TODO");
-        return FashionStoreManagementController.getFashionStoreManagement().getOrder(orderNumber);
+        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+
+        // Iterate through the orders to match the ID, avoiding index out of bounds
+        for (Order o : fm.getOrders()) {
+            if (o.getOrderNumber() == orderNumber) {
+                return o;
+            }
+        }
+        return null;
     }
     
     public static List<Order> getAllOrders() {
-        // throw new RuntimeException("TODO");
         return FashionStoreManagementController.getFashionStoreManagement().getOrders();
     }
     
     public static User findUserByUsername(String username, FashionStoreManagement sys) {
-        throw new RuntimeException("TODO");
-
+        return User.getWithUsername(username);
     }
     
     public static Item findItemByName(String name, FashionStoreManagement sys) {
-       throw new RuntimeException("TODO");
+        return Item.getWithName(name);
 
     }
 
     public static void addItemToOrder(int orderNumber, String itemName, String size) throws FashionStoreException {
-        // throw new RuntimeException("TODO");
-        try{
-            Order order = getOrder(orderNumber);
-            Item itemToAdd = Item.getWithName(itemName);
-            SizedItem targetSizedItem = null;
-            SizedItem.Size targetSize = SizedItem.Size.valueOf(size);
-            tar
-        } catch (Exception e) {
-            throw new FashionStoreException("Couldn't add item");
+        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+
+        Order order = getOrder(orderNumber);
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
-    }
+
+        if (order.getDatePlaced() != null) {
+            throw new FashionStoreException("order has already been placed");
+        }
+        Item itemToAdd = Item.getWithName(itemName);
+        if (itemToAdd == null) {
+            throw new FashionStoreException("there is no item called \"" + itemName + "\"");
+        }
+
+        SizedItem.Size targetSize = SizedItem.Size.valueOf(size);
+
+        // Check if sized item is already in order
+        for (OrderItem oi : order.getOrderItems()) {
+            if (oi.getItem().getItem().equals(itemToAdd) && oi.getItem().getSize() == targetSize) {
+                throw new FashionStoreException("order already includes item \"" + itemName + "\" in size \"" + size + "\"");
+            }
+        }
+
+        SizedItem targetSizedItem = null;
+
+        for (SizedItem si : fm.getSizedItems()) {
+            if (si.getItem().equals(itemToAdd) && si.getSize() == targetSize) {
+                targetSizedItem = si;
+                break;
+            }
+        }
+
+        // Add sized item to order
+        if (targetSizedItem != null) {
+            new OrderItem(1, fm, order, targetSizedItem);
+        }
+
+        }
+
 
     public static void setOrderItemQuantity(int orderNumber, String itemName, String size, int quantity) throws FashionStoreException {
-        throw new RuntimeException("TODO");
+
+        if (quantity < 0) {
+            throw new FashionStoreException("quantity must be non-negative");
+        }
+
+        Order order = getOrder(orderNumber);
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
+
+        if (order.getDatePlaced() != null) {
+            throw new FashionStoreException("order has already been placed");
+        }
+
+        Item baseItem = Item.getWithName(itemName);
+        if (baseItem == null) {
+            throw new FashionStoreException("there is no item called \"" + itemName + "\"");
+        }
+
+        SizedItem.Size targetSize = SizedItem.Size.valueOf(size);
+        OrderItem itemToUpdate = null;
+
+        for (OrderItem oi : order.getOrderItems()) {
+            if (oi.getItem().getItem().getName().equals(itemName) && oi.getItem().getSize() == targetSize) {
+                itemToUpdate = oi;
+                break;
+            }
+        }
+
+        if (itemToUpdate == null) {
+            throw new FashionStoreException("order does not include item \"" + itemName + "\" in size \"" + size + "\"");
+        }
+            if (quantity == 0) {
+                itemToUpdate.delete();
+            } else {
+                itemToUpdate.setQuantity(quantity);
+            }
     }
+
     
     public static Customer findCustomer(User user) throws FashionStoreException {
-        throw new RuntimeException("TODO");
+        // Look through the user's roles to find the Customer role
+        for (UserRole role : user.getRoles()) {
+            if (role instanceof Customer) {
+                return (Customer) role;
+            }
+        }
+        throw new FashionStoreException("\"" + user.getUsername() + "\" is not a customer");
     }
 }
 
