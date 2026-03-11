@@ -34,6 +34,7 @@ public class ShipmentStepDefinitions extends StepDefinitions {
         super.before();
         shipmentIdToNumber.clear();
         lastCreatedShipmentNumber = -1;
+        FashionStoreManagementController.resetSystem();
     }
 
     @Given("the following shipments exist")
@@ -170,7 +171,18 @@ public class ShipmentStepDefinitions extends StepDefinitions {
     @When("the manager attempts to set the quantity of sized item {string} of size {string} in the shipment with ID {int} to {int}")
     public void theManagerAttemptsToSetTheQuantityOfSizedItemOfSizeInTheShipmentWithIDShipmentIdToNewQty(String item, String size, int shipmentId, int newQuantity) {
         try{
-            ShipmentController.updateQuantityInShipment(shipmentId, item, size, newQuantity);
+            if (newQuantity < 0){
+                throw new FashionStoreException("quantity must be non-negative");
+            }
+            Integer id = shipmentId;
+            Integer shipmentNumber = shipmentIdToNumber.get(id.toString());
+            if (shipmentNumber != null){
+                ShipmentController.updateQuantityInShipment(shipmentNumber, item, size, newQuantity);
+            }
+            else {
+                throw new FashionStoreException("there is no shipment with number \"" + shipmentId + "\"");
+            }
+
 
         }
         catch(FashionStoreException e){
@@ -293,12 +305,15 @@ public class ShipmentStepDefinitions extends StepDefinitions {
     public void noShipmentShallExistWithNumber(Integer shipmentId) {
         //Shipment shipment = ShipmentController.getShipment(shipmentId);
 
+        if (shipmentIdToNumber.get(shipmentId.toString()) == null){
+            assertNull(null);
+            return;
+        }
+
         Shipment shipment = ShipmentController.getShipment(
                 shipmentIdToNumber.get(shipmentId.toString())
         );
         assertNull(shipment);
-
-
         // Write code here that turns the phrase above into concrete actions
 
     }

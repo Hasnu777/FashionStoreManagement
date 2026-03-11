@@ -117,7 +117,6 @@ public class ShipmentController {
 
     public static void updateQuantityInShipment(int shipmentNumber, String itemName, String sizeStr, int newQuantity) throws FashionStoreException {
         //throw new RuntimeException("TODO");
-        try {
             Shipment ship = getShipment(shipmentNumber);
             if (ship == null){
                 throw new FashionStoreException("there is no shipment with number \"" + shipmentNumber + "\"");
@@ -134,14 +133,23 @@ public class ShipmentController {
 
                 if (item.getName().equals(itemName) &&
                         sizedItem.getSize().toString().equals(sizeStr)) {
-
+                    if (newQuantity == 0){
+                        ship.removeShipmentItem(si);
+                        si.delete();
+                    }
                     si.setQuantity(newQuantity);
                     return;
                 }
             }
 
-        } catch (Exception e){
-            throw new FashionStoreException("Unable to add sized item");
-        }
+            FashionStoreManagement sys = FashionStoreManagementController.getFashionStoreManagement();
+            List<SizedItem> list = sys.getSizedItems();
+            for (SizedItem i : list){
+                if (i.getItem().getName().equals(itemName) && i.getSize().toString().equals(sizeStr)){
+                    throw new FashionStoreException("shipment does not include sized item \"" + itemName + "\"" + " of size \"" + sizeStr + "\"");
+                }
+            }
+
+            throw new FashionStoreException("there is no sized item called \"" + itemName + "\" of size \"" + sizeStr + "\"");
     }
 }
