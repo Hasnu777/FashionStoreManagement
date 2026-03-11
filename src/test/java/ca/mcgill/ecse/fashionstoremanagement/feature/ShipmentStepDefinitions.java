@@ -131,19 +131,34 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @When("the manager attempts to add sized item {string} of size {string} to the shipment with ID {int}")
     public void theManagerAttemptsToAddSizedItemOfSizeToTheShipmentWithID(String itemName, String sizeStr, Integer shipmentId) {
+//        try{
+//            Integer shipmentNumber = shipmentIdToNumber.get(shipmentId);
+//            if (shipmentNumber == null) {
+//                ShipmentController.addSizedItemToShipment(shipmentId, itemName, sizeStr);
+//
+//            }
+//            else {
+//                ShipmentController.addSizedItemToShipment(shipmentNumber, itemName, sizeStr);
+//
+//            }
+//
+//        }
+//        catch(FashionStoreException e){
+//            StepDefinitions.error = e;
+//        }
+
+
         try{
-            Integer shipmentNumber = shipmentIdToNumber.get(shipmentId);
+            Integer shipmentNumber = shipmentIdToNumber.get(shipmentId.toString());
+
             if (shipmentNumber == null) {
                 ShipmentController.addSizedItemToShipment(shipmentId, itemName, sizeStr);
-
             }
             else {
                 ShipmentController.addSizedItemToShipment(shipmentNumber, itemName, sizeStr);
-
             }
 
-        }
-        catch(FashionStoreException e){
+        } catch(FashionStoreException e){
             StepDefinitions.error = e;
         }
 
@@ -238,7 +253,11 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall include {int} {string} of size {string}")
     public void theShipmentWithIDShallIncludeOfSize(Integer shipmentId, Integer expectedQuantity, String itemName, String sizeStr) {
-        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        //Shipment shipment = ShipmentController.getShipment(shipmentId);
+
+        Shipment shipment = ShipmentController.getShipment(
+                shipmentIdToNumber.get(shipmentId.toString())
+        );
         assertNotNull(shipment);
 
         SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
@@ -258,7 +277,11 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall include {int} distinct sized items")
     public void theShipmentWithIDShallIncludeDistinctSizedItems(Integer shipmentId, Integer expectedCount) {
-        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        //Shipment shipment = ShipmentController.getShipment(shipmentId);
+
+        Shipment shipment = ShipmentController.getShipment(
+                shipmentIdToNumber.get(shipmentId.toString())
+        );
         assertNotNull(shipment);
         assertEquals(expectedCount, shipment.numberOfShipmentItems());
 
@@ -268,7 +291,11 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("no shipment shall exist with number {int}")
     public void noShipmentShallExistWithNumber(Integer shipmentId) {
-        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        //Shipment shipment = ShipmentController.getShipment(shipmentId);
+
+        Shipment shipment = ShipmentController.getShipment(
+                shipmentIdToNumber.get(shipmentId.toString())
+        );
         assertNull(shipment);
 
 
@@ -288,7 +315,10 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall not include any sized items called {string} of size {string}")
     public void theShipmentWithIDShallNotIncludeAnySizedItemsCalledOfSize(Integer shipmentId, String itemName, String sizeStr) {
-        Shipment shipment = ShipmentController.getShipment(shipmentId);
+        ///Shipment shipment = ShipmentController.getShipment(shipmentId);
+        Shipment shipment = ShipmentController.getShipment(
+                shipmentIdToNumber.get(shipmentId.toString())
+        );
         assertNotNull(shipment);
 
         SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);

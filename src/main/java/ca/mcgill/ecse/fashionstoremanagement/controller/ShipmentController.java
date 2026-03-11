@@ -116,26 +116,32 @@ public class ShipmentController {
     }
 
     public static void updateQuantityInShipment(int shipmentNumber, String itemName, String sizeStr, int newQuantity) throws FashionStoreException {
-        throw new RuntimeException("TODO");
-//        try {
-//            Shipment ship = getShipment(shipmentNumber);
-//            List <ShipmentItem> l = ship.getShipmentItems();
-//
-//            for (ShipmentItem si : ship.getShipmentItems()) {
-//
-//                SizedItem sizedItem = si.getItem();
-//                Item item = sizedItem.getItem();
-//
-//                if (item.getName().equals(itemName) &&
-//                        sizedItem.getSize().toString().equals(sizeStr)) {
-//
-//                    si.setQuantity(newQuantity);
-//                    return;
-//                }
-//            }
-//
-//        } catch (Exception e){
-//            throw new FashionStoreException("Unable to add sized item");
-//        }
+        //throw new RuntimeException("TODO");
+        try {
+            Shipment ship = getShipment(shipmentNumber);
+            if (ship == null){
+                throw new FashionStoreException("there is no shipment with number \"" + shipmentNumber + "\"");
+            }
+            if (ship.getDateOrdered() != null){
+                throw new FashionStoreException("shipment has already been ordered");
+            }
+            List <ShipmentItem> l = ship.getShipmentItems();
+
+            for (ShipmentItem si : ship.getShipmentItems()) {
+
+                SizedItem sizedItem = si.getItem();
+                Item item = sizedItem.getItem();
+
+                if (item.getName().equals(itemName) &&
+                        sizedItem.getSize().toString().equals(sizeStr)) {
+
+                    si.setQuantity(newQuantity);
+                    return;
+                }
+            }
+
+        } catch (Exception e){
+            throw new FashionStoreException("Unable to add sized item");
+        }
     }
 }
