@@ -34,7 +34,6 @@ public class ShipmentStepDefinitions extends StepDefinitions {
         super.before();
         shipmentIdToNumber.clear();
         lastCreatedShipmentNumber = -1;
-        FashionStoreManagementController.resetSystem();
     }
 
     @Given("the following shipments exist")
@@ -132,24 +131,9 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @When("the manager attempts to add sized item {string} of size {string} to the shipment with ID {int}")
     public void theManagerAttemptsToAddSizedItemOfSizeToTheShipmentWithID(String itemName, String sizeStr, Integer shipmentId) {
-//        try{
-//            Integer shipmentNumber = shipmentIdToNumber.get(shipmentId);
-//            if (shipmentNumber == null) {
-//                ShipmentController.addSizedItemToShipment(shipmentId, itemName, sizeStr);
-//
-//            }
-//            else {
-//                ShipmentController.addSizedItemToShipment(shipmentNumber, itemName, sizeStr);
-//
-//            }
-//
-//        }
-//        catch(FashionStoreException e){
-//            StepDefinitions.error = e;
-//        }
-
 
         try{
+            //maps shipment ID to shipment number
             Integer shipmentNumber = shipmentIdToNumber.get(shipmentId.toString());
 
             if (shipmentNumber == null) {
@@ -174,6 +158,8 @@ public class ShipmentStepDefinitions extends StepDefinitions {
             if (newQuantity < 0){
                 throw new FashionStoreException("quantity must be non-negative");
             }
+
+            //maps shipment ID to shipment number
             Integer id = shipmentId;
             Integer shipmentNumber = shipmentIdToNumber.get(id.toString());
             if (shipmentNumber != null){
@@ -265,7 +251,6 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall include {int} {string} of size {string}")
     public void theShipmentWithIDShallIncludeOfSize(Integer shipmentId, Integer expectedQuantity, String itemName, String sizeStr) {
-        //Shipment shipment = ShipmentController.getShipment(shipmentId);
 
         Shipment shipment = ShipmentController.getShipment(
                 shipmentIdToNumber.get(shipmentId.toString())
@@ -289,7 +274,6 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall include {int} distinct sized items")
     public void theShipmentWithIDShallIncludeDistinctSizedItems(Integer shipmentId, Integer expectedCount) {
-        //Shipment shipment = ShipmentController.getShipment(shipmentId);
 
         Shipment shipment = ShipmentController.getShipment(
                 shipmentIdToNumber.get(shipmentId.toString())
