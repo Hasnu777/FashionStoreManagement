@@ -13,10 +13,10 @@ public class ShipmentController {
 
     public static int createShipment() throws FashionStoreException {
         // throw new RuntimeException("TODO");
-        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
         try {
-            Shipment s = new Shipment(null, null, fm);
-            return s.getShipmentNumber();
+            Shipment shipment = new Shipment(null, null, system);
+            return shipment.getShipmentNumber();
         } catch (Exception e) {
             throw new FashionStoreException("Could not create shipment");
         }
@@ -28,13 +28,13 @@ public class ShipmentController {
 
         Shipment shipment = getShipment(shipmentNumber);
         if (shipment == null) {
+            //shipment with given shipmentNumber does not exist
             throw new FashionStoreException("there is no shipment with number \"" + shipmentNumber + "\"");
         }
-
         if (shipment.getDateOrdered() != null) {
+            //shipment date ordered exist meaning that shipment has been ordered
             throw new FashionStoreException("cannot delete a shipment which has already been ordered");
         }
-
         shipment.delete();
     }
 
@@ -42,9 +42,11 @@ public class ShipmentController {
         //throw new RuntimeException("TODO");
         Shipment shipment = getShipment(shipmentNumber);
         if (shipment == null) {
+            //shipment with given shipmentNumber does not exist
             throw new FashionStoreException("there is no shipment with number \"" + shipmentNumber + "\"");
         }
         if (shipment.getDateOrdered() != null) {
+            //shipment date ordered exist meaning that shipment has been ordered
             throw new FashionStoreException("shipment has already been ordered");
         }
         shipment.setDateOrdered(dateOrdered);
@@ -52,37 +54,34 @@ public class ShipmentController {
 
     public static Shipment getShipment(int shipmentNumber) {
         //throw new RuntimeException("TODO");
-//        FashionStoreManagement sys = FashionStoreManagementController.getFashionStoreManagement();
-//        return sys.getShipment(shipmentNumber);
-        FashionStoreManagement sys = FashionStoreManagementController.getFashionStoreManagement();
-        for (Shipment s : sys.getShipments()) {
-            if (s.getShipmentNumber() == shipmentNumber) {
-                return s;
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
+        for (Shipment shipment : system.getShipments()) {
+            if (shipment.getShipmentNumber() == shipmentNumber) {
+                return shipment;
             }
         }
-        return null;
+        return null; //shipment with given shipmentNumber not found
     }
 
 
     public static List<Shipment> getAllShipments() {
         //throw new RuntimeException("TODO");
-        FashionStoreManagement sys = FashionStoreManagementController.getFashionStoreManagement();
-        return sys.getShipments();
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
+        return system.getShipments();
     }
 
     public static List<ShipmentItem> getShipmentItems(int shipmentNumber) {
         //throw new RuntimeException("TODO");
         Shipment shipment = getShipment(shipmentNumber);
-        if (shipment != null) {
+        if (shipment != null) { //if shipment with given shipmentNumber is found
             return shipment.getShipmentItems();
         }
-        return new java.util.ArrayList<>();
+        return new java.util.ArrayList<>(); //return empty list
     }
 
     public static void addSizedItemToShipment(int shipmentNumber, String itemName, String sizeStr) throws FashionStoreException {
         //throw new RuntimeException("TODO");
-        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
-        System.out.println(shipmentNumber);
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
         Shipment shipment = getShipment(shipmentNumber);
         if (shipment == null) {
             throw new FashionStoreException("there is no shipment with number \"" + shipmentNumber + "\"");
@@ -94,11 +93,12 @@ public class ShipmentController {
         Item item = Item.getWithName(itemName);
         SizedItem targetSizedItem = null;
 
+        //linear search of target sized item
         if (item != null) {
             SizedItem.Size targetSize = SizedItem.Size.valueOf(sizeStr);
-            for (SizedItem si : item.getSizedItems()) {
-                if (si.getSize() == targetSize) {
-                    targetSizedItem = si;
+            for (SizedItem sizeItem : item.getSizedItems()) {
+                if (sizeItem.getSize() == targetSize) {
+                    targetSizedItem = sizeItem;
                     break;
                 }
             }
@@ -107,12 +107,12 @@ public class ShipmentController {
         if (targetSizedItem == null) {
             throw new FashionStoreException("there is no sized item called \"" + itemName + "\" of size \"" + sizeStr + "\"");
         }
-        for (ShipmentItem si : shipment.getShipmentItems()) {
-            if (si.getItem().equals(targetSizedItem)) {
+        for (ShipmentItem shipItem : shipment.getShipmentItems()) {
+            if (shipItem.getItem().equals(targetSizedItem)) {
                 throw new FashionStoreException("shipment already includes sized item \"" + itemName + "\" of size \"" + sizeStr + "\"");
             }
         }
-        new ShipmentItem(1, fm, shipment, targetSizedItem);
+        new ShipmentItem(1, system, shipment, targetSizedItem);
     }
 
     public static void updateQuantityInShipment(int shipmentNumber, String itemName, String sizeStr, int newQuantity) throws FashionStoreException {
@@ -124,32 +124,34 @@ public class ShipmentController {
             if (ship.getDateOrdered() != null){
                 throw new FashionStoreException("shipment has already been ordered");
             }
-            List <ShipmentItem> l = ship.getShipmentItems();
 
-            for (ShipmentItem si : ship.getShipmentItems()) {
+            for (ShipmentItem shipItem : ship.getShipmentItems()) {
 
-                SizedItem sizedItem = si.getItem();
+                SizedItem sizedItem = shipItem.getItem();
                 Item item = sizedItem.getItem();
 
+                //linear search of target sized item
                 if (item.getName().equals(itemName) &&
                         sizedItem.getSize().toString().equals(sizeStr)) {
                     if (newQuantity == 0){
-                        ship.removeShipmentItem(si);
-                        si.delete();
+                        ship.removeShipmentItem(shipItem);
+                        shipItem.delete();
                     }
-                    si.setQuantity(newQuantity);
+                    shipItem.setQuantity(newQuantity);
                     return;
                 }
             }
 
-            FashionStoreManagement sys = FashionStoreManagementController.getFashionStoreManagement();
-            List<SizedItem> list = sys.getSizedItems();
-            for (SizedItem i : list){
-                if (i.getItem().getName().equals(itemName) && i.getSize().toString().equals(sizeStr)){
+            //if target sized item exists but is not in this shipment
+            FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
+            List<SizedItem> list = system.getSizedItems();
+            for (SizedItem sizedItem : list){
+                if (sizedItem.getItem().getName().equals(itemName) && sizedItem.getSize().toString().equals(sizeStr)){
                     throw new FashionStoreException("shipment does not include sized item \"" + itemName + "\"" + " of size \"" + sizeStr + "\"");
                 }
             }
 
+            // if target sized item does not exist
             throw new FashionStoreException("there is no sized item called \"" + itemName + "\" of size \"" + sizeStr + "\"");
     }
 }

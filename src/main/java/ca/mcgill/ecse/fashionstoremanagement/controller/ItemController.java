@@ -10,7 +10,7 @@ public class ItemController {
 
 	public static void addItem(String name, double price, int points, String sizeStr, int quantity) {
 	// Get FashionStoreManagement instance to perform operations on it
-	FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+	FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
 	Item existingItem = Item.getWithName(name);
 	if (existingItem != null) {
 		throw new FashionStoreException("an item called \"" + name + "\" already exists");
@@ -28,11 +28,11 @@ public class ItemController {
 		throw new FashionStoreException("quantity must be non-negative");
 	}
 	// Item must be created prior to a SizedItem
-	Item itemToAdd = new Item(name, price, points, fm);
+	Item itemToAdd = new Item(name, price, points, system);
 	// Create SizedItem, in-line execution of acquiring Size enum
-	SizedItem sizedItemToAdd = fm.addSizedItem(SizedItem.Size.valueOf(sizeStr), quantity, itemToAdd);
+	SizedItem sizedItemToAdd = system.addSizedItem(SizedItem.Size.valueOf(sizeStr), quantity, itemToAdd);
 	// Insert new SizedItem object into FashionStoreManagement instance
-		fm.addSizedItem(sizedItemToAdd);
+		system.addSizedItem(sizedItemToAdd);
 	}
 
 	public static void updateItemPrice(String name, double newPrice) {

@@ -13,7 +13,7 @@ public class OrderController {
             throw new FashionStoreException("delivery deadline is required");
         }
 
-        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
         User user = User.getWithUsername(customerUsername);
 
         // Check if the user actually exists before checking their roles
@@ -23,7 +23,7 @@ public class OrderController {
 
         Customer customer = findCustomer(user);
 
-        return new Order(null, Order.DeliveryDeadline.valueOf(deadline), fm, customer);
+        return new Order(null, Order.DeliveryDeadline.valueOf(deadline), system, customer);
     }
     
     public static void deleteOrder(int orderNumber) throws FashionStoreException {
@@ -42,12 +42,12 @@ public class OrderController {
     }
     
     public static Order getOrder(int orderNumber) {
-        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
 
         // Iterate through the orders to match the ID, avoiding index out of bounds
-        for (Order o : fm.getOrders()) {
-            if (o.getOrderNumber() == orderNumber) {
-                return o;
+        for (Order order : system.getOrders()) {
+            if (order.getOrderNumber() == orderNumber) {
+                return order;
             }
         }
         return null;
@@ -67,7 +67,7 @@ public class OrderController {
     }
 
     public static void addItemToOrder(int orderNumber, String itemName, String size) throws FashionStoreException {
-        FashionStoreManagement fm = FashionStoreManagementController.getFashionStoreManagement();
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
 
         Order order = getOrder(orderNumber);
         if (order == null) {
@@ -85,24 +85,24 @@ public class OrderController {
         SizedItem.Size targetSize = SizedItem.Size.valueOf(size);
 
         // Check if sized item is already in order
-        for (OrderItem oi : order.getOrderItems()) {
-            if (oi.getItem().getItem().equals(itemToAdd) && oi.getItem().getSize() == targetSize) {
+        for (OrderItem orderItem : order.getOrderItems()) {
+            if (orderItem.getItem().getItem().equals(itemToAdd) && orderItem.getItem().getSize() == targetSize) {
                 throw new FashionStoreException("order already includes item \"" + itemName + "\" in size \"" + size + "\"");
             }
         }
 
         SizedItem targetSizedItem = null;
 
-        for (SizedItem si : fm.getSizedItems()) {
-            if (si.getItem().equals(itemToAdd) && si.getSize() == targetSize) {
-                targetSizedItem = si;
+        for (SizedItem sizedItem : system.getSizedItems()) {
+            if (sizedItem.getItem().equals(itemToAdd) && sizedItem.getSize() == targetSize) {
+                targetSizedItem = sizedItem;
                 break;
             }
         }
 
         // Add sized item to order
         if (targetSizedItem != null) {
-            new OrderItem(1, fm, order, targetSizedItem);
+            new OrderItem(1, system, order, targetSizedItem);
         }
 
         }
@@ -131,9 +131,9 @@ public class OrderController {
         SizedItem.Size targetSize = SizedItem.Size.valueOf(size);
         OrderItem itemToUpdate = null;
 
-        for (OrderItem oi : order.getOrderItems()) {
-            if (oi.getItem().getItem().getName().equals(itemName) && oi.getItem().getSize() == targetSize) {
-                itemToUpdate = oi;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            if (orderItem.getItem().getItem().getName().equals(itemName) && orderItem.getItem().getSize() == targetSize) {
+                itemToUpdate = orderItem;
                 break;
             }
         }

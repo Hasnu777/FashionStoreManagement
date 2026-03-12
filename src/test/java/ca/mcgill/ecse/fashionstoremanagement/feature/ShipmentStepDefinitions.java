@@ -303,8 +303,7 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("no shipment shall exist with number {int}")
     public void noShipmentShallExistWithNumber(Integer shipmentId) {
-        //Shipment shipment = ShipmentController.getShipment(shipmentId);
-// test 
+
         if (shipmentIdToNumber.get(shipmentId.toString()) == null){
             assertNull(null);
             return;
@@ -330,7 +329,6 @@ public class ShipmentStepDefinitions extends StepDefinitions {
 
     @Then("the shipment with ID {int} shall not include any sized items called {string} of size {string}")
     public void theShipmentWithIDShallNotIncludeAnySizedItemsCalledOfSize(Integer shipmentId, String itemName, String sizeStr) {
-        ///Shipment shipment = ShipmentController.getShipment(shipmentId);
         Shipment shipment = ShipmentController.getShipment(
                 shipmentIdToNumber.get(shipmentId.toString())
         );

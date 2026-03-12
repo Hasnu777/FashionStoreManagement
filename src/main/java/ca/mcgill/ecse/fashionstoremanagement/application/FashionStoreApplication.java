@@ -10,7 +10,5 @@ public class FashionStoreApplication {
 
     public static void main(String[] args) {
         System.out.println("Hello and welcome!");
-        FashionStoreManagement sys = new FashionStoreManagement();
-        sys.addShipment(null, null);
     }
 }
