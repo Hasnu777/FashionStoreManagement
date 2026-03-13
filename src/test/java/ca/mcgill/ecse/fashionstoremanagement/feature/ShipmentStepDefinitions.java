@@ -255,14 +255,14 @@ public class ShipmentStepDefinitions extends StepDefinitions {
         Shipment shipment = ShipmentController.getShipment(
                 shipmentIdToNumber.get(shipmentId.toString())
         );
-        assertNotNull(shipment);
+        assertNotNull(shipment); //assert that shipment with given shipmentId exists
 
         SizedItem sizedItem = findSizedItem(getSystem(), itemName, sizeStr);
-        assertNotNull(sizedItem);
+        assertNotNull(sizedItem); //assert that given sized item exists
 
-        for(ShipmentItem si : shipment.getShipmentItems()){
-            if(si.getItem().equals(sizedItem)){
-                assertEquals(expectedQuantity, si.getQuantity());
+        for(ShipmentItem shipmentItem : shipment.getShipmentItems()){
+            if(shipmentItem.getItem().equals(sizedItem)){
+                assertEquals(expectedQuantity, shipmentItem.getQuantity());
                 return;
             }
         }
@@ -278,7 +278,7 @@ public class ShipmentStepDefinitions extends StepDefinitions {
         Shipment shipment = ShipmentController.getShipment(
                 shipmentIdToNumber.get(shipmentId.toString())
         );
-        assertNotNull(shipment);
+        assertNotNull(shipment); //assert that shipment with give shipmentId exists
         assertEquals(expectedCount, shipment.numberOfShipmentItems());
 
         // Write code here that turns the phrase above into concrete actions
@@ -349,9 +349,9 @@ public class ShipmentStepDefinitions extends StepDefinitions {
         catch(IllegalArgumentException e) {
             return null;
         }
-        for(SizedItem si : system.getSizedItems()){
-            if(si.getItem().getName().equals(itemName) && si.getSize().equals(size)){
-                return si;
+        for(SizedItem sizedItem : system.getSizedItems()){
+            if(sizedItem.getItem().getName().equals(itemName) && sizedItem.getSize().equals(size)){
+                return sizedItem;
             }
 
         }
