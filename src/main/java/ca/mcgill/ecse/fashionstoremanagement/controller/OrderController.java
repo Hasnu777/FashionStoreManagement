@@ -5,6 +5,7 @@ import ca.mcgill.ecse.fashionstoremanagement.model.*;
 import java.util.List;
 
 public class OrderController {
+
     public static Order createOrder(String customerUsername, String deadline) throws FashionStoreException {
         if (customerUsername == null || customerUsername.isEmpty()) {
             throw new FashionStoreException("there is no user with username \"" + customerUsername + "\"");

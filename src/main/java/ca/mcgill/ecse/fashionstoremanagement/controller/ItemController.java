@@ -36,10 +36,12 @@ public class ItemController {
 	}
 
 	public static void updateItemPrice(String name, double newPrice) {
+		// Get the desired item to update and check if it exists
 		Item itemToUpdate = Item.getWithName(name);
 		if (itemToUpdate == null) {
 			throw new FashionStoreException("there is no item called \"" + name + "\"");
 		}
+		// Verify valid price input
 		if (newPrice <= 0) {
 			throw new FashionStoreException("price must be positive");
 		}
@@ -47,10 +49,12 @@ public class ItemController {
 	}
 
 	public static void updateItemPoints(String name, int newPoints) {
+		// Get the desired item to update and check if it exists
 		Item itemToUpdate = Item.getWithName(name);
 		if (itemToUpdate == null) {
 			throw new FashionStoreException("there is no item called \"" + name + "\"");
 		}
+		// Verify valid quantity input
 		if (newPoints < 1 || newPoints > 5) {
 			throw new FashionStoreException("points must be between one and five");
 		}
@@ -58,11 +62,11 @@ public class ItemController {
 	}
 
 	public static void deleteItem(String name) throws FashionStoreException {
+		// Get the desired item to delete and verify it exists
 		Item itemToDelete = Item.getWithName(name);
 		if (itemToDelete == null) {
 			throw new FashionStoreException("there is no item called \"" + name + "\"");
 		}
 		itemToDelete.delete();
 	}
-
 }
