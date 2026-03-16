@@ -3,6 +3,11 @@ Feature: Update order
   As a customer, I want to be able to change the quantity of an item in my order.
 
   Background:
+    Given the following employees exist in the system
+      | username | password | name           | phone          |
+      | alice    | alice123 | Alice Allisson | (514) 555-1111 |
+      | bob      | password | Bob Robertson  | (514) 555-2222 |
+      | claire   | password | Claire Clark   | (514) 555-3333 |
     Given the following customers exist in the system
       | username  | password         | name             | phone          | address                | points |
       | obiwan212 | highground       | Obi-Wan Kenobi   | (438) 555-1234 | Jedi Temple, Coruscant | 212    |
@@ -13,22 +18,25 @@ Feature: Update order
       | T-Shirt     | 29.99  | M    | 50                  | 4      |
       | Winter Coat | 199.99 | L    | 10                  | 5      |
       | Jeans       | 59.99  | M    | 30                  | 3      |
+      | Dress Shirt | 89.99  | S    | 0                   | 2      |
     And the following orders exist in the system
       # There's no way to set the autounique order number, so refer to orders here using a separate ID.
       # The controller should still identify orders by their order number.
       # You'll need to create a map from IDs to order numbers.
       # Also, please convert the string "NULL" to null.
-      | id | datePlaced | deadline    | customer  |
-      | 1  | NULL       | SameDay     | alice     |
-      | 2  | 2025-02-24 | InOneDay    | obiwan212 |
-      | 3  | NULL       | InTwoDays   | anakin501 |
-      | 4  | 2025-02-24 | InThreeDays | alice     |
+      | id | datePlaced | deadline    | customer  | assignee | state              |
+      | 1  | NULL       | SameDay     | alice     | NULL     | under construction |
+      | 2  | 2025-02-24 | InOneDay    | obiwan212 | NULL     | placed             |
+      | 3  | NULL       | InTwoDays   | anakin501 | NULL     | under construction |
+      | 4  | 2025-02-24 | InThreeDays | alice     | bob      | delivered          |
+      | 5  | NULL       | InOneDay    | alice     | NULL     | pending            |
     And the following items are part of orders
       | order | item        | size | quantity |
       | 1     | T-Shirt     | M    | 2        |
       | 2     | T-Shirt     | M    | 1        |
       | 2     | Winter Coat | L    | 3        |
       | 4     | Winter Coat | L    | 5        |
+      | 5     | Winter Coat | L    | 1        |
 
   Scenario Outline: Successfully add a new item to an order
     When the user attempts to add item "<item>" in size "<size>" to the order with ID <orderId>
@@ -46,7 +54,7 @@ Feature: Update order
     When the user attempts to add item "<item>" in size "<size>" to the non-existent order with order number <id>
     Then the system shall raise the error "there is no order with number \"<id>\""
     And no order shall exist with ID "<id>"
-    And the total number of orders shall be 4
+    And the total number of orders shall be 5
 
     Examples:
       | item        | size | id        |
@@ -87,7 +95,7 @@ Feature: Update order
       | item    | size | id | newQty |
       | T-Shirt | M    | 1  | 1      |
       | T-Shirt | M    | 1  | 3      |
-      | T-Shirt | M    | 1  | 42     |
+      | T-Shirt | M    | 1  | 10     |
 
   Scenario: Successfully remove item from order by setting its quantity to zero
     When the user attempts to set the quantity of item "T-Shirt" in size "M" in the order with ID "1" to 0
@@ -95,11 +103,17 @@ Feature: Update order
     And the order with ID "1" shall not include any items called "T-Shirt"
     And the order with ID "1" shall include 0 distinct items
 
+  Scenario: Try to add a 50th distinct item to an order
+    Given the order with ID "3" has 49 distinct items
+    When the user attempts to add item "Winter Coat" in size "L" to the order with ID 3
+    Then the system shall raise the error "order cannot include more than 49 distinct items"
+    And the order with ID "3" shall include 49 distinct items
+
   Scenario Outline: Try to update quantity of item in an order that doesn't exist
     When the user attempts to set the quantity of item "<item>" in size "<size>" in the non-existent order <id> to <newQty>
     Then the system shall raise the error "there is no order with number \"<id>\""
     And no order shall exist with ID "<id>"
-    And the total number of orders shall be 4
+    And the total number of orders shall be 5
 
     Examples:
       | item        | size | id        | newQty |
@@ -124,8 +138,12 @@ Feature: Update order
     And the order with ID "<id>" shall include <numItems> distinct items
 
     Examples:
-      | item        | size | id | newQty | oldQty | numItems | error                         |
+      | item        | size | id | newQty | oldQty | numItems | error                              |
       | T-Shirt     | M    | 1  | -1     | 2      | 1        | quantity must be non-negative |
       | T-Shirt     | M    | 1  | -2     | 2      | 1        | quantity must be non-negative |
-      | T-Shirt     | M    | 2  | 10     | 1      | 2        | order has already been placed |
+      | T-Shirt     | M    | 1  | 11     | 2      | 1        | quantity cannot exceed 10          |
+      | T-Shirt     | M    | 1  | 12     | 2      | 1        | quantity cannot exceed 10          |
+      | T-Shirt     | M    | 2  | 10     | 1      | 2        | order has already been placed      |
       | Winter Coat | L    | 2  | 7      | 3      | 2        | order has already been placed |
+      | Winter Coat | L    | 5  | 2      | 1      | 1        | order has already been checked out |
+      | Winter Coat | L    | 5  | 0      | 1      | 1        | order has already been checked out |

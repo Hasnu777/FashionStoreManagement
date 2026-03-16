@@ -253,6 +253,12 @@ public class UserStepDefinitions extends StepDefinitions {
         assertNotNull(this.getSystem().getManager(), "the manager should exist");
     }
 
+    @Then("{string} shall have {int} points")
+    public void shall_have_points(String username, Integer points) {
+        Customer c = getCustomerAccount(User.getWithUsername(username));
+        assertEquals(points, c.getLoyaltyPoints());
+    }
+
     private Customer getCustomerAccount(User u) {
         if (u == null) {
             return null;
