@@ -5,10 +5,10 @@ Feature: Update shipment
   Background:
     Given the following items exist in the system
       | name         | price | size | quantityInInventory | points |
-      | T-Shirt      | 29.99 | M    |                  50 |     10 |
-      | T-Shirt      | 29.99 | L    |                  30 |     10 |
-      | Jeans        | 79.99 | M    |                  20 |     25 |
-      | Winter Coat  | 199.99| L    |                  10 |     50 |
+      | T-Shirt      | 29.99 | M    |                  50 |     4 |
+      | T-Shirt      | 29.99 | L    |                  30 |     4 |
+      | Jeans        | 79.99 | M    |                  20 |     5 |
+      | Winter Coat  | 199.99| L    |                  10 |     5 |
     And the following shipments exist
       # The shipmentId will be auto-generated shipment numbers.
       # Also, please convert the string "NULL" to null.

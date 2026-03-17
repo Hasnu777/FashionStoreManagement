@@ -1,12 +1,12 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.35.0.8072.d3fbfafbc modeling language!*/
+/*This code was generated using the UMPLE 1.36.0.8222.7cf9b9a6f modeling language!*/
 
 package ca.mcgill.ecse.fashionstoremanagement.model;
 import java.sql.Date;
 import java.util.*;
 
 // line 63 "../../../../../../model.ump"
-// line 147 "../../../../../../model.ump"
+// line 161 "../../../../../../model.ump"
 public class Order
 {
 
@@ -29,6 +29,10 @@ public class Order
   //Order Attributes
   private Date datePlaced;
   private DeliveryDeadline deadline;
+  private int totalCost;
+  private int finalCost;
+  private int pointsUsedInPayment;
+  private int pointsAwarded;
 
   //Autounique Attributes
   private int orderNumber;
@@ -39,6 +43,12 @@ public class Order
   private Customer orderPlacer;
   private Employee orderAssignee;
 
+  //Helper Variables
+  private boolean canSetTotalCost;
+  private boolean canSetFinalCost;
+  private boolean canSetPointsUsedInPayment;
+  private boolean canSetPointsAwarded;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -47,6 +57,10 @@ public class Order
   {
     datePlaced = aDatePlaced;
     deadline = aDeadline;
+    canSetTotalCost = true;
+    canSetFinalCost = true;
+    canSetPointsUsedInPayment = true;
+    canSetPointsAwarded = true;
     orderNumber = nextOrderNumber++;
     boolean didAddFashionStoreManagement = setFashionStoreManagement(aFashionStoreManagement);
     if (!didAddFashionStoreManagement)
@@ -80,6 +94,46 @@ public class Order
     wasSet = true;
     return wasSet;
   }
+  /* Code from template attribute_SetImmutable */
+  public boolean setTotalCost(int aTotalCost)
+  {
+    boolean wasSet = false;
+    if (!canSetTotalCost) { return false; }
+    canSetTotalCost = false;
+    totalCost = aTotalCost;
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template attribute_SetImmutable */
+  public boolean setFinalCost(int aFinalCost)
+  {
+    boolean wasSet = false;
+    if (!canSetFinalCost) { return false; }
+    canSetFinalCost = false;
+    finalCost = aFinalCost;
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template attribute_SetImmutable */
+  public boolean setPointsUsedInPayment(int aPointsUsedInPayment)
+  {
+    boolean wasSet = false;
+    if (!canSetPointsUsedInPayment) { return false; }
+    canSetPointsUsedInPayment = false;
+    pointsUsedInPayment = aPointsUsedInPayment;
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template attribute_SetImmutable */
+  public boolean setPointsAwarded(int aPointsAwarded)
+  {
+    boolean wasSet = false;
+    if (!canSetPointsAwarded) { return false; }
+    canSetPointsAwarded = false;
+    pointsAwarded = aPointsAwarded;
+    wasSet = true;
+    return wasSet;
+  }
 
   public Date getDatePlaced()
   {
@@ -89,6 +143,39 @@ public class Order
   public DeliveryDeadline getDeadline()
   {
     return deadline;
+  }
+
+  /**
+   * Total cost of the order, without considering points.
+   */
+  public int getTotalCost()
+  {
+    return totalCost;
+  }
+
+  /**
+   * Amount that the customer actually had to pay for the order.
+   * This depends on both the total cost and whether or not the customer decided to use their points.
+   */
+  public int getFinalCost()
+  {
+    return finalCost;
+  }
+
+  /**
+   * Points used by customer in payment
+   */
+  public int getPointsUsedInPayment()
+  {
+    return pointsUsedInPayment;
+  }
+
+  /**
+   * Points awarded to customer
+   */
+  public int getPointsAwarded()
+  {
+    return pointsAwarded;
   }
 
   public int getOrderNumber()
@@ -305,7 +392,11 @@ public class Order
   public String toString()
   {
     return super.toString() + "["+
-            "orderNumber" + ":" + getOrderNumber()+ "]" + System.getProperties().getProperty("line.separator") +
+            "orderNumber" + ":" + getOrderNumber()+ "," +
+            "totalCost" + ":" + getTotalCost()+ "," +
+            "finalCost" + ":" + getFinalCost()+ "," +
+            "pointsUsedInPayment" + ":" + getPointsUsedInPayment()+ "," +
+            "pointsAwarded" + ":" + getPointsAwarded()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "datePlaced" + "=" + (getDatePlaced() != null ? !getDatePlaced().equals(this)  ? getDatePlaced().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "deadline" + "=" + (getDeadline() != null ? !getDeadline().equals(this)  ? getDeadline().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "fashionStoreManagement = "+(getFashionStoreManagement()!=null?Integer.toHexString(System.identityHashCode(getFashionStoreManagement())):"null") + System.getProperties().getProperty("line.separator") +

@@ -25,9 +25,26 @@ Feature: Create, update, and delete items
       | Socks       | 9.99  |      2 | S    |      100 |
       | Hoodie      | 59.99 |      4 | L    |       30 |
 
-  Scenario Outline: Try to add an item with a duplicate name
+  Scenario Outline: Successfully add a new size for an existing item
+    When the manager attempts to add a new item with name "<name>", price <price>, points <points>, size "<newSize>", and quantity <newQuantity>
+    Then the system shall not raise any errors
+    And an item shall exist with name "<name>"
+    And the item shall cost <price>
+    And the item shall be worth <points> points
+    And a sized item of size "<oldSize>" shall exist for item "<name>"
+    And a sized item of size "<assertedNewSize>" shall exist for item "<name>"
+    And the quantity of the sized item "<name>" of size "<oldSize>" shall be <oldQuantity>
+    And the quantity of the sized item "<name>" of size "<assertedNewSize>" shall be <newQuantity>
+    And the total number of items shall be 2
+
+    Examples:
+      | name        | price  | points | oldSize | newSize | assertedNewSize | oldQuantity | newQuantity |
+      | T-Shirt     | 29.99  |      4 | M       | l       | L               |          50 |          10 |
+      | Winter Coat | 199.99 |      5 | L       | xl      | XL              |          10 |           5 |
+
+  Scenario Outline: Try to add a size for an existing item with mismatched price or points
     When the manager attempts to add a new item with name "<name>", price <newPrice>, points <newPoints>, size "<newSize>", and quantity <newQuantity>
-    Then the system shall raise the error "an item called \"<name>\" already exists"
+    Then the system shall raise the error "<error>"
     And an item shall exist with name "<name>"
     And the item shall cost <oldPrice>
     And the item shall be worth <oldPoints> points
@@ -36,9 +53,24 @@ Feature: Create, update, and delete items
     And the total number of items shall be 2
 
     Examples:
-      | name        | oldPrice | newPrice | oldPoints | newPoints | oldSize | newSize | oldQuantity | newQuantity |
-      | T-Shirt     | 29.99    | 35.99    |       4   |      5    | M       | L       |          50 |          10 |
-      | Winter Coat | 199.99   | 219.99   |       5   |      4    | L       | XL      |          10 |           5 |
+      | name        | oldPrice | newPrice | oldPoints | newPoints | oldSize | newSize | oldQuantity | newQuantity | error                                           |
+      | T-Shirt     | 29.99    | 35.99    | 4         | 4         | M       | L       | 50          | 10          | item \"T-Shirt\" has a different price          |
+      | Winter Coat | 199.99   | 199.99   | 5         | 4         | L       | XL      | 10          | 5           | item \"Winter Coat\" has a different points value |
+
+  Scenario Outline: Try to add an existing size for an item
+    When the manager attempts to add a new item with name "<name>", price <price>, points <points>, size "<newSize>", and quantity <newQuantity>
+    Then the system shall raise the error "item \"<name>\" already has size \"<newSize>\""
+    And an item shall exist with name "<name>"
+    And the item shall cost <price>
+    And the item shall be worth <points> points
+    And a sized item of size "<existingSize>" shall exist for item "<name>"
+    And the quantity of the sized item "<name>" of size "<existingSize>" shall be <existingQuantity>
+    And the total number of items shall be 2
+
+    Examples:
+      | name        | price  | points | existingSize | newSize | existingQuantity | newQuantity |
+      | T-Shirt     | 29.99  | 4      | M            | M       | 50               | 3           |
+      | Winter Coat | 199.99 | 5      | L            | L       | 10               | 2           |
 
   Scenario Outline: Try to add an invalid item
     When the manager attempts to add a new item with name "<name>", price <price>, points <points>, size "<size>", and quantity <quantity>

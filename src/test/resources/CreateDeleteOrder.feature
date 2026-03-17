@@ -7,6 +7,7 @@ Feature: Create and delete orders
       | username | password | name           | phone          |
       | alice    | alice123 | Alice Allisson | (514) 555-1111 |
       | bob      | password | Bob Robertson  | (514) 555-2222 |
+      | claire   | password | Claire Clark   | (514) 555-3333 |
     And the following customers exist in the system
       | username  | password         | name             | phone          | address                | points |
       | obiwan212 | highground       | Obi-Wan Kenobi   | (438) 555-1234 | Jedi Temple, Coruscant | 212    |
@@ -21,11 +22,11 @@ Feature: Create and delete orders
       # The controller should still identify orders by their order number.
       # You'll need to create a map from IDs to order numbers.
       # Also, please convert the string "NULL" to null (here and in the tests below).
-      | id | datePlaced | deadline    | customer  |
-      | 1  | NULL       | SameDay     | alice     |
-      | 2  | 2025-02-24 | InOneDay    | obiwan212 |
-      | 3  | NULL       | InTwoDays   | anakin501 |
-      | 4  | 2025-02-24 | InThreeDays | alice     |
+      | id | datePlaced | deadline    | customer  | assignee | state              |
+      | 1  | NULL       | SameDay     | alice     | NULL     | under construction |
+      | 2  | 2025-02-24 | InOneDay    | obiwan212 | NULL     | placed             |
+      | 3  | NULL       | InTwoDays   | anakin501 | NULL     | pending            |
+      | 4  | 2025-02-24 | InThreeDays | alice     | bob      | delivered          |
     And the following items are part of orders
       | order | item        | size | quantity |
       | 1     | T-Shirt     | M    | 2        |
@@ -56,6 +57,7 @@ Feature: Create and delete orders
 
     Examples:
       | user        | deadline | error                                            |
+      | NULL        | SameDay  | customer is required                             |
       | nonexistent | SameDay  | there is no user with username \\"nonexistent\\" |
       | ghost       | SameDay  | there is no user with username \\"ghost\\"       |
       | bob         | SameDay  | \\"bob\\" is not a customer                      |
