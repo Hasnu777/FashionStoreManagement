@@ -1,12 +1,11 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.35.0.8072.d3fbfafbc modeling language!*/
+/*This code was generated using the UMPLE 1.36.0.8291.fe15f81dc modeling language!*/
 
 package ca.mcgill.ecse.fashionstoremanagement.model;
 import java.util.*;
 import java.sql.Date;
 
-// line 4 "../../../../../../model.ump"
-// line 107 "../../../../../../model.ump"
+// line 4 "../../../../../FashionStoreManagement.ump"
 public class FashionStoreManagement
 {
 
@@ -576,9 +575,9 @@ public class FashionStoreManagement
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addOrder(Date aDatePlaced, Order.DeliveryDeadline aDeadline, Customer aOrderPlacer)
+  public Order addOrder(String aPendingAssigneeUsername, Date aDatePlaced, Order.DeliveryDeadline aDeadline, Customer aOrderPlacer)
   {
-    return new Order(aDatePlaced, aDeadline, this, aOrderPlacer);
+    return new Order(aPendingAssigneeUsername, aDatePlaced, aDeadline, this, aOrderPlacer);
   }
 
   public boolean addOrder(Order aOrder)

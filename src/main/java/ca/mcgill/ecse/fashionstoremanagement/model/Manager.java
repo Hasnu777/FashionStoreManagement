@@ -1,10 +1,9 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.35.0.8072.d3fbfafbc modeling language!*/
+/*This code was generated using the UMPLE 1.36.0.8291.fe15f81dc modeling language!*/
 
 package ca.mcgill.ecse.fashionstoremanagement.model;
 
-// line 38 "../../../../../../model.ump"
-// line 132 "../../../../../../model.ump"
+// line 38 "../../../../../FashionStoreManagement.ump"
 public class Manager extends UserRole
 {
 

@@ -1,12 +1,12 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.36.0.8222.7cf9b9a6f modeling language!*/
+/*This code was generated using the UMPLE 1.36.0.8291.fe15f81dc modeling language!*/
 
 package ca.mcgill.ecse.fashionstoremanagement.model;
 import java.sql.Date;
 import java.util.*;
 
-// line 63 "../../../../../../model.ump"
-// line 161 "../../../../../../model.ump"
+// line 3 "../../../../../OrderStateMachine.ump"
+// line 63 "../../../../../FashionStoreManagement.ump"
 public class Order
 {
 
@@ -27,6 +27,8 @@ public class Order
   //------------------------
 
   //Order Attributes
+  private String pendingAssigneeUsername;
+  private boolean pendingUsePoints;
   private Date datePlaced;
   private DeliveryDeadline deadline;
   private int totalCost;
@@ -36,6 +38,10 @@ public class Order
 
   //Autounique Attributes
   private int orderNumber;
+
+  //Order State Machines
+  public enum State { UnderConstruction, Pending, Placed, InPreparation, ReadyForDelivery, Delivered, Cancelled }
+  private State state;
 
   //Order Associations
   private FashionStoreManagement fashionStoreManagement;
@@ -53,8 +59,10 @@ public class Order
   // CONSTRUCTOR
   //------------------------
 
-  public Order(Date aDatePlaced, DeliveryDeadline aDeadline, FashionStoreManagement aFashionStoreManagement, Customer aOrderPlacer)
+  public Order(String aPendingAssigneeUsername, Date aDatePlaced, DeliveryDeadline aDeadline, FashionStoreManagement aFashionStoreManagement, Customer aOrderPlacer)
   {
+    pendingAssigneeUsername = aPendingAssigneeUsername;
+    pendingUsePoints = false;
     datePlaced = aDatePlaced;
     deadline = aDeadline;
     canSetTotalCost = true;
@@ -73,11 +81,28 @@ public class Order
     {
       throw new RuntimeException("Unable to create ordersPlaced due to orderPlacer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+    setState(State.UnderConstruction);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setPendingAssigneeUsername(String aPendingAssigneeUsername)
+  {
+    boolean wasSet = false;
+    pendingAssigneeUsername = aPendingAssigneeUsername;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setPendingUsePoints(boolean aPendingUsePoints)
+  {
+    boolean wasSet = false;
+    pendingUsePoints = aPendingUsePoints;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setDatePlaced(Date aDatePlaced)
   {
@@ -135,6 +160,16 @@ public class Order
     return wasSet;
   }
 
+  public String getPendingAssigneeUsername()
+  {
+    return pendingAssigneeUsername;
+  }
+
+  public boolean getPendingUsePoints()
+  {
+    return pendingUsePoints;
+  }
+
   public Date getDatePlaced()
   {
     return datePlaced;
@@ -181,6 +216,169 @@ public class Order
   public int getOrderNumber()
   {
     return orderNumber;
+  }
+
+  public String getStateFullName()
+  {
+    String answer = state.toString();
+    return answer;
+  }
+
+  public State getState()
+  {
+    return state;
+  }
+
+  public boolean checkout(int totalCost)
+  {
+    boolean wasEventProcessed = false;
+    
+    State aState = state;
+    switch (aState)
+    {
+      case UnderConstruction:
+        if (this.numberOfOrderItems()>this.minimumNumberOfOrderItems())
+        {
+        // line 12 "../../../../../OrderStateMachine.ump"
+          setTotalCost(totalCost);
+          setState(State.Pending);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean cancelOrder()
+  {
+    boolean wasEventProcessed = false;
+    
+    State aState = state;
+    switch (aState)
+    {
+      case UnderConstruction:
+        setState(State.Cancelled);
+        wasEventProcessed = true;
+        break;
+      case Pending:
+        setState(State.Cancelled);
+        wasEventProcessed = true;
+        break;
+      case Placed:
+        setState(State.Cancelled);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean pay(int finalCost,int pointsUsed,int pointsAwarded,Date datePlaced)
+  {
+    boolean wasEventProcessed = false;
+    
+    State aState = state;
+    switch (aState)
+    {
+      case Pending:
+        // line 20 "../../../../../OrderStateMachine.ump"
+        setFinalCost(finalCost);
+                setPointsUsedInPayment(pointsUsed);
+                setPointsAwarded(pointsAwarded);
+                setDatePlaced(datePlaced);
+        setState(State.Placed);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean assignEmployee(Employee employeeToAssign)
+  {
+    boolean wasEventProcessed = false;
+    
+    State aState = state;
+    switch (aState)
+    {
+      case Placed:
+        if (!(hasOrderAssignee()))
+        {
+        // line 34 "../../../../../OrderStateMachine.ump"
+          setOrderAssignee(employeeToAssign);
+          setState(State.InPreparation);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      case InPreparation:
+        if (hasOrderAssignee())
+        {
+        // line 43 "../../../../../OrderStateMachine.ump"
+          setOrderAssignee(employeeToAssign);
+          setState(State.InPreparation);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean finishAssembly()
+  {
+    boolean wasEventProcessed = false;
+    
+    State aState = state;
+    switch (aState)
+    {
+      case InPreparation:
+        setState(State.ReadyForDelivery);
+        wasEventProcessed = true;
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean deliver(Date orderDeliveryDeadline)
+  {
+    boolean wasEventProcessed = false;
+    
+    State aState = state;
+    switch (aState)
+    {
+      case ReadyForDelivery:
+        if (isDeliveryDay(orderDeliveryDeadline))
+        {
+          setState(State.Delivered);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  private void setState(State aState)
+  {
+    state = aState;
   }
   /* Code from template association_GetOne */
   public FashionStoreManagement getFashionStoreManagement()
@@ -388,11 +586,19 @@ public class Order
     }
   }
 
+  // line 62 "../../../../../OrderStateMachine.ump"
+  public boolean isDeliveryDay(Date orderDeliveryDeadline){
+    Date todaysDate = new Date(System.currentTimeMillis());
+        return !orderDeliveryDeadline.after(todaysDate);
+  }
+
 
   public String toString()
   {
     return super.toString() + "["+
             "orderNumber" + ":" + getOrderNumber()+ "," +
+            "pendingAssigneeUsername" + ":" + getPendingAssigneeUsername()+ "," +
+            "pendingUsePoints" + ":" + getPendingUsePoints()+ "," +
             "totalCost" + ":" + getTotalCost()+ "," +
             "finalCost" + ":" + getFinalCost()+ "," +
             "pointsUsedInPayment" + ":" + getPointsUsedInPayment()+ "," +

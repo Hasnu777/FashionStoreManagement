@@ -7,31 +7,16 @@ class Order {
     state {
 
         UnderConstruction {
-            addItem(int aQuantity, FashionStoreManagement aFashionStoreManagement, SizedItem aItem)
-                [aQuantity <= 10 && aQuantity <= aItem.getQuantityInInventory() && this.numberOfOrderItems() < 49]
-                / {addOrderItem(int aQuantity, FashionStoreManagement aFashionStoreManagement, SizedItem aItem);}
-                -> UnderConstruction;
-            updateItem(int aNewQuantity, FashionStoreManagement aFashionStoreManagement, SizedItem aItem)
-                [aNewQuantity <= 10 && aNewQuantity <= aItem.getQuantityInInventory()]
-                / {setOrderItemQuantity(int orderNumber, String itemName, String size, int quantity);}
-                -> UnderConstruction;
-            removeItem(FashionStoreManagement aFashionStoreManagement, SizedItem aItem)
-                [this.indexOfOrderItem(aItem) != -1]
-                / {removeOrderItem(aItem);}
-                -> UnderConstruction;
             checkout(int totalCost)
                 [this.numberOfOrderItems() > this.minimumNumberOfOrderItems()]
                 / {setTotalCost(totalCost);}
                 -> Pending;
             cancelOrder()
-                []
-                / {}
                 -> Cancelled;
         }
 
         Pending {
             pay(int finalCost, int pointsUsed, int pointsAwarded, Date datePlaced)
-            []
             / {
                 setFinalCost(finalCost);
                 setPointsUsedInPayment(pointsUsed);
@@ -40,8 +25,6 @@ class Order {
             }
             -> Placed;
             cancelOrder()
-                []
-                / {}
                 -> Cancelled;
         }
 
@@ -51,8 +34,6 @@ class Order {
                 / {setOrderAssignee(employeeToAssign);}
                 -> InPreparation;
             cancelOrder()
-                []
-                / {}
                 -> Cancelled;
         }
 
@@ -62,15 +43,12 @@ class Order {
                 / {setOrderAssignee(employeeToAssign);}
                 -> InPreparation;
             finishAssembly()
-                []
-                / {}
                 -> ReadyForDelivery;
         }
 
         ReadyForDelivery {
             deliver(Date orderDeliveryDeadline)
-                [isDeliveryDay(Date orderDeliveryDeadline)]
-                / {}
+                [isDeliveryDay(orderDeliveryDeadline)]
                 -> Delivered;
         }
 

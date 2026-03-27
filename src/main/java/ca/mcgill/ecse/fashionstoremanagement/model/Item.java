@@ -1,11 +1,10 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.35.0.8072.d3fbfafbc modeling language!*/
+/*This code was generated using the UMPLE 1.36.0.8291.fe15f81dc modeling language!*/
 
 package ca.mcgill.ecse.fashionstoremanagement.model;
 import java.util.*;
 
-// line 42 "../../../../../../model.ump"
-// line 137 "../../../../../../model.ump"
+// line 42 "../../../../../FashionStoreManagement.ump"
 public class Item
 {
 

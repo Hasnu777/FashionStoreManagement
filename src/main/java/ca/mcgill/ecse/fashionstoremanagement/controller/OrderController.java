@@ -24,7 +24,7 @@ public class OrderController {
 
         Customer customer = findCustomer(user);
 
-        return new Order(null, Order.DeliveryDeadline.valueOf(deadline), system, customer);
+        return new Order(null, null, Order.DeliveryDeadline.valueOf(deadline), system, customer);
     }
     
     public static void deleteOrder(int orderNumber) throws FashionStoreException {

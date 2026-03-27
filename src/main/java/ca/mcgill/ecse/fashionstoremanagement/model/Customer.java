@@ -1,12 +1,11 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.35.0.8072.d3fbfafbc modeling language!*/
+/*This code was generated using the UMPLE 1.36.0.8291.fe15f81dc modeling language!*/
 
 package ca.mcgill.ecse.fashionstoremanagement.model;
 import java.util.*;
 import java.sql.Date;
 
-// line 28 "../../../../../../model.ump"
-// line 122 "../../../../../../model.ump"
+// line 28 "../../../../../FashionStoreManagement.ump"
 public class Customer extends UserRole
 {
 
@@ -128,9 +127,9 @@ public class Customer extends UserRole
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addOrdersPlaced(Date aDatePlaced, Order.DeliveryDeadline aDeadline, FashionStoreManagement aFashionStoreManagement)
+  public Order addOrdersPlaced(String aPendingAssigneeUsername, Date aDatePlaced, Order.DeliveryDeadline aDeadline, FashionStoreManagement aFashionStoreManagement)
   {
-    return new Order(aDatePlaced, aDeadline, aFashionStoreManagement, this);
+    return new Order(aPendingAssigneeUsername, aDatePlaced, aDeadline, aFashionStoreManagement, this);
   }
 
   public boolean addOrdersPlaced(Order aOrdersPlaced)
