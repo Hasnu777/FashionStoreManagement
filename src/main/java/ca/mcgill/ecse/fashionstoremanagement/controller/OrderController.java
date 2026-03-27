@@ -67,7 +67,7 @@ public class OrderController {
 
     }
 
-    public static void addItemToOrder(int orderNumber, String itemName, String size) throws FashionStoreException {
+    public static void addItemToOrder(int orderNumber, String itemName, String size, int quantity) throws FashionStoreException {
         FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
 
         Order order = getOrder(orderNumber);
@@ -103,10 +103,10 @@ public class OrderController {
 
         // Add sized item to order
         if (targetSizedItem != null) {
-            new OrderItem(1, system, order, targetSizedItem);
+            new OrderItem(quantity, system, order, targetSizedItem); // Hassan - use model function to add item to order
         }
 
-        }
+    }
 
 
     public static void setOrderItemQuantity(int orderNumber, String itemName, String size, int quantity) throws FashionStoreException {

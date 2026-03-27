@@ -1,0 +1,88 @@
+namespace ca.mcgill.ecse.fashionstoremanagement.model;
+
+class Order {
+    String pendingAssigneeUsername;
+    boolean pendingUsePoints = false;
+
+    state {
+
+        UnderConstruction {
+            addItem(int aQuantity, FashionStoreManagement aFashionStoreManagement, SizedItem aItem)
+                [aQuantity <= 10 && aQuantity <= aItem.getQuantityInInventory() && this.numberOfOrderItems() < 49]
+                / {addOrderItem(int aQuantity, FashionStoreManagement aFashionStoreManagement, SizedItem aItem);}
+                -> UnderConstruction;
+            updateItem(int aNewQuantity, FashionStoreManagement aFashionStoreManagement, SizedItem aItem)
+                [aNewQuantity <= 10 && aNewQuantity <= aItem.getQuantityInInventory()]
+                / {setOrderItemQuantity(int orderNumber, String itemName, String size, int quantity);}
+                -> UnderConstruction;
+            removeItem(FashionStoreManagement aFashionStoreManagement, SizedItem aItem)
+                [this.indexOfOrderItem(aItem) != -1]
+                / {removeOrderItem(aItem);}
+                -> UnderConstruction;
+            checkout(int totalCost)
+                [this.numberOfOrderItems() > this.minimumNumberOfOrderItems()]
+                / {setTotalCost(totalCost);}
+                -> Pending;
+            cancelOrder()
+                []
+                / {}
+                -> Cancelled;
+        }
+
+        Pending {
+            pay(int finalCost, int pointsUsed, int pointsAwarded, Date datePlaced)
+            []
+            / {
+                setFinalCost(finalCost);
+                setPointsUsedInPayment(pointsUsed);
+                setPointsAwarded(pointsAwarded);
+                setDatePlaced(datePlaced);
+            }
+            -> Placed;
+            cancelOrder()
+                []
+                / {}
+                -> Cancelled;
+        }
+
+        Placed {
+            assignEmployee(Employee employeeToAssign)
+                [!hasOrderAssignee()]
+                / {setOrderAssignee(employeeToAssign);}
+                -> InPreparation;
+            cancelOrder()
+                []
+                / {}
+                -> Cancelled;
+        }
+
+        InPreparation {
+            assignEmployee(Employee employeeToAssign)
+                [hasOrderAssignee()]
+                / {setOrderAssignee(employeeToAssign);}
+                -> InPreparation;
+            finishAssembly()
+                []
+                / {}
+                -> ReadyForDelivery;
+        }
+
+        ReadyForDelivery {
+            deliver(Date orderDeliveryDeadline)
+                [isDeliveryDay(Date orderDeliveryDeadline)]
+                / {}
+                -> Delivered;
+        }
+
+        Delivered {}
+
+        Cancelled {}
+
+    }
+
+    boolean isDeliveryDay(Date orderDeliveryDeadline) Java {
+        Date todaysDate = new Date(System.currentTimeMillis());
+        return !orderDeliveryDeadline.after(todaysDate);
+    }
+
+}
