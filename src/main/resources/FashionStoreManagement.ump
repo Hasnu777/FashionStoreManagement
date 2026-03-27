@@ -1,4 +1,5 @@
 namespace ca.mcgill.ecse.fashionstoremanagement.model;
+use OrderStateMachine.ump;
 
 class FashionStoreManagement {
   1 <@>- * User users;
