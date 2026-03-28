@@ -1,5 +1,8 @@
 package ca.mcgill.ecse.fashionstoremanagement.feature;
 
+import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
+import ca.mcgill.ecse.fashionstoremanagement.controller.ItemController;
+import ca.mcgill.ecse.fashionstoremanagement.controller.OrderProcessingController;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -19,10 +22,16 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @When("the user attempts to pay for the order with ID {string} {string} their points")
     public void the_user_attempts_to_pay_for_the_order_with_id_without_using_their_points(String orderId,
                                                                                           String usingOrWithoutUsing) {
+        int orderNumber = Integer.parseInt(orderId);
+        boolean usePoints = usingOrWithoutUsing.equals("using");
 
-
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+//        Retrieve orderNumber
+        try {
+            OrderProcessingController.payForOrder(orderNumber, usePoints);
+        }
+        catch (FashionStoreException e) {
+            StepDefinitions.error = e;
+        }
     }
 
     @When("the manager attempts to assign the order with ID {string} to {string}")
@@ -39,14 +48,23 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
 
     @When("the user attempts to cancel the order with ID {string}")
     public void the_user_attempts_to_cancel_the_order_with_id(String orderId) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        try {
+            OrderProcessingController.cancelOrder(Integer.parseInt(orderId));
+        }
+        catch (FashionStoreException e) {
+            StepDefinitions.error = e;
+        }
     }
 
     @When("the manager attempts to mark the order with ID {string} as delivered")
     public void the_manager_attempts_to_mark_the_order_with_id_as_delivered(String orderId) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        try {
+            OrderProcessingController.deliverOrder(Integer.parseInt(orderId));
+        }
+        catch (FashionStoreException e) {
+            StepDefinitions.error = e;
+        }
+
     }
 
     @Then("the order shall be {string}")

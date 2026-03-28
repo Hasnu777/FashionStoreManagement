@@ -19,9 +19,16 @@ public class OrderProcessingController {
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
+
 //        Check for incorrect states
-        if (!order.getStateFullName().equals("Pending")) {
-            throw new FashionStoreException("cannot pay for order in state " + order.getStateFullName());
+        if (order.getStateFullName().equals("UnderConstruction")) {
+            throw new FashionStoreException("cannot pay for an order which has not been checked out");
+        }
+        else if (order.getStateFullName().equals("Placed")) {
+            throw new FashionStoreException("cannot pay for an order which has already been paid for");
+        }
+        else if (order.getStateFullName().equals("Cancelled")) {
+            throw new FashionStoreException("cannot pay for an order which has been cancelled");
         }
 
 //        Retrieve cost, date placed
@@ -78,20 +85,32 @@ public class OrderProcessingController {
         LocalDate localDeliveryDate = datePlaced.toLocalDate().plusDays(deadlineNumber);
         Date deliveryDate = java.sql.Date.valueOf(localDeliveryDate);
 
-//        Deliver order
-        order.deliver(deliveryDate);
+//        Check if delivery date has passed
+        Date today = new Date(System.currentTimeMillis());
+        if (today.before(deliveryDate)){
+            throw new FashionStoreException("cannot mark order as delivered before the delivery date");
+        }
+
+//        Attempt to deliver order
+        if (!order.deliver(deliveryDate)) {
+            throw new FashionStoreException("cannot mark an order as delivered if it is not ready for delivery");
+        }
     }
 
     public static void cancelOrder(int orderNumber) {
 //        Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
+        String state = order.getStateFullName();
 
-//        Try to cancel
-        boolean success = order.cancelOrder();
-
-//        Handle failure
-        if (!success) {
-            throw new RuntimeException("Cannot cancel order in state: " + order.getState());
+//        Ensure correct state
+        if (state.equals("InPreparation") || state.equals("ReadyForDelivery") || state.equals("Delivered")) {
+            throw new FashionStoreException("cannot cancel an order that has already been assigned to an employee");
         }
+        else if (state.equals("Cancelled")) {
+            throw new FashionStoreException("order was already cancelled");
+        }
+
+//        Cancel
+        boolean success = order.cancelOrder();
     }
 }
