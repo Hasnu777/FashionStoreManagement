@@ -14,9 +14,15 @@ public class OrderProcessingController {
 
     public static void payForOrder(int orderNumber, boolean usePoints) {
         // Hassan - compute the final cost and points used and points awarded to customer and date placed then pass into the event
-
 //        Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
+//        Check for incorrect states
+        if (!order.getStateFullName().equals("Pending")) {
+            throw new FashionStoreException("cannot pay for order in state " + order.getStateFullName());
+        }
 
 //        Retrieve cost, date placed
         int subtotal = order.getTotalCost();

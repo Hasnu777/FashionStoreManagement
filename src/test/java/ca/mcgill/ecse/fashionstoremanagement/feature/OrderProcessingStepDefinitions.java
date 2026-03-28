@@ -10,6 +10,8 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
 
     @When("the user attempts to check out the order with ID {string}")
     public void the_user_attempts_to_check_out_the_order_with_id(String orderId) {
+
+
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
@@ -17,6 +19,8 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @When("the user attempts to pay for the order with ID {string} {string} their points")
     public void the_user_attempts_to_pay_for_the_order_with_id_without_using_their_points(String orderId,
                                                                                           String usingOrWithoutUsing) {
+
+
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
