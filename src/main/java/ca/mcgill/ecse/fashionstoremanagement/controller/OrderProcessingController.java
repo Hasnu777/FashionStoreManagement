@@ -35,13 +35,20 @@ public class OrderProcessingController {
         int subtotal = order.getTotalCost();
         Date orderDate = order.getDatePlaced();
 
-//        Calculate points awarded
+//        Calculate points awarded, check for insufficient stock
         int pointsToAward = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
-            int quantity = orderItem.getQuantity();
             SizedItem item = orderItem.getItem();
+            int quantity = orderItem.getQuantity();
             int points = item.getItem().getLoyaltyPoints();
+            int quantityInInv = item.getQuantityInInventory();
 
+//            Check stock
+            if (quantity > quantityInInv) {
+                throw new FashionStoreException("insufficient stock of item \"" + item.getItem().getName() + "\"");
+            }
+
+//            Increase points
             pointsToAward += quantity*points;
         }
 
@@ -112,5 +119,16 @@ public class OrderProcessingController {
 
 //        Cancel
         boolean success = order.cancelOrder();
+
+//        Add items back to stock
+        if (success) {
+            for (OrderItem orderItem : order.getOrderItems()) {;
+                SizedItem item = orderItem.getItem();
+                int quantity = orderItem.getQuantity();
+                int quantityInInv = item.getQuantityInInventory();
+
+                item.setQuantityInInventory(quantityInInv + quantity);
+            }
+        }
     }
 }
