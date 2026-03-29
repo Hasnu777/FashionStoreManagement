@@ -114,15 +114,25 @@ public class OrderController {
         if (quantity < 0) {
             throw new FashionStoreException("quantity must be non-negative");
         }
+        if (quantity > 10) {
+            throw new FashionStoreException("quantity cannot exceed 10");
+        }
+
 
         Order order = getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
 
-        if (order.getDatePlaced() != null) {
-            throw new FashionStoreException("order has already been placed");
+        if(order.getState() == Order.State.Pending){
+            throw new FashionStoreException("order has already been checked out");
         }
+
+        if(order.getState() !=  Order.State.UnderConstruction){
+            throw new FashionStoreException("order has already been placed");
+
+        }
+
 
         Item baseItem = Item.getWithName(itemName);
         if (baseItem == null) {

@@ -95,7 +95,18 @@ public class OrderStepDefinitions extends StepDefinitions {
     @Given("the order with ID {string} has {int} distinct items")
     public void theOrderWithIDHasDistinctItems(String id, int count) {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+
+        Order order = getOrderByFeatureId(id);
+        assertNotNull(order, "No order found for ID" + id);
+
+        FashionStoreManagement system = getSystem();
+
+        int currentCount = order.numberOfOrderItems();
+        for(int i = currentCount; i < count; i++){
+            Item dummyItem = new Item("dummyItem" + i, 1.0, 0, system);
+            SizedItem dummySizedItem = new SizedItem(SizedItem.Size.M, 100, system, dummyItem);
+            order.addOrderItem(1, system, dummySizedItem);
+        }
     }
 
     @When("{string} attempts to create an order with deadline {string}")
