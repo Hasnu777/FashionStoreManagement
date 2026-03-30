@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse.fashionstoremanagement.model;
 
-// line 91 "../../../../../FashionStoreManagement.ump"
+// line 95 "../../../../../FashionStoreManagement.ump"
 public class ShipmentItem
 {
 

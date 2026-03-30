@@ -5,7 +5,7 @@ package ca.mcgill.ecse.fashionstoremanagement.model;
 import java.sql.Date;
 import java.util.*;
 
-// line 79 "../../../../../FashionStoreManagement.ump"
+// line 83 "../../../../../FashionStoreManagement.ump"
 public class Shipment
 {
 

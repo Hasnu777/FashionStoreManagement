@@ -62,7 +62,7 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
         } catch (FashionStoreException e) {
             StepDefinitions.error = e;
         }
-        throw new PendingException();
+//        throw new PendingException();
     }
 
     @When("the user attempts to cancel the order with ID {string}")

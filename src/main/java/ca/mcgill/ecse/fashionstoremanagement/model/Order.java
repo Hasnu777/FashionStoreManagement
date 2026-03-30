@@ -592,6 +592,11 @@ public class Order
         return !orderDeliveryDeadline.after(todaysDate);
   }
 
+  // line 79 "../../../../../FashionStoreManagement.ump"
+   public void setOrderState(State aState){
+    state = aState;
+  }
+
 
   public String toString()
   {
