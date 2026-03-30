@@ -6,6 +6,7 @@ import ca.mcgill.ecse.fashionstoremanagement.controller.OrderProcessingControlle
 import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
 import ca.mcgill.ecse.fashionstoremanagement.model.FashionStoreManagement;
 import ca.mcgill.ecse.fashionstoremanagement.model.Order;
+import ca.mcgill.ecse.fashionstoremanagement.model.*;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -37,7 +38,7 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
 
     @When("the user attempts to pay for the order with ID {string} {string} their points")
     public void the_user_attempts_to_pay_for_the_order_with_id_without_using_their_points(String orderId, String usingOrWithoutUsing) {
-        int orderNumber = Integer.parseInt(orderId);
+        int orderNumber = Integer.parseInt(orderIdToNumber.get(orderId));
         currentOrderNumber = orderNumber;
         boolean usePoints = usingOrWithoutUsing.equals("using");
 
@@ -140,7 +141,14 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
         // Write code here that turns the phrase above into concrete actions
         Order order = OrderController.getOrder(currentOrderNumber);
         assert order != null;
-        assertEquals(order.getOrderAssignee().getUser().getUsername(), employeeUsername);
+        try {
+            User employee = order.getOrderAssignee().getUser();
+            assertEquals(employee.getUsername(), employeeUsername);
+        }
+        catch (NullPointerException e) {
+            assertEquals(employeeUsername, "NULL");
+        }
+
     }
 
     @Then("the order's date placed shall be today")

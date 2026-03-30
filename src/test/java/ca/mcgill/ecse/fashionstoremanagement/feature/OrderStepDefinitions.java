@@ -100,7 +100,12 @@ public class OrderStepDefinitions extends StepDefinitions {
             }
             else if (orderState.equals("in preparation")) {
                 order.setOrderState(Order.State.InPreparation);
-                order.setOrderAssignee(assignee);
+                if (assignee != null) {
+                    order.setOrderAssignee(assignee);
+                }
+                else {
+                    order.setPendingAssigneeUsername("NULL");
+                }
             }
             else if (orderState.equals("ready for delivery")) {
                 order.setOrderState(Order.State.ReadyForDelivery);
