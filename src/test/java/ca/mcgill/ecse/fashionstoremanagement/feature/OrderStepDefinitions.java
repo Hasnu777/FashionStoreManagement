@@ -13,7 +13,6 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -92,6 +91,21 @@ public class OrderStepDefinitions extends StepDefinitions {
 
             // Create the order directly in the model for the Given step.
             Order order = new Order(assigneeUsername, datePlaced, deadline, getSystem(), customer);
+            lastCreatedOrder = order;
+            if (orderState.equals("pending")) {
+                order.setOrderState(Order.State.Pending);
+            }
+            else if (orderState.equals("placed")) {
+                order.setOrderState(Order.State.Placed);
+            }
+            else if (orderState.equals("in preparation")) {
+                order.setOrderState(Order.State.InPreparation);
+                order.setOrderAssignee(assignee);
+            }
+            else if (orderState.equals("ready for delivery")) {
+                order.setOrderState(Order.State.ReadyForDelivery);
+                order.setOrderAssignee(assignee);
+            }
 
 //            Field orderStateField = Order.class.getDeclaredField("state");
 //            orderStateField.setAccessible(true);

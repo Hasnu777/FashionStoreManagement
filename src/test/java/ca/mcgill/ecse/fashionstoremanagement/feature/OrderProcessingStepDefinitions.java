@@ -96,7 +96,7 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @Then("the order shall be {string}")
     public void the_order_shall_be(String expectedState) {
         // Write code here that turns the phrase above into concrete actions
-        assertEquals(expectedState, OrderController.getOrder(currentOrderNumber).getStateFullName());
+        assertEquals(expectedState, OrderController.getOrder(currentOrderNumber).getStateFullName().toLowerCase());
     }
 
     @Then("the order's placer shall be {string}")

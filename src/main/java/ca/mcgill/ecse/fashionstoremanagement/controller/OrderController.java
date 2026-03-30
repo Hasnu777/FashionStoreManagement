@@ -50,7 +50,8 @@ public class OrderController {
         // Iterate through the orders to match the ID, avoiding index out of bounds
         System.out.println("Going through orders right now");
         for (Order order : system.getOrders()) {
-
+            System.out.println("Looking at order with order ID " + order.getOrderNumber());
+            System.out.println(order.toString());
             if (order.getOrderNumber() == orderNumber) {
                 return order;
             }
