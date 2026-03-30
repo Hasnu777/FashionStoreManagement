@@ -84,19 +84,36 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
         // Write code here that turns the phrase above into concrete actions
         currentOrderNumber = Integer.parseInt(orderIdToNumber.get(orderId));
         System.out.println("Current order number is " + currentOrderNumber);
-//        Order.State state = OrderController.getOrder(Integer.parseInt(orderIdToNumber.get(orderId))).getState();
-        Order order = OrderController.getOrder(currentOrderNumber);
-//        if (order != null) {
-//            System.out.println(order.toString()) + "\nState: " + order.getState());
-//        }
-        OrderProcessingController.deliverOrder(currentOrderNumber);
-//        assertEquals(state, "delivered"); //prolly not correct implementation
+        try {
+            OrderProcessingController.deliverOrder(currentOrderNumber);
+        }
+        catch (FashionStoreException e) {
+            StepDefinitions.error = e;
+        }
     }
 
     @Then("the order shall be {string}")
     public void the_order_shall_be(String expectedState) {
+        Order.State state = OrderController.getOrder(currentOrderNumber).getState();
+        String stateString = "";
+        switch (state) {
+            case UnderConstruction:
+                stateString = "under construction";
+            case Pending:
+                stateString = "pending";
+            case Placed:
+                stateString = "placed";
+            case InPreparation:
+                stateString = "in preparation";
+            case ReadyForDelivery:
+                stateString = "ready for delivery";
+            case Delivered:
+                stateString = "delivered";
+            case Cancelled:
+                stateString = "cancelled";
+        }
         // Write code here that turns the phrase above into concrete actions
-        assertEquals(expectedState, OrderController.getOrder(currentOrderNumber).getStateFullName().toLowerCase());
+        assertEquals(expectedState, stateString);
     }
 
     @Then("the order's placer shall be {string}")
