@@ -24,7 +24,15 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @When("the user attempts to check out the order with ID {string}")
     public void the_user_attempts_to_check_out_the_order_with_id(String orderId) {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        //throw new PendingException();
+        int orderNumber = Integer.parseInt(orderIdToNumber.get(orderId));
+
+        try{
+            OrderProcessingController.checkOut(orderNumber);
+        }
+        catch (FashionStoreException e) {
+            StepDefinitions.error = e;
+        }
     }
 
     @When("the user attempts to pay for the order with ID {string} {string} their points")
@@ -144,7 +152,12 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @Then("the total cost of the order shall be {int} cents")
     public void the_total_cost_of_the_order_shall_be_cents(Integer expectedCost) {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        //throw new PendingException();
+        Order order = OrderController.getOrder(currentOrderNumber);
+        assert order != null;
+        Integer current = order.getTotalCost();
+        System.out.println("current is" + current);
+        assertEquals(expectedCost, current);
     }
 
     @Then("the final cost of the order, after considering points, shall be {int} cents")
