@@ -94,6 +94,10 @@ public class OrderController {
             }
         }
 
+        if (order.getOrderItems().size() >= 50) {
+            throw new FashionStoreException("a customer cannot have more than 50 distinct items in their cart");
+        }
+
         SizedItem targetSizedItem = null;
 
         for (SizedItem sizedItem : system.getSizedItems()) {
@@ -120,6 +124,10 @@ public class OrderController {
             throw new FashionStoreException("quantity cannot exceed 10");
         }
 
+
+        if (quantity > 10) {
+            throw new FashionStoreException("a customer cannot order more than 10 of each different item with a specific size");
+        }
 
         Order order = getOrder(orderNumber);
         if (order == null) {
@@ -154,6 +162,11 @@ public class OrderController {
         if (itemToUpdate == null) {
             throw new FashionStoreException("order does not include item \"" + itemName + "\" in size \"" + size + "\"");
         }
+
+        if (quantity > itemToUpdate.getItem().getQuantityInInventory()) {
+            throw new FashionStoreException("the quantity requested of the item must be available in inventory");
+        }
+
             if (quantity == 0) {
                 itemToUpdate.delete();
             } else {
