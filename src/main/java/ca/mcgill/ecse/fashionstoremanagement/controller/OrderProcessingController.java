@@ -4,6 +4,8 @@ import ca.mcgill.ecse.fashionstoremanagement.model.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
+
 
 public class OrderProcessingController {
 
@@ -66,7 +68,21 @@ public class OrderProcessingController {
     }
 
     public static void assignOrderToEmployee(int orderNumber, String employeeUsername) {
-        throw new RuntimeException("TODO");
+        Order order = OrderController.getOrder(orderNumber);
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
+        List<Employee> employees = system.getEmployees();
+        Employee employee = null;
+        for (Employee e : employees) {
+            if (e.getUser().getUsername().equals(employeeUsername)) {
+                employee = e;
+            }
+        }
+        if (employee == null) {
+            throw new FashionStoreException("employee not found");
+        }
+        else {
+            order.assignEmployee(employee);
+        }
     }
 
     public static void finishOrderAssembly(int orderNumber) {

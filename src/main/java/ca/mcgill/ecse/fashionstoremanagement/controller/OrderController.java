@@ -7,9 +7,11 @@ import java.util.List;
 public class OrderController {
 
     public static Order createOrder(String customerUsername, String deadline) throws FashionStoreException {
-        if (customerUsername == null || customerUsername.isEmpty()) {
-            throw new FashionStoreException("there is no user with username \"" + customerUsername + "\"");
+        // check if no customer username was provided
+        if (customerUsername == null || customerUsername.isEmpty() || customerUsername.equals("NULL")) {
+            throw new FashionStoreException("customer is required");
         }
+        // check if no deadline was provided
         if (deadline == null || deadline.isEmpty() || deadline.equals("NULL")) {
             throw new FashionStoreException("delivery deadline is required");
         }
