@@ -96,22 +96,6 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     public void the_order_shall_be(String expectedState) {
         Order.State state = OrderController.getOrder(currentOrderNumber).getState();
         String stateString = "";
-//        switch (state) {
-//            case UnderConstruction:
-//                stateString = "under construction";
-//            case Pending:
-//                stateString = "pending";
-//            case Placed:
-//                stateString = "placed";
-//            case InPreparation:
-//                stateString = "in preparation";
-//            case ReadyForDelivery:
-//                stateString = "ready for delivery";
-//            case Delivered:
-//                stateString = "delivered";
-//            case Cancelled:
-//                stateString = "cancelled";
-//        }
         if (state == Order.State.UnderConstruction) {
             stateString = "under construction";
         }
