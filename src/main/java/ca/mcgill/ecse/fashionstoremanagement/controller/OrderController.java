@@ -67,17 +67,21 @@ public class OrderController {
 
     }
 
-    public static void addItemToOrder(int orderNumber, String itemName, String size, int quantity) throws FashionStoreException {
+    public static void addItemToOrder(int orderNumber, String itemName, String size) throws FashionStoreException {
         FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
 
+        // make sure the order exists
         Order order = getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
 
-        if (order.getDatePlaced() != null) {
+        // can only add items if the order is still being built
+        if (order.getState() != Order.State.UnderConstruction) {
             throw new FashionStoreException("order has already been placed");
         }
+
+        // make sure the item exists
         Item itemToAdd = Item.getWithName(itemName);
         if (itemToAdd == null) {
             throw new FashionStoreException("there is no item called \"" + itemName + "\"");
@@ -85,15 +89,8 @@ public class OrderController {
 
         SizedItem.Size targetSize = SizedItem.Size.valueOf(size);
 
-        // Check if sized item is already in order
-        for (OrderItem orderItem : order.getOrderItems()) {
-            if (orderItem.getItem().getItem().equals(itemToAdd) && orderItem.getItem().getSize() == targetSize) {
-                throw new FashionStoreException("order already includes item \"" + itemName + "\" in size \"" + size + "\"");
-            }
-        }
-
+        // find the specific sized version of the item
         SizedItem targetSizedItem = null;
-
         for (SizedItem sizedItem : system.getSizedItems()) {
             if (sizedItem.getItem().equals(itemToAdd) && sizedItem.getSize() == targetSize) {
                 targetSizedItem = sizedItem;
@@ -101,11 +98,24 @@ public class OrderController {
             }
         }
 
-        // Add sized item to order
-        if (targetSizedItem != null) {
-            new OrderItem(quantity, system, order, targetSizedItem); // Hassan - use model function to add item to order
+        if (targetSizedItem == null) {
+            throw new FashionStoreException("there is no item called \"" + itemName + "\" in size \"" + size + "\"");
         }
 
+        // don't add duplicates
+        for (OrderItem orderItem : order.getOrderItems()) {
+            if (orderItem.getItem().equals(targetSizedItem)) {
+                throw new FashionStoreException("order already includes item \"" + itemName + "\" in size \"" + size + "\"");
+            }
+        }
+
+        // cart can't have more than 50 distinct items
+        if (order.numberOfOrderItems() >= 50) {
+            throw new FashionStoreException("order cannot include more than 49 distinct items");
+        }
+
+        // add it with quantity 1
+        order.addOrderItem(1, system, targetSizedItem);
     }
 
 
