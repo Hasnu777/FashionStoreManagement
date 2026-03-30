@@ -46,9 +46,11 @@ public class OrderController {
     
     public static Order getOrder(int orderNumber) {
         FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
-
+        System.out.println("Entering getOrder()");
         // Iterate through the orders to match the ID, avoiding index out of bounds
+        System.out.println("Going through orders right now");
         for (Order order : system.getOrders()) {
+
             if (order.getOrderNumber() == orderNumber) {
                 return order;
             }

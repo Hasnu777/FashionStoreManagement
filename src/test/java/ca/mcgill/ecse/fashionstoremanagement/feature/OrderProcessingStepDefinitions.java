@@ -19,7 +19,7 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
 
     private int currentOrderNumber;
 
-    private Map<String, Integer> orderIdToNumber = new HashMap<>();
+    private Map<String, String> orderIdToNumber = OrderStepDefinitions.orderIds;
 
     @When("the user attempts to check out the order with ID {string}")
     public void the_user_attempts_to_check_out_the_order_with_id(String orderId) {
@@ -28,9 +28,9 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     }
 
     @When("the user attempts to pay for the order with ID {string} {string} their points")
-    public void the_user_attempts_to_pay_for_the_order_with_id_without_using_their_points(String orderId,
-                                                                                          String usingOrWithoutUsing) {
+    public void the_user_attempts_to_pay_for_the_order_with_id_without_using_their_points(String orderId, String usingOrWithoutUsing) {
         int orderNumber = Integer.parseInt(orderId);
+        currentOrderNumber = orderNumber;
         boolean usePoints = usingOrWithoutUsing.equals("using");
 
 //        Retrieve orderNumber
@@ -40,6 +40,7 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
         catch (FashionStoreException e) {
             StepDefinitions.error = e;
         }
+
     }
 
     @When("the manager attempts to assign the order with ID {string} to {string}")
@@ -47,7 +48,8 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
         // Write code here that turns the phrase above into concrete actions
         //TODO
         try{
-            OrderProcessingController.assignOrderToEmployee(orderIdToNumber.get(orderId), employeeUsername);
+            currentOrderNumber = Integer.parseInt(orderIdToNumber.get(orderId));
+            OrderProcessingController.assignOrderToEmployee(Integer.parseInt(orderIdToNumber.get(orderId)), employeeUsername);
         } catch (FashionStoreException e){
             StepDefinitions.error = e;
         }
@@ -58,7 +60,8 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     public void the_user_attempts_to_indicate_that_assembly_of_the_order_with_id_is_finished(String orderId) {
         // Write code here that turns the phrase above into concrete actions
         try{
-            OrderProcessingController.finishOrderAssembly(orderIdToNumber.get(orderId));
+            currentOrderNumber = Integer.parseInt(orderIdToNumber.get(orderId));
+            OrderProcessingController.finishOrderAssembly(Integer.parseInt(orderIdToNumber.get(orderId)));
         } catch (FashionStoreException e) {
             StepDefinitions.error = e;
         }
@@ -69,7 +72,8 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     public void the_user_attempts_to_cancel_the_order_with_id(String orderId) {
         // Write code here that turns the phrase above into concrete actions
         try{
-            OrderProcessingController.cancelOrder(orderIdToNumber.get(orderId));
+            currentOrderNumber = Integer.parseInt(orderIdToNumber.get(orderId));
+            OrderProcessingController.cancelOrder(Integer.parseInt(orderIdToNumber.get(orderId)));
         } catch (FashionStoreException e){
             StepDefinitions.error = e;
         }
@@ -78,15 +82,21 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @When("the manager attempts to mark the order with ID {string} as delivered")
     public void the_manager_attempts_to_mark_the_order_with_id_as_delivered(String orderId) {
         // Write code here that turns the phrase above into concrete actions
-
-        Order.State state = OrderController.getOrder(orderIdToNumber.get(orderId)).getState();
-        assertEquals(state, "delivered"); //prolly not correct implementation
+        currentOrderNumber = Integer.parseInt(orderIdToNumber.get(orderId));
+        System.out.println("Current order number is " + currentOrderNumber);
+//        Order.State state = OrderController.getOrder(Integer.parseInt(orderIdToNumber.get(orderId))).getState();
+        Order order = OrderController.getOrder(currentOrderNumber);
+//        if (order != null) {
+//            System.out.println(order.toString()) + "\nState: " + order.getState());
+//        }
+        OrderProcessingController.deliverOrder(currentOrderNumber);
+//        assertEquals(state, "delivered"); //prolly not correct implementation
     }
 
     @Then("the order shall be {string}")
     public void the_order_shall_be(String expectedState) {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        assertEquals(expectedState, OrderController.getOrder(currentOrderNumber).getStateFullName());
     }
 
     @Then("the order's placer shall be {string}")
