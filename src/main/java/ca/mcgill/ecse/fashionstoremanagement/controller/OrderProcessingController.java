@@ -10,8 +10,50 @@ import java.util.List;
 public class OrderProcessingController {
 
     public static void checkOut(int orderNumber) {
-        throw new RuntimeException("TODO");
+        // throw new RuntimeException("TODO");
         // Hassan - calculate the total cost then pass into the event
+        // Retrieve order object
+        Order order = OrderController.getOrder(orderNumber);
+
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
+
+        // Pending orders cannot be empty
+        if (order.getOrderItems().isEmpty()) {
+            throw new FashionStoreException("pending orders cannot be empty");
+        }
+
+        double totalCostDouble = 0.0;
+
+        // Calculate cost with bulk discount
+        for (OrderItem orderItem : order.getOrderItems()) {
+            int quantity = orderItem.getQuantity();
+            double basePrice = orderItem.getItem().getItem().getPrice(); // Price in dollars
+
+            // Calculate discount (5% per additional item, capped at 45%)
+            double discountMultiplier = 0.05 * (quantity - 1);
+            if (discountMultiplier > 0.45) {
+                discountMultiplier = 0.45;
+            }
+
+            double discountedPricePerItem = basePrice * (1.0 - discountMultiplier);
+            totalCostDouble += (discountedPricePerItem * quantity);
+        }
+
+        // Add same-day delivery fee
+        if (order.getDeadline() == Order.DeliveryDeadline.SameDay) {
+            totalCostDouble += 5.00; // $5.00 extra fee
+        }
+
+        // Convert total cost to cents (since loyalty points are 1 point = 1 cent)
+        int totalCostCents = (int) Math.round(totalCostDouble * 100);
+
+        // Trigger state machine event
+        boolean success = order.checkout(totalCostCents);
+        if (!success) {
+            throw new FashionStoreException("cannot checkout an order which is not under construction");
+        }
     }
 
     public static void payForOrder(int orderNumber, boolean usePoints) {
@@ -69,6 +111,9 @@ public class OrderProcessingController {
 
     public static void assignOrderToEmployee(int orderNumber, String employeeUsername) {
         Order order = OrderController.getOrder(orderNumber);
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
         FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
         List<Employee> employees = system.getEmployees();
         Employee employee = null;
@@ -88,6 +133,9 @@ public class OrderProcessingController {
     public static void finishOrderAssembly(int orderNumber) {
         //throw new RuntimeException("TODO");
         Order order = OrderController.getOrder(orderNumber);
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
         boolean flag = order.finishAssembly();
         if (!flag){
             throw new FashionStoreException("Unable to finish assembly");
@@ -103,7 +151,9 @@ public class OrderProcessingController {
 
 //        Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
-
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
 //        Retrieve datePlaced, deliveryDeadline
         Date datePlaced = order.getDatePlaced();
         Order.DeliveryDeadline deadline = order.getDeadline();
@@ -128,6 +178,9 @@ public class OrderProcessingController {
     public static void cancelOrder(int orderNumber) {
 //        Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
         String state = order.getStateFullName();
 
 //        Ensure correct state
