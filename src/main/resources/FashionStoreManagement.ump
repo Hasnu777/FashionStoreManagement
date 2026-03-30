@@ -74,6 +74,10 @@ class Order {
   lazy immutable Integer pointsUsedInPayment;
   // Points awarded to customer
   lazy immutable Integer pointsAwarded;
+
+  public void setOrderState(State aState) {
+    state = aState;
+  }
 }
 
 class Shipment {
