@@ -86,7 +86,12 @@ public class OrderProcessingController {
     }
 
     public static void finishOrderAssembly(int orderNumber) {
-        throw new RuntimeException("TODO");
+        //throw new RuntimeException("TODO");
+        Order order = OrderController.getOrder(orderNumber);
+        boolean flag = order.finishAssembly();
+        if (!flag){
+            throw new FashionStoreException("Unable to finish assembly");
+        }
     }
 
     public static void deliverOrder(int orderNumber) {
