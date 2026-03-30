@@ -164,14 +164,25 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
         Order order = OrderController.getOrder(currentOrderNumber);
         assert order != null;
         Integer current = order.getTotalCost();
-        System.out.println("current is" + current);
         assertEquals(expectedCost, current);
     }
 
     @Then("the final cost of the order, after considering points, shall be {int} cents")
     public void the_final_cost_of_the_order_after_considering_points_shall_be_cents(Integer expectedCost) {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
+        //throw new PendingException();
+        Order order = OrderController.getOrder(currentOrderNumber);
+        assert order != null;
+        //        Calculate points awarded, check for insufficient stock
+        int pointsToAward = 0;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            SizedItem item = orderItem.getItem();
+            int quantity = orderItem.getQuantity();
+            int points = item.getItem().getLoyaltyPoints();
+            int quantityInInv = item.getQuantityInInventory();
 
+            Integer current = order.getTotalCost() + pointsToAward;
+            assertEquals(expectedCost, current);
+        }
+    }
 }
