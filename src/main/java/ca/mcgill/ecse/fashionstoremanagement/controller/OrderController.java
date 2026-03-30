@@ -72,14 +72,18 @@ public class OrderController {
     public static void addItemToOrder(int orderNumber, String itemName, String size, int quantity) throws FashionStoreException {
         FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
 
+        // make sure the order exists
         Order order = getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
 
-        if (order.getDatePlaced() != null) {
+        // can only add items if the order is still being built
+        if (order.getState() != Order.State.UnderConstruction) {
             throw new FashionStoreException("order has already been placed");
         }
+
+        // make sure the item exists
         Item itemToAdd = Item.getWithName(itemName);
         if (itemToAdd == null) {
             throw new FashionStoreException("there is no item called \"" + itemName + "\"");
@@ -99,7 +103,6 @@ public class OrderController {
         }
 
         SizedItem targetSizedItem = null;
-
         for (SizedItem sizedItem : system.getSizedItems()) {
             if (sizedItem.getItem().equals(itemToAdd) && sizedItem.getSize() == targetSize) {
                 targetSizedItem = sizedItem;
@@ -120,9 +123,9 @@ public class OrderController {
         if (quantity < 0) {
             throw new FashionStoreException("quantity must be non-negative");
         }
-        if (quantity > 10) {
-            throw new FashionStoreException("quantity cannot exceed 10");
-        }
+//        if (quantity > 10) {
+//            throw new FashionStoreException("quantity cannot exceed 10");
+//        }
 
 
         if (quantity > 10) {
@@ -134,15 +137,13 @@ public class OrderController {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
 
-        if(order.getState() == Order.State.Pending){
-            throw new FashionStoreException("order has already been checked out");
-        }
+//        if(order.getState() == Order.State.Pending){
+//            throw new FashionStoreException("order has already been checked out");
+//        }
 
         if(order.getState() !=  Order.State.UnderConstruction){
             throw new FashionStoreException("order has already been placed");
-
         }
-
 
         Item baseItem = Item.getWithName(itemName);
         if (baseItem == null) {
