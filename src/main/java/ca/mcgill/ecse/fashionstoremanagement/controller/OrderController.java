@@ -75,11 +75,14 @@ public class OrderController {
         // make sure the order exists
         Order order = getOrder(orderNumber);
         if (order == null) {
+            System.out.println("order is null");
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
+        System.out.println("Acquired the following order:\n\n" + order.toString() + "\nState: " + order.getState());
 
         // can only add items if the order is still being built
         if (order.getState() != Order.State.UnderConstruction) {
+            System.out.println("Order is not under construction");
             throw new FashionStoreException("order has already been placed");
         }
 
@@ -88,8 +91,8 @@ public class OrderController {
         if (itemToAdd == null) {
             throw new FashionStoreException("there is no item called \"" + itemName + "\"");
         }
-
-        SizedItem.Size targetSize = SizedItem.Size.valueOf(size);
+        System.out.println("Attempting to add the following item:\n\n" + itemToAdd.toString());
+        SizedItem.Size targetSize = SizedItem.Size.valueOf(size.toUpperCase());
 
         // Check if sized item is already in order
         for (OrderItem orderItem : order.getOrderItems()) {
@@ -98,8 +101,8 @@ public class OrderController {
             }
         }
 
-        if (order.getOrderItems().size() >= 50) {
-            throw new FashionStoreException("a customer cannot have more than 50 distinct items in their cart");
+        if (order.getOrderItems().size() == 49) {
+            throw new FashionStoreException("order cannot include more than 49 distinct items");
         }
 
         SizedItem targetSizedItem = null;
@@ -109,7 +112,7 @@ public class OrderController {
                 break;
             }
         }
-
+        System.out.println("adding the target item oh em gee");
         // Add sized item to order
         if (targetSizedItem != null) {
             new OrderItem(quantity, system, order, targetSizedItem); // Hassan - use model function to add item to order
@@ -123,26 +126,32 @@ public class OrderController {
         if (quantity < 0) {
             throw new FashionStoreException("quantity must be non-negative");
         }
+        if (quantity > 10) {
+            throw new FashionStoreException("quantity cannot exceed 10");
+        }
+
+
 //        if (quantity > 10) {
-//            throw new FashionStoreException("quantity cannot exceed 10");
+//            throw new FashionStoreException("a customer cannot order more than 10 of each different item with a specific size");
 //        }
 
 
-        if (quantity > 10) {
-            throw new FashionStoreException("a customer cannot order more than 10 of each different item with a specific size");
-        }
 
         Order order = getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
-
+        System.out.println("Order acquired:\n\n " + order.toString() + "\nState: " + order.getState());
 //        if(order.getState() == Order.State.Pending){
 //            throw new FashionStoreException("order has already been checked out");
 //        }
 
-        if(order.getState() !=  Order.State.UnderConstruction){
+        if (order.getState() == Order.State.Placed) {
             throw new FashionStoreException("order has already been placed");
+        }
+
+        if (order.getState() == Order.State.Pending) {
+            throw new FashionStoreException("order has already been checked out");
         }
 
         Item baseItem = Item.getWithName(itemName);
