@@ -113,9 +113,11 @@ public class OrderStepDefinitions extends StepDefinitions {
             }
             else if (orderState.equals("delivered")) {
                 order.setOrderState(Order.State.Delivered);
+                order.setOrderAssignee(assignee);
             }
             else if (orderState.equals("cancelled")) {
                 order.setOrderState(Order.State.Cancelled);
+                order.setOrderAssignee(assignee);
             }
 
 //            Field orderStateField = Order.class.getDeclaredField("state");

@@ -176,6 +176,10 @@ public class OrderProcessingController {
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
+        Order.State orderState = order.getState();
+        if (orderState != Order.State.ReadyForDelivery) {
+            throw new FashionStoreException("cannot mark an order as delivered if it is not ready for delivery");
+        }
 //        Retrieve datePlaced, deliveryDeadline
         Date datePlaced = order.getDatePlaced();
         Order.DeliveryDeadline deadline = order.getDeadline();
