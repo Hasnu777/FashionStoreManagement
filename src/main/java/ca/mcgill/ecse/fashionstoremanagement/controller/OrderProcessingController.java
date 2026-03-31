@@ -216,16 +216,24 @@ public class OrderProcessingController {
         else if (state.equals("Cancelled")) {
             throw new FashionStoreException("order was already cancelled");
         }
-
+        Order.State orderState = order.getState();
+        boolean itemsRemoved = true;
+        if (orderState == Order.State.UnderConstruction || orderState == Order.State.Pending) {
+            itemsRemoved = false;
+        }
 //        Cancel
         boolean success = order.cancelOrder();
 
 //        Add items back to stock
-        if (success) {
-            for (OrderItem orderItem : order.getOrderItems()) {;
+        if (success && itemsRemoved) {
+            for (OrderItem orderItem : order.getOrderItems()) {
+                System.out.println("Looking at the following order item: \n" + orderItem.toString());
                 SizedItem item = orderItem.getItem();
+                System.out.println("Looking at the above order item's assoc'ed size item: \n" + item.toString());
                 int quantity = orderItem.getQuantity();
+                System.out.println("Looking at the above order item's quantity: \n" + quantity);
                 int quantityInInv = item.getQuantityInInventory();
+                System.out.println("Looking at the above order item's quantity inventory: \n" + quantityInInv);
 
                 item.setQuantityInInventory(quantityInInv + quantity);
             }
