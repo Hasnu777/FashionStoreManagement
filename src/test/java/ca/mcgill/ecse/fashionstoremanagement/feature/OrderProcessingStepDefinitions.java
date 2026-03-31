@@ -11,6 +11,7 @@ import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -133,7 +134,12 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @Then("the order's placer shall be {string}")
     public void the_order_s_placer_shall_be(String customerUsername) {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        //throw new PendingException();
+        Order order = OrderController.getOrder(currentOrderNumber);
+        assert order != null;
+
+        Customer placer = order.getOrderPlacer();
+        assertEquals(placer.getUser().getUsername(), customerUsername);
     }
 
     @Then("the order's assignee shall be {string}")
@@ -154,7 +160,13 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
     @Then("the order's date placed shall be today")
     public void the_order_s_date_placed_shall_be_today() {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        //throw new PendingException();
+        Order order = OrderController.getOrder(currentOrderNumber);
+        assert order != null;
+
+        Date orderDate = order.getDatePlaced();
+        Date today = new Date(System.currentTimeMillis());
+        assertEquals(orderDate, today);
     }
 
     @Then("the total cost of the order shall be {int} cents")
