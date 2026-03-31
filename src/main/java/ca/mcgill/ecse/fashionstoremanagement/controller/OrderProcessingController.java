@@ -47,12 +47,16 @@ public class OrderProcessingController {
         }
 
         // Convert total cost to cents (since loyalty points are 1 point = 1 cent)
-        int totalCostCents = (int) Math.round(totalCostDouble * 100);
+        int totalCostCents = (int) Math.round(totalCostDouble);
 
         // Trigger state machine event
         boolean success = order.checkout(totalCostCents);
         if (!success) {
-            throw new FashionStoreException("cannot checkout an order which is not under construction");
+//            Order.State orderState = order.getState();
+//            if (orderState == Order.State.Pending) {
+//                throw new FashionStoreException("order has already been checked out");
+//            }
+            throw new FashionStoreException("order has already been checked out");
         }
     }
 

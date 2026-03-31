@@ -7,6 +7,7 @@ import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
 import ca.mcgill.ecse.fashionstoremanagement.model.FashionStoreManagement;
 import ca.mcgill.ecse.fashionstoremanagement.model.Order;
 import ca.mcgill.ecse.fashionstoremanagement.model.*;
+import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -19,9 +20,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderProcessingStepDefinitions extends StepDefinitions {
 
-    private int currentOrderNumber;
+    private int currentOrderNumber = OrderStepDefinitions.lastCreatedOrder.getOrderNumber();
 
     private Map<String, String> orderIdToNumber = OrderStepDefinitions.orderIds;
+
+//    @Before
+//    public void before() {
+//        currentOrderNumber = ;
+//        orderIdToNumber = ;
+//    }
 
     @When("the user attempts to check out the order with ID {string}")
     public void the_user_attempts_to_check_out_the_order_with_id(String orderId) {

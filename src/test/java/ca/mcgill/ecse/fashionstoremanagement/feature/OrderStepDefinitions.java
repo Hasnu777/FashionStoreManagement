@@ -22,7 +22,7 @@ public class OrderStepDefinitions extends StepDefinitions {
     public static Map<String, String> orderIds;
 
     // remembers the order created in the When step
-    private Order lastCreatedOrder;
+    public static Order lastCreatedOrder;
 
     @Before
     public void before() {

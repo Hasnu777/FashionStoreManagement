@@ -51,7 +51,7 @@ public class OrderController {
         System.out.println("Going through orders right now");
         for (Order order : system.getOrders()) {
             System.out.println("Looking at order with order ID " + order.getOrderNumber());
-            System.out.println(order.toString());
+            System.out.println(order.toString() + "\nState: " + order.getState());
             if (order.getOrderNumber() == orderNumber) {
                 return order;
             }
