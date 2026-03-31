@@ -28,22 +28,28 @@ public class OrderProcessingController {
 
         // Calculate cost with bulk discount
         for (OrderItem orderItem : order.getOrderItems()) {
+            System.out.println("Looking at order item: \n\n" + orderItem.toString());
             int quantity = orderItem.getQuantity();
+            System.out.println("Quantity: " + quantity);
             double basePrice = orderItem.getItem().getItem().getPrice(); // Price in dollars
+            System.out.println("Base price: " + basePrice);
 
             // Calculate discount (5% per additional item, capped at 45%)
             double discountMultiplier = 0.05 * (quantity - 1);
             if (discountMultiplier > 0.45) {
                 discountMultiplier = 0.45;
             }
+            System.out.println("Discount multiplier: " + discountMultiplier);
 
             double discountedPricePerItem = basePrice * (1.0 - discountMultiplier);
+            System.out.println("Discounted price per item: " + discountedPricePerItem);
             totalCostDouble += (discountedPricePerItem * quantity);
+            System.out.println("Total cost: " + totalCostDouble);
         }
 
         // Add same-day delivery fee
         if (order.getDeadline() == Order.DeliveryDeadline.SameDay) {
-            totalCostDouble += 5.00; // $5.00 extra fee
+            totalCostDouble += 500; // $5.00 extra fee in cents
         }
 
         // Convert total cost to cents (since loyalty points are 1 point = 1 cent)
@@ -159,7 +165,13 @@ public class OrderProcessingController {
 
         boolean flag = order.finishAssembly();
         if (!flag){
-
+            Order.State orderState = order.getState();
+            if (orderState == Order.State.ReadyForDelivery || orderState == Order.State.Delivered) {
+                throw new FashionStoreException("cannot finish assembling order that has already been assembled");
+            }
+            else if (orderState == Order.State.Cancelled) {
+                throw new FashionStoreException("cannot finish assembling order because it was cancelled");
+            }
             throw new FashionStoreException("cannot finish assembling order because it has not been assigned to an employee");
         }
     }
