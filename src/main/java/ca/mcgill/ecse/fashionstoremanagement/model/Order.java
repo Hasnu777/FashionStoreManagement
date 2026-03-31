@@ -593,6 +593,7 @@ public class Order
   }
 
   // line 79 "../../../../../FashionStoreManagement.ump"
+  // Used solely for testing purposes
    public void setOrderState(State aState){
     state = aState;
   }
