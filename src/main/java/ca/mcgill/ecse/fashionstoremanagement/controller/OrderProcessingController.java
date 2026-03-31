@@ -9,21 +9,7 @@ import java.util.List;
 
 public class OrderProcessingController {
 
-    public static void checkOut(int orderNumber) {
-        // throw new RuntimeException("TODO");
-        // Hassan - calculate the total cost then pass into the event
-        // Retrieve order object
-        Order order = OrderController.getOrder(orderNumber);
-
-        if (order == null) {
-            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
-        }
-
-        // Pending orders cannot be empty
-        if (order.getOrderItems().isEmpty()) {
-            throw new FashionStoreException("cannot check out an empty order");
-        }
-
+    private static int calculateTotalCost(Order order) {
         double totalCostDouble = 0.0;
 
         // Calculate cost with bulk discount
@@ -55,6 +41,27 @@ public class OrderProcessingController {
         // Convert total cost to cents (since loyalty points are 1 point = 1 cent)
         int totalCostCents = (int) Math.round(totalCostDouble);
 
+        return totalCostCents;
+
+    }
+
+    public static void checkOut(int orderNumber) {
+        // throw new RuntimeException("TODO");
+        // Hassan - calculate the total cost then pass into the event
+        // Retrieve order object
+        Order order = OrderController.getOrder(orderNumber);
+
+        if (order == null) {
+            throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
+        }
+
+        // Pending orders cannot be empty
+        if (order.getOrderItems().isEmpty()) {
+            throw new FashionStoreException("cannot check out an empty order");
+        }
+        int totalCostCents = calculateTotalCost(order);
+        order.setTotalCost(totalCostCents);
+
         // Trigger state machine event
         boolean success = order.checkout(totalCostCents);
         if (!success) {
@@ -81,21 +88,36 @@ public class OrderProcessingController {
         else if (order.getStateFullName().equals("Placed")) {
             throw new FashionStoreException("cannot pay for an order which has already been paid for");
         }
+        Order.State orderState = order.getState();
+        if (orderState == Order.State.InPreparation || orderState == Order.State.ReadyForDelivery || orderState == Order.State.Delivered) {
+            throw new FashionStoreException("cannot pay for an order which has already been paid for");
+        }
         else if (order.getStateFullName().equals("Cancelled")) {
             throw new FashionStoreException("cannot pay for an order which has been cancelled");
         }
 
 //        Retrieve cost, date placed
         int subtotal = order.getTotalCost();
-        Date orderDate = order.getDatePlaced();
+        if (subtotal == 0) {
+            subtotal = calculateTotalCost(order);
+            order.setTotalCost(subtotal);
+        }
+        System.out.println("Subtotal: " + subtotal);
+        Date orderDate = new Date(System.currentTimeMillis());
+        System.out.println("Order date: " + orderDate);
 
 //        Calculate points awarded, check for insufficient stock
         int pointsToAward = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
+            System.out.println("Looking at order item: \n\n" + orderItem.toString());
             SizedItem item = orderItem.getItem();
+            System.out.println("Looking at item: \n\n" + item.toString());
             int quantity = orderItem.getQuantity();
+            System.out.println("Order item quantity: " + quantity);
             int points = item.getItem().getLoyaltyPoints();
+            System.out.println("Order item points: " + points);
             int quantityInInv = item.getQuantityInInventory();
+            System.out.println("Order item quantityInInv: " + quantityInInv);
 
 //            Check stock
             if (quantity > quantityInInv) {
@@ -104,25 +126,38 @@ public class OrderProcessingController {
 
 //            Increase points
             pointsToAward += quantity*points;
+            System.out.println("Updated points to award to: " + pointsToAward);
         }
 
 //        Calculate points to use
         Customer customer = order.getOrderPlacer();
         int pointsInAccount = customer.getLoyaltyPoints();
+        System.out.println("Customer points: " + pointsInAccount);
         int pointsToUse = (usePoints) ? Math.min(pointsInAccount, subtotal) : 0;
+        System.out.println("Points to use: " + pointsToUse);
 
 //        Calculate final cost and leftover points
         int total = subtotal - pointsToUse;
-        customer.setLoyaltyPoints(pointsInAccount - pointsToUse);
+        System.out.println("Total cost: " + total);
+
+        customer.setLoyaltyPoints(pointsInAccount - pointsToUse + pointsToAward);
 
 //       Pay for order
-        boolean success = order.pay(total, pointsToUse, pointsToAward, orderDate);
-        if (!success) {
-            Order.State orderState = order.getState();
-            if (orderState == Order.State.InPreparation || orderState == Order.State.ReadyForDelivery || orderState == Order.State.Delivered) {
-                throw new FashionStoreException("cannot pay for an order which has already been paid for");
-            }
+        order.pay(total, pointsToUse, pointsToAward, orderDate);
+        order.setFinalCost(total);
+        System.out.println("Order final cost: " + order.getFinalCost());
+        for (OrderItem orderItem : order.getOrderItems()) {
+            System.out.println("Looking at the following order item: \n" + orderItem.toString());
+            SizedItem item = orderItem.getItem();
+            System.out.println("Looking at the above order item's assoc'ed size item: \n" + item.toString());
+            int quantity = orderItem.getQuantity();
+            System.out.println("Looking at the above order item's quantity: \n" + quantity);
+            int quantityInInv = item.getQuantityInInventory();
+            System.out.println("Looking at the above order item's quantity inventory: \n" + quantityInInv);
+
+            item.setQuantityInInventory(quantityInInv - quantity);
         }
+
     }
 
     public static void assignOrderToEmployee(int orderNumber, String employeeUsername) {

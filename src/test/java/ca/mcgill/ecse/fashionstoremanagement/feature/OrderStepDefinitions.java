@@ -97,6 +97,7 @@ public class OrderStepDefinitions extends StepDefinitions {
             }
             else if (orderState.equals("placed")) {
                 order.setOrderState(Order.State.Placed);
+                order.setDatePlaced(datePlaced);
             }
             else if (orderState.equals("in preparation")) {
                 order.setOrderState(Order.State.InPreparation);
@@ -106,14 +107,17 @@ public class OrderStepDefinitions extends StepDefinitions {
                 else {
                     order.setPendingAssigneeUsername("NULL");
                 }
+                order.setDatePlaced(datePlaced);
             }
             else if (orderState.equals("ready for delivery")) {
                 order.setOrderState(Order.State.ReadyForDelivery);
                 order.setOrderAssignee(assignee);
+                order.setDatePlaced(datePlaced);
             }
             else if (orderState.equals("delivered")) {
                 order.setOrderState(Order.State.Delivered);
                 order.setOrderAssignee(assignee);
+                order.setDatePlaced(datePlaced);
             }
             else if (orderState.equals("cancelled")) {
                 order.setOrderState(Order.State.Cancelled);

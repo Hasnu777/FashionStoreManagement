@@ -12,7 +12,7 @@ import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -173,7 +173,7 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
 
         Date orderDate = order.getDatePlaced();
         Date today = new Date(System.currentTimeMillis());
-        assertEquals(orderDate, today);
+        assertEquals(today.toLocalDate(), orderDate.toLocalDate());
     }
 
     @Then("the total cost of the order shall be {int} cents")
@@ -193,15 +193,7 @@ public class OrderProcessingStepDefinitions extends StepDefinitions {
         Order order = OrderController.getOrder(currentOrderNumber);
         assert order != null;
         //        Calculate points awarded, check for insufficient stock
-        int pointsToAward = 0;
-        for (OrderItem orderItem : order.getOrderItems()) {
-            SizedItem item = orderItem.getItem();
-            int quantity = orderItem.getQuantity();
-            int points = item.getItem().getLoyaltyPoints();
-            int quantityInInv = item.getQuantityInInventory();
+        assertEquals(expectedCost, order.getFinalCost());
 
-            Integer current = order.getTotalCost() + pointsToAward;
-            assertEquals(expectedCost, current);
-        }
     }
 }
