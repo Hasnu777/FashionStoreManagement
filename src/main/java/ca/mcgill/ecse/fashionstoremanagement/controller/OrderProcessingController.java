@@ -116,7 +116,13 @@ public class OrderProcessingController {
         customer.setLoyaltyPoints(pointsInAccount - pointsToUse);
 
 //       Pay for order
-        order.pay(total, pointsToUse, pointsToAward, orderDate);
+        boolean success = order.pay(total, pointsToUse, pointsToAward, orderDate);
+        if (!success) {
+            Order.State orderState = order.getState();
+            if (orderState == Order.State.InPreparation || orderState == Order.State.ReadyForDelivery || orderState == Order.State.Delivered) {
+                throw new FashionStoreException("cannot pay for an order which has already been paid for");
+            }
+        }
     }
 
     public static void assignOrderToEmployee(int orderNumber, String employeeUsername) {
