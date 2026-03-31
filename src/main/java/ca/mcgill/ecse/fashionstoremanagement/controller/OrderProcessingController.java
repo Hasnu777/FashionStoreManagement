@@ -21,7 +21,7 @@ public class OrderProcessingController {
 
         // Pending orders cannot be empty
         if (order.getOrderItems().isEmpty()) {
-            throw new FashionStoreException("pending orders cannot be empty");
+            throw new FashionStoreException("cannot check out an empty order");
         }
 
         double totalCostDouble = 0.0;
@@ -123,9 +123,25 @@ public class OrderProcessingController {
             }
         }
         if (employee == null) {
-            throw new FashionStoreException("employee not found");
+            List<User> users = system.getUsers();
+            for (User u : users) {
+                if (u.getUsername().equals(employeeUsername)) {
+                    throw new FashionStoreException("\"" + employeeUsername + "\" is not an employee");
+                }
+            }
+            throw new FashionStoreException("there is no user with username \"" + employeeUsername + "\"");
         }
         else {
+            Order.State orderState = order.getState();
+            if (orderState == Order.State.UnderConstruction || orderState == Order.State.Pending) {
+                throw new FashionStoreException("cannot assign employee to order that has not been placed");
+            }
+            else if (orderState == Order.State.ReadyForDelivery || orderState == Order.State.Delivered) {
+                throw new FashionStoreException("cannot assign employee to an order that has already been prepared");
+            }
+            else if (orderState == Order.State.Cancelled) {
+                throw new FashionStoreException("cannot assign employee to an order that has been cancelled");
+            }
             order.assignEmployee(employee);
         }
     }
@@ -136,9 +152,11 @@ public class OrderProcessingController {
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
+
         boolean flag = order.finishAssembly();
         if (!flag){
-            throw new FashionStoreException("Unable to finish assembly");
+
+            throw new FashionStoreException("cannot finish assembling order because it has not been assigned to an employee");
         }
     }
 
