@@ -9,6 +9,12 @@ import java.util.List;
 
 public class OrderProcessingController {
 
+
+    /**
+     * This helper method calculates the total cost of an order, not including points
+     * @param order the order cost to be calculated
+     * @return the total cost of the order
+     */
     private static int calculateTotalCost(Order order) {
         double totalCostDouble = 0.0;
 
@@ -45,9 +51,11 @@ public class OrderProcessingController {
 
     }
 
+    /**
+     * This method performs an order checkout,
+     * @param orderNumber the order number to be reference
+     */
     public static void checkOut(int orderNumber) {
-        // throw new RuntimeException("TODO");
-        // Hassan - calculate the total cost then pass into the event
         // Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
 
@@ -65,23 +73,23 @@ public class OrderProcessingController {
         // Trigger state machine event
         boolean success = order.checkout(totalCostCents);
         if (!success) {
-//            Order.State orderState = order.getState();
-//            if (orderState == Order.State.Pending) {
-//                throw new FashionStoreException("order has already been checked out");
-//            }
             throw new FashionStoreException("order has already been checked out");
         }
     }
 
+    /**
+     * This method performs an order payment, and specifies if points are to be used
+     * @param orderNmber the order number used to reference the order to be paid
+     * @param usePoints indicates whether to use points
+     */
     public static void payForOrder(int orderNumber, boolean usePoints) {
-        // Hassan - compute the final cost and points used and points awarded to customer and date placed then pass into the event
-//        Retrieve order object
+        // Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
 
-//        Check for incorrect states
+        // Check for incorrect states
         if (order.getStateFullName().equals("UnderConstruction")) {
             throw new FashionStoreException("cannot pay for an order which has not been checked out");
         }
@@ -96,7 +104,7 @@ public class OrderProcessingController {
             throw new FashionStoreException("cannot pay for an order which has been cancelled");
         }
 
-//        Retrieve cost, date placed
+        // Retrieve cost, date placed
         int subtotal = order.getTotalCost();
         if (subtotal == 0) {
             subtotal = calculateTotalCost(order);
@@ -106,7 +114,7 @@ public class OrderProcessingController {
         Date orderDate = new Date(System.currentTimeMillis());
         System.out.println("Order date: " + orderDate);
 
-//        Calculate points awarded, check for insufficient stock
+        // Calculate points awarded, check for insufficient stock
         int pointsToAward = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             System.out.println("Looking at order item: \n\n" + orderItem.toString());
@@ -119,30 +127,30 @@ public class OrderProcessingController {
             int quantityInInv = item.getQuantityInInventory();
             System.out.println("Order item quantityInInv: " + quantityInInv);
 
-//            Check stock
+            // Check stock
             if (quantity > quantityInInv) {
                 throw new FashionStoreException("insufficient stock of item \"" + item.getItem().getName() + "\"");
             }
 
-//            Increase points
+            // Increase points
             pointsToAward += quantity*points;
             System.out.println("Updated points to award to: " + pointsToAward);
         }
 
-//        Calculate points to use
+        // Calculate points to use
         Customer customer = order.getOrderPlacer();
         int pointsInAccount = customer.getLoyaltyPoints();
         System.out.println("Customer points: " + pointsInAccount);
         int pointsToUse = (usePoints) ? Math.min(pointsInAccount, subtotal) : 0;
         System.out.println("Points to use: " + pointsToUse);
 
-//        Calculate final cost and leftover points
+        // Calculate final cost and leftover points
         int total = subtotal - pointsToUse;
         System.out.println("Total cost: " + total);
 
         customer.setLoyaltyPoints(pointsInAccount - pointsToUse + pointsToAward);
 
-//       Pay for order
+        // Pay for order
         order.pay(total, pointsToUse, pointsToAward, orderDate);
         order.setFinalCost(total);
         System.out.println("Order final cost: " + order.getFinalCost());
@@ -160,14 +168,22 @@ public class OrderProcessingController {
 
     }
 
+    /**
+     * This method assigns an order to a single employee
+     * @param orderNumber used to reference the order to be assigned
+     * @param employeeUsername the username of the employee of which the order is assigned to
+     */
     public static void assignOrderToEmployee(int orderNumber, String employeeUsername) {
+        // Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
+        // Retrieve management system
         FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
         List<Employee> employees = system.getEmployees();
         Employee employee = null;
+        // Find correct employee
         for (Employee e : employees) {
             if (e.getUser().getUsername().equals(employeeUsername)) {
                 employee = e;
@@ -183,6 +199,7 @@ public class OrderProcessingController {
             throw new FashionStoreException("there is no user with username \"" + employeeUsername + "\"");
         }
         else {
+            // Ensures that order is in the correct state
             Order.State orderState = order.getState();
             if (orderState == Order.State.UnderConstruction || orderState == Order.State.Pending) {
                 throw new FashionStoreException("cannot assign employee to order that has not been placed");
@@ -197,14 +214,19 @@ public class OrderProcessingController {
         }
     }
 
+    /**
+     * This method assembles an order, making it ready for delivery
+     * @param orderNumber used to reference the order to be assembled
+     */
     public static void finishOrderAssembly(int orderNumber) {
-        //throw new RuntimeException("TODO");
+        // Retrieve order
         Order order = OrderController.getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
 
         boolean flag = order.finishAssembly();
+        // If order failed to assemble
         if (!flag){
             Order.State orderState = order.getState();
             if (orderState == Order.State.ReadyForDelivery || orderState == Order.State.Delivered) {
@@ -217,14 +239,12 @@ public class OrderProcessingController {
         }
     }
 
+    /**
+     * This method delivers an order
+     * @param orderNumber used to reference the order to be delivered
+     */
     public static void deliverOrder(int orderNumber) {
-        /* Hassan - you must calculate the order's actual delivery deadline in Date form
-         by using date placed and deadline variables in the form of a Date (lowkey ask Claude)
-         then pass it into the event. The event guard will be checking if this delivery deadline
-         is on or before the current date.
-         */
-
-//        Retrieve order object
+        // Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
@@ -233,36 +253,40 @@ public class OrderProcessingController {
         if (orderState != Order.State.ReadyForDelivery) {
             throw new FashionStoreException("cannot mark an order as delivered if it is not ready for delivery");
         }
-//        Retrieve datePlaced, deliveryDeadline
+        // Retrieve datePlaced, deliveryDeadline
         Date datePlaced = order.getDatePlaced();
         Order.DeliveryDeadline deadline = order.getDeadline();
         int deadlineNumber = deadline.ordinal();
 
-//        Create delivery date
+        // Create delivery date
         LocalDate localDeliveryDate = datePlaced.toLocalDate().plusDays(deadlineNumber);
-        Date deliveryDate = java.sql.Date.valueOf(localDeliveryDate);
+        Date deliveryDate = Date.valueOf(localDeliveryDate);
 
-//        Check if delivery date has passed
+        // Check if delivery date has passed
         Date today = new Date(System.currentTimeMillis());
         if (today.before(deliveryDate)){
             throw new FashionStoreException("cannot mark order as delivered before the delivery date");
         }
 
-//        Attempt to deliver order
+        // Attempt to deliver order
         if (!order.deliver(deliveryDate)) {
             throw new FashionStoreException("cannot mark an order as delivered if it is not ready for delivery");
         }
     }
 
+    /**
+     * This method cancels an order that has been previously placed
+     * @param orderNumber used to reference the order to be canceled
+     */
     public static void cancelOrder(int orderNumber) {
-//        Retrieve order object
+        // Retrieve order object
         Order order = OrderController.getOrder(orderNumber);
         if (order == null) {
             throw new FashionStoreException("there is no order with number \"" + orderNumber + "\"");
         }
         String state = order.getStateFullName();
 
-//        Ensure correct state
+        // Ensure correct state
         if (state.equals("InPreparation") || state.equals("ReadyForDelivery") || state.equals("Delivered")) {
             throw new FashionStoreException("cannot cancel an order that has already been assigned to an employee");
         }
@@ -274,10 +298,10 @@ public class OrderProcessingController {
         if (orderState == Order.State.UnderConstruction || orderState == Order.State.Pending) {
             itemsRemoved = false;
         }
-//        Cancel
+        // Cancel
         boolean success = order.cancelOrder();
 
-//        Add items back to stock
+        // Add items back to stock
         if (success && itemsRemoved) {
             for (OrderItem orderItem : order.getOrderItems()) {
                 System.out.println("Looking at the following order item: \n" + orderItem.toString());
