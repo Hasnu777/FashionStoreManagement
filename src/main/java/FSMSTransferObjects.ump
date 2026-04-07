@@ -1,0 +1,104 @@
+// generate Java "src/main/java";
+namespace ca.mcgill.ecse.fashionstoremanagement.controller;
+
+/*
+ * Transfer objects are used to transfer information
+ * to the UI (which we will have in delievrable 4)
+ * without giving it access to model objects
+ */
+
+class TOShipment {
+  int shipmentNumber;
+  Date dateOrdered;
+  Date dateArrived;
+}
+
+class TOShipmentItem {
+  int shipmentNumber;
+  int productId;
+  String itemName;
+  String size;
+  Integer quantity;
+}
+
+class TOUser {
+  String username;
+  String name;
+  String phoneNumber;
+}
+
+class TOCustomer {
+  String username;
+  String name;
+  String phoneNumber;
+  String address;
+  Integer loyaltyPoints;
+}
+
+
+class TOEmployee {
+  String username;
+  String name;
+  String phoneNumber;
+}
+
+class TOManager {
+  String username;
+  String name;
+  String phoneNumber;
+}
+
+class TOOrder {
+  int orderNumber;
+  Date datePlaced;
+  String deadline;
+  int totalCost;
+  int finalCost;
+  int pointsUsedInPayment;
+  int pointsAwarded;
+  String customerUsername;
+  String assigneeUsername;
+  String status;
+}
+
+class TOOrderItem {
+  int orderNumber;
+  int productId;
+  String itemName;
+  String size;
+  Integer quantity;
+}
+
+class TOItem {
+  String name;
+  double price;
+  Integer loyaltyPoints;
+}
+
+class TOSpecialItem {
+  String name;
+  double price;
+  Integer loyaltyPoints;
+  String availabilityType;
+  Date startDate;
+  Date endDate;
+}
+
+class TOSizedItem {
+  int productId;
+  String itemName;
+  String size;
+  Integer quantityInInventory;
+}
+
+association {
+  1 TOCustomer orderPlacer -- * TOOrder ordersPlaced;
+}
+
+association {
+  0..1 TOEmployee orderAssignee -- * TOOrder ordersAssigned;
+}
+
+association {
+  0..5 TOSizedItem sizedItems -- 1 TOItem item;
+}
