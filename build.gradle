@@ -6,11 +6,17 @@
  */
 
 plugins {
-    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.12'
 }
 
 repositories {
     mavenCentral()
+}
+
+javafx {
+    version = "17"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 dependencies {
@@ -29,6 +35,11 @@ java {
     }
 }
 
+application {
+    // Define the main class for the application.
+    mainClass = 'ca.mcgill.ecse.fashionstoremanagement.application.FashionStoreApplication'
+
+}
 tasks.named("test") {
     useJUnitPlatform()
     testLogging {
@@ -38,4 +49,13 @@ tasks.named("test") {
     // Work around. Gradle does not include enough information to disambiguate
     // between different examples and scenarios.
     systemProperty("cucumber.junit-platform.naming-strategy", "long")
+}
+
+tasks.register('copyResources', Copy) {
+    from "src/main/java/ca/mcgill/ecse/flightmanagementsystem"
+    into "build/classes/java/main/ca/mcgill/ecse/flightmanagementsystem"
+    exclude "**/*.java"
+}
+tasks.named('run') {
+    dependsOn tasks.named('copyResources')
 }

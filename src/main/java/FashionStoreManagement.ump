@@ -1,5 +1,6 @@
 namespace ca.mcgill.ecse.fashionstoremanagement.model;
 use OrderStateMachine.ump;
+use FSMSTransferObjects.ump;
 
 class FashionStoreManagement {
   1 <@>- * User users;
