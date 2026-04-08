@@ -1,9 +1,7 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
-import ca.mcgill.ecse.fashionstoremanagement.model.Order;
+import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import ca.mcgill.ecse.fashionstoremanagement.model.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -52,10 +50,13 @@ public class UserPageController {
         });
         colRole.setCellValueFactory(data -> {
             User user = data.getValue();
-            String deadline = user.getRoles() != null
-                    ? user.getRoles().toString()
-                    : "N/A";
-            return new javafx.beans.property.SimpleStringProperty(deadline);
+            if (user.getRoles() == null || user.getRoles().isEmpty()) {
+                return new javafx.beans.property.SimpleStringProperty("N/A");
+            }
+            String roles = user.getRoles().stream()
+                    .map(role -> role.getClass().getSimpleName()) // gets "Customer", "Employee", "Manager" etc.
+                    .collect(java.util.stream.Collectors.joining(", "));
+            return new javafx.beans.property.SimpleStringProperty(roles);
         });
 
         loadUsers();
@@ -70,6 +71,9 @@ public class UserPageController {
                 showPage(newIndex.intValue()));
 
         showPage(0); // show first page immediately
+
+        FashionStoreFxmlView.getInstance().registerRefreshEvent(userTable);
+        userTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadUsers());
     }
 
     private void loadUsers() {
@@ -80,6 +84,8 @@ public class UserPageController {
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
         pagination.setCurrentPageIndex(0);
         showPage(0);
+
+        userTable.refresh();
     }
 
     private void showPage(int pageIndex) {

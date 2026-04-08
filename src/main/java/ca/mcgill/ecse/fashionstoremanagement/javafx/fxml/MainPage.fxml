@@ -23,6 +23,11 @@
                         <fx:include source="pages/EmployeePage.fxml" />
                     </content>
                 </Tab>
+                <Tab text="Customers">
+                    <content>
+                        <fx:include source="pages/CustomerPage.fxml" />
+                    </content>
+                </Tab>
                 <Tab text="Orders">
                     <content>
                         <fx:include source="pages/CreateDeleteOrder.fxml" />

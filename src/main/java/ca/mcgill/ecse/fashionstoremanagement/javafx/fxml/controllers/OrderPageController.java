@@ -1,10 +1,8 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import ca.mcgill.ecse.fashionstoremanagement.model.Order;
-import ca.mcgill.ecse.fashionstoremanagement.model.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -49,10 +47,12 @@ public class OrderPageController {
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         colCustomer.setCellValueFactory(data -> {
             Order order = data.getValue();
+            String username = "N/A";
 
-            String username = order.getOrderPlacer() != null
-                    ? order.getOrderPlacer().getUser().getName()
-                    : "N/A";
+            if (order.getOrderPlacer() != null && order.getOrderPlacer().getUser() != null) {
+                    username = order.getOrderPlacer().getUser().getUsername();
+            }
+            System.out.println(order.getOrderPlacer().toString());
             return new javafx.beans.property.SimpleStringProperty(username);
         });
         colTotal.setCellValueFactory(data -> {
@@ -91,6 +91,8 @@ public class OrderPageController {
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
         pagination.setCurrentPageIndex(0);
         showPage(0);
+
+        orderTable.refresh();
     }
 
     void showPage(int pageIndex) {

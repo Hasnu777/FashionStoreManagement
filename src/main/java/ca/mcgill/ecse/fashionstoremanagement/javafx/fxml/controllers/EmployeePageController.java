@@ -2,6 +2,7 @@ package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
 import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
+import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,6 +20,7 @@ public class EmployeePageController {
             UserController.registerNewEmployee(usernameField.getText());
             statusLabel.setText("Employee registered successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
@@ -30,6 +32,7 @@ public class EmployeePageController {
             UserController.updateName(usernameField.getText(), nameField.getText());
             statusLabel.setText("Name updated successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
@@ -41,6 +44,7 @@ public class EmployeePageController {
             UserController.updatePhoneNumber(usernameField.getText(), phoneField.getText());
             statusLabel.setText("Phone updated successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
@@ -52,6 +56,7 @@ public class EmployeePageController {
             UserController.deleteEmployee(usernameField.getText());
             statusLabel.setText("Employee deleted successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
