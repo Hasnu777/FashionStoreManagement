@@ -8,19 +8,24 @@
     <children>
         <TabPane prefWidth="851.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <tabs>
-                <Tab text="Items">
+                <Tab text="Order View">
                     <content>
-                        <fx:include source="pages/ItemPage.fxml" />
+                        <fx:include source="pages/OrderPage.fxml" />
                     </content>
                 </Tab>
-                <Tab text="Customers">
+                <Tab text="User View">
                     <content>
-                        <fx:include source="pages/CustomerPage.fxml" />
+                        <fx:include source="pages/UserPage.fxml" />
                     </content>
                 </Tab>
                 <Tab text="Employees">
                     <content>
                         <fx:include source="pages/EmployeePage.fxml" />
+                    </content>
+                </Tab>
+                <Tab text="Orders">
+                    <content>
+                        <fx:include source="pages/CreateDeleteOrder.fxml" />
                     </content>
                 </Tab>
             </tabs>

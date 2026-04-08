@@ -14,6 +14,7 @@ import javafx.scene.control.Pagination;
 import java.util.List;
 
 public class OrderPageController {
+    private static OrderPageController instance;
 
     @FXML private TableView<Order> orderTable;
     @FXML private TableColumn<Order, Integer> colOrderId;
@@ -22,9 +23,10 @@ public class OrderPageController {
     @FXML private TableColumn<Order, String>  colDeadline;
     @FXML private TableColumn<Order, String>  colStatus;
     @FXML private TableColumn<Order, String>  colAssignee;
-    @FXML private Pagination                  pagination;
+    @FXML
+    Pagination                  pagination;
 
-    private ObservableList<Order> allOrders;
+    ObservableList<Order> allOrders;
 
     @FXML
     public void initialize() {
@@ -83,10 +85,19 @@ public class OrderPageController {
         showPage(0); // show first page immediately
     }
 
-    private void showPage(int pageIndex) {
+    void showPage(int pageIndex) {
         int from = pageIndex * 8; // rows per page
         int to   = Math.min(from + 8, allOrders.size()); // rows per page
         orderTable.setItems(FXCollections.observableArrayList(
                 allOrders.subList(from, to)));
+    }
+
+    public static void refreshOrders() {
+        if (instance != null) {
+            instance.allOrders = FXCollections.observableArrayList(OrderController.getAllOrders());
+            int pageCount = (int) Math.ceil((double) instance.allOrders.size() / 8); // rows per page
+            instance.pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
+            instance.showPage(instance.pagination.getCurrentPageIndex());
+        }
     }
 }
