@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.OrderPageController">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="600.0">
+         <center>
+            <TableView fx:id="orderTable" BorderPane.alignment="CENTER">
+              <columns>
+                  <TableColumn fx:id="colOrderId" prefWidth="100.0" text="Order ID" />
+                  <TableColumn fx:id="colCustomer" prefWidth="100.0" text="Customer" />
+                  <TableColumn fx:id="colTotal" prefWidth="100.0" text="Total" />
+                  <TableColumn fx:id="colDeadline" prefWidth="100.0" text="Deadline" />
+                  <TableColumn fx:id="colStatus" prefWidth="100.0" text="Status" />
+                  <TableColumn fx:id="colAssignee" prefWidth="108.0" text="Assignee" />
+              </columns>
+            </TableView>
+         </center>
+         <top>
+            <HBox prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" prefHeight="4.0" prefWidth="600.0" text="All Orders" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+               </children></HBox>
+         </top>
+         <bottom>
+             <Pagination fx:id="pagination" prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>
