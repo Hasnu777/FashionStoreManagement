@@ -1,5 +1,7 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
+import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
+import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
 import ca.mcgill.ecse.fashionstoremanagement.model.Order;
 import ca.mcgill.ecse.fashionstoremanagement.model.User;
@@ -29,6 +31,8 @@ public class UserPageController {
     public void initialize() {
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        allUsers = FXCollections.observableArrayList();
+
 //        columns
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colName.setCellValueFactory(data -> {
@@ -54,16 +58,28 @@ public class UserPageController {
             return new javafx.beans.property.SimpleStringProperty(deadline);
         });
 
+        loadUsers();
+
 //        set up pagination
         int pageCount = (int) Math.ceil((double) allUsers.size() / 8); //rows per page
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
         pagination.setCurrentPageIndex(0);
 
-        // Show the correct slice of orders whenever the page changes
+        // Show the correct slice of users whenever the page changes
         pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) ->
                 showPage(newIndex.intValue()));
 
         showPage(0); // show first page immediately
+    }
+
+    private void loadUsers() {
+        List<User> users = FashionStoreManagementController.getFashionStoreManagement().getUsers();
+        allUsers = FXCollections.observableArrayList(users != null ? users : List.of());
+
+        int pageCount = (int) Math.ceil((double) allUsers.size() / 8);
+        pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
+        pagination.setCurrentPageIndex(0);
+        showPage(0);
     }
 
     private void showPage(int pageIndex) {

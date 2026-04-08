@@ -1,7 +1,10 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
+import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
+import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import ca.mcgill.ecse.fashionstoremanagement.model.Order;
+import ca.mcgill.ecse.fashionstoremanagement.model.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -32,7 +35,17 @@ public class OrderPageController {
     public void initialize() {
         orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-//        columns
+        // initialize allOrders first before anything else can throw
+        allOrders = FXCollections.observableArrayList();
+
+        setupColumns();
+        loadOrders();
+
+        FashionStoreFxmlView.getInstance().registerRefreshEvent(orderTable);
+        orderTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadOrders());
+    }
+
+    public void setupColumns() {
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         colCustomer.setCellValueFactory(data -> {
             Order order = data.getValue();
@@ -68,21 +81,16 @@ public class OrderPageController {
                     : "N/A";
             return new javafx.beans.property.SimpleStringProperty(assignee);
         });
+    }
 
-//        load all orders from the controller
+    private void loadOrders() {
         List<Order> orders = OrderController.getAllOrders();
-        orderTable.setItems(FXCollections.observableArrayList(orders));
+        allOrders = FXCollections.observableArrayList(orders != null ? orders : List.of());
 
-//        set up pagination
-        int pageCount = (int) Math.ceil((double) allOrders.size() / 8); //rows per page
+        int pageCount = (int) Math.ceil((double) allOrders.size() / 8); // rows per page
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
         pagination.setCurrentPageIndex(0);
-
-        // Show the correct slice of orders whenever the page changes
-        pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) ->
-                showPage(newIndex.intValue()));
-
-        showPage(0); // show first page immediately
+        showPage(0);
     }
 
     void showPage(int pageIndex) {
@@ -90,14 +98,5 @@ public class OrderPageController {
         int to   = Math.min(from + 8, allOrders.size()); // rows per page
         orderTable.setItems(FXCollections.observableArrayList(
                 allOrders.subList(from, to)));
-    }
-
-    public static void refreshOrders() {
-        if (instance != null) {
-            instance.allOrders = FXCollections.observableArrayList(OrderController.getAllOrders());
-            int pageCount = (int) Math.ceil((double) instance.allOrders.size() / 8); // rows per page
-            instance.pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
-            instance.showPage(instance.pagination.getCurrentPageIndex());
-        }
     }
 }

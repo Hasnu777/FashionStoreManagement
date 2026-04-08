@@ -3,6 +3,7 @@ package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
+import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -19,7 +20,7 @@ public class CDOrderPageController {
     private void createOrder() {
         try {
             OrderController.createOrder(usernameField.getText(), deadlineField.getText());
-            OrderPageController.refreshOrders(); // triggers the table to reload
+            FashionStoreFxmlView.getInstance().refresh(); // triggers the table to reload
             // clear fields
             usernameField.clear();
             deadlineField.clear();
