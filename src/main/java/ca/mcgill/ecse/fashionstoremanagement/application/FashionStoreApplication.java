@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.fashionstoremanagement.application;
+/*package ca.mcgill.ecse.fashionstoremanagement.application;
 
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
 import ca.mcgill.ecse.fashionstoremanagement.model.FashionStoreManagement;
@@ -10,5 +10,15 @@ public class FashionStoreApplication {
 
     public static void main(String[] args) {
         System.out.println("Hello and welcome!");
+    }
+} */
+package ca.mcgill.ecse.fashionstoremanagement.application;
+
+import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
+
+public class FashionStoreApplication {
+
+    public static void main(String[] args) {
+        FashionStoreFxmlView.launch(FashionStoreFxmlView.class, args);
     }
 }

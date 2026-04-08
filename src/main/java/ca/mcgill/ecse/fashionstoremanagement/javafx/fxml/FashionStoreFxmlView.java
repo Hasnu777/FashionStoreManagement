@@ -21,7 +21,7 @@ public class FashionStoreFxmlView extends Application{
     public void start(Stage primaryStage) {
         instance = this;
         try {
-            var root = (Pane) FXMLLoader.load(getClass().getResource("MainPage.fxml"));
+            var root = (Pane) FXMLLoader.load(getClass().getResource("/ca/mcgill/ecse/fashionstoremanagement/javafx/fxml/MainPage.fxml"));
             var scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setMinWidth(800);

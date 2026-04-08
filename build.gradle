@@ -36,24 +36,20 @@ java {
 }
 
 application {
-    // Define the main class for the application.
     mainClass = 'ca.mcgill.ecse.fashionstoremanagement.application.FashionStoreApplication'
-
 }
+
 tasks.named("test") {
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
     }
-    // https://github.com/cucumber/cucumber-java-skeleton/blob/main/gradle/build.gradle.kts
-    // Work around. Gradle does not include enough information to disambiguate
-    // between different examples and scenarios.
     systemProperty("cucumber.junit-platform.naming-strategy", "long")
 }
 
 tasks.register('copyResources', Copy) {
-    from "src/main/java/ca/mcgill/ecse/flightmanagementsystem"
-    into "build/classes/java/main/ca/mcgill/ecse/flightmanagementsystem"
+    from "src/main/java/ca/mcgill/ecse/fashionstoremanagement"
+    into "build/classes/java/main/ca/mcgill/ecse/fashionstoremanagement"
     exclude "**/*.java"
 }
 tasks.named('run') {
