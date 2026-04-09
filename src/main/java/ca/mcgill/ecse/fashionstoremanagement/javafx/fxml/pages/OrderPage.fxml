@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.OrderPageController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
+        <ColumnConstraints hgrow="ALWAYS" prefWidth="200.0" />
+        <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
+    </columnConstraints>
+    <children>
+        <Label text="Order Number:" />
+        <TextField fx:id="orderNumberField" promptText="Order #" GridPane.columnIndex="1" />
+
+        <Label text="Customer Username:" GridPane.rowIndex="1" />
+        <TextField fx:id="customerUsernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label text="Deadline:" GridPane.rowIndex="2" />
+        <TextField fx:id="deadlineField" promptText="e.g. SameDay, NextDay" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <Label text="Employee Username:" GridPane.rowIndex="3" />
+        <TextField fx:id="employeeUsernameField" promptText="Assignee Username" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <Label text="Item Name:" GridPane.rowIndex="4" />
+        <TextField fx:id="itemNameField" promptText="Item to add/update" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+        <Label text="Item Size:" GridPane.rowIndex="5" />
+        <ChoiceBox fx:id="sizeBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+        <Label text="Item Quantity:" GridPane.rowIndex="6" />
+        <TextField fx:id="quantityField" promptText="Quantity" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <Label text="Use Loyalty Points:" GridPane.rowIndex="7" />
+        <CheckBox fx:id="usePointsCheckBox" text="Use Points" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+        <Button maxWidth="1.7976931348623157E308" text="Create Order" onAction="#createOrderClicked" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" />
+        <Button maxWidth="1.7976931348623157E308" text="Delete Order" onAction="#deleteOrderClicked" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" />
+        <Button maxWidth="1.7976931348623157E308" text="Add Item to Order" onAction="#addItemToOrderClicked" GridPane.columnIndex="2" GridPane.rowIndex="8" GridPane.hgrow="ALWAYS" />
+
+        <Button maxWidth="1.7976931348623157E308" text="Update Item Qty" onAction="#updateOrderItemQuantityClicked" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />
+        <Button maxWidth="1.7976931348623157E308" text="Check Out" onAction="#checkOutClicked" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />
+        <Button maxWidth="1.7976931348623157E308" text="Pay For Order" onAction="#payForOrderClicked" GridPane.columnIndex="2" GridPane.rowIndex="9" GridPane.hgrow="ALWAYS" />
+
+        <Button maxWidth="1.7976931348623157E308" text="Assign Employee" onAction="#assignOrderClicked" GridPane.rowIndex="10" GridPane.hgrow="ALWAYS" />
+        <Button maxWidth="1.7976931348623157E308" text="Finish Assembly" onAction="#finishAssemblyClicked" GridPane.columnIndex="1" GridPane.rowIndex="10" GridPane.hgrow="ALWAYS" />
+        <Button maxWidth="1.7976931348623157E308" text="Deliver Order" onAction="#deliverOrderClicked" GridPane.columnIndex="2" GridPane.rowIndex="10" GridPane.hgrow="ALWAYS" />
+
+        <Button maxWidth="1.7976931348623157E308" text="Cancel Order" onAction="#cancelOrderClicked" GridPane.rowIndex="11" GridPane.hgrow="ALWAYS" />
+
+        <Label fx:id="statusLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="11" GridPane.columnSpan="2" />
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</GridPane>

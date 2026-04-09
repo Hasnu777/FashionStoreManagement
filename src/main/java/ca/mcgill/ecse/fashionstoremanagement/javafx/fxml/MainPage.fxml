@@ -23,6 +23,13 @@
                         <fx:include source="pages/EmployeePage.fxml" />
                     </content>
                 </Tab>
+
+                <Tab text="Orders">
+                    <content>
+                        <fx:include source="pages/OrderPage.fxml" />
+                    </content>
+                </Tab>
+
             </tabs>
         </TabPane>
     </children>
