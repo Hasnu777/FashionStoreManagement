@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.OrderPageController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
+        <ColumnConstraints hgrow="ALWAYS" prefWidth="200.0" />
+        <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
+    </columnConstraints>
+    <children>
+        <Label text="Username:" />
+        <TextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" />
+
+        <Label text="Deadline:" GridPane.rowIndex="1" />
+        <Button maxWidth="1.7976931348623157E308" onAction="#createOrder" text="Create Order" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+      <ChoiceBox fx:id="deadlineField" prefHeight="26.0" prefWidth="228.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label fx:id="statusLabel" prefHeight="17.0" prefWidth="200.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>

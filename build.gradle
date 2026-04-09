@@ -14,11 +14,6 @@ repositories {
     mavenCentral()
 }
 
-javafx {
-    version = "17"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
-}
-
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
     testImplementation(platform("io.cucumber:cucumber-bom:7.21.1"))
@@ -29,17 +24,16 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
 }
 
-//java {
-//    toolchain {
-//        languageVersion = JavaLanguageVersion.of(21)
-//    }
-//}
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
 
 application {
     // Define the main class for the application.
     mainClass = 'ca.mcgill.ecse.fashionstoremanagement.application.FashionStoreApplication'
-
 }
+
 tasks.named("test") {
     useJUnitPlatform()
     testLogging {

@@ -2,6 +2,7 @@ package ca.mcgill.ecse.fashionstoremanagement.controller;
 
 import ca.mcgill.ecse.fashionstoremanagement.model.*;
 
+import java.util.Collections;
 import java.util.List;
 
 public class OrderController {
@@ -60,7 +61,8 @@ public class OrderController {
     }
     
     public static List<Order> getAllOrders() {
-        return FashionStoreManagementController.getFashionStoreManagement().getOrders();
+        List<Order> orders = FashionStoreManagementController.getFashionStoreManagement().getOrders();
+        return orders != null ? orders : Collections.emptyList();
     }
     
     public static User findUserByUsername(String username, FashionStoreManagement sys) {

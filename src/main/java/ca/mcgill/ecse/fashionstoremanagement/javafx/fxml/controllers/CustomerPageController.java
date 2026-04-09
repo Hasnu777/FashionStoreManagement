@@ -2,6 +2,7 @@ package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
 import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
+import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -25,6 +26,7 @@ public class CustomerPageController {
                     addressField.getText());
             statusLabel.setText("Customer registered successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
@@ -36,6 +38,7 @@ public class CustomerPageController {
             UserController.updateAddress(usernameField.getText(), addressField.getText());
             statusLabel.setText("Address updated successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
@@ -47,6 +50,7 @@ public class CustomerPageController {
             UserController.updateName(usernameField.getText(), nameField.getText());
             statusLabel.setText("Name updated successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
@@ -58,6 +62,7 @@ public class CustomerPageController {
             UserController.updatePhoneNumber(usernameField.getText(), phoneField.getText());
             statusLabel.setText("Phone updated successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
@@ -69,6 +74,7 @@ public class CustomerPageController {
             UserController.deleteCustomer(usernameField.getText());
             statusLabel.setText("Customer deleted successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
+            FashionStoreFxmlView.getInstance().refresh();
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
