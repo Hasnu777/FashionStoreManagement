@@ -14,7 +14,7 @@ import javafx.scene.control.Pagination;
 
 import java.util.List;
 
-public class UserPageController {
+public class ViewUsersPageController {
 
     @FXML private TableView<User> userTable;
     @FXML private TableColumn<User, String>  colUsername;

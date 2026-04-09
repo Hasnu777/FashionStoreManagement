@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.CDOrderPageController">
+<GridPane hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.OrderPageController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
         <ColumnConstraints hgrow="ALWAYS" prefWidth="200.0" />
