@@ -42,20 +42,19 @@
                         <fx:include source="pages/EmployeePage.fxml" />
                     </content>
                 </Tab>
-
                 <Tab text="Orders">
                     <content>
                         <fx:include source="pages/OrderPage.fxml" />
                     </content>
                 </Tab>
                 <Tab text="Shipment">
-                    <fx:include source="pages/ShipmentPage.fxml"/>
+                    <fx:include source="pages/ShipmentPage.fxml" />
                 </Tab>
                 <Tab text="Shipment Items">
-                    <fx:include source="pages/ShipmentItemPage.fxml"/>
+                    <fx:include source="pages/ShipmentItemPage.fxml" />
                 </Tab>
                 <Tab text="Assign Order">
-                    <fx:include source="pages/AssignOrderPage.fxml"/>
+                    <fx:include source="pages/AssignOrderPage.fxml" />
                 </Tab>
             </tabs>
         </TabPane>
