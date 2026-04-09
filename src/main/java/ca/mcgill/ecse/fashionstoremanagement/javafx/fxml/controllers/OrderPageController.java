@@ -13,8 +13,7 @@ public class OrderPageController {
 
     @FXML private TextField orderNumberField;
     @FXML private TextField customerUsernameField;
-    @FXML private TextField deadlineField; // Or ChoiceBox depending on your FXML setup (e.g., SameDay)
-    @FXML private TextField employeeUsernameField;
+    @FXML private TextField deadlineField;
 
     @FXML private TextField itemNameField;
     @FXML private ChoiceBox<String> sizeBox;
@@ -25,7 +24,6 @@ public class OrderPageController {
 
     @FXML
     public void initialize() {
-        // Initialize size choices to match the domain model/ItemPageController
         sizeBox.getItems().addAll("XS", "S", "M", "L", "XL");
     }
 
@@ -92,7 +90,6 @@ public class OrderPageController {
             String size = sizeBox.getValue();
             int quantity = Integer.parseInt(quantityField.getText());
 
-            // Note: Setting quantity to 0 removes the item as per backend logic
             OrderController.setOrderItemQuantity(orderNumber, itemName, size, quantity);
 
             if (quantity == 0) {
@@ -136,25 +133,6 @@ public class OrderPageController {
             OrderProcessingController.payForOrder(orderNumber, usePoints);
 
             statusLabel.setText("Order paid successfully!");
-            statusLabel.setStyle("-fx-text-fill: green;");
-        } catch (FashionStoreException e) {
-            ViewUtils.showError(e.getMessage());
-        } catch (NumberFormatException e) {
-            ViewUtils.showError("Order number must be an integer!");
-        } catch (Exception e) {
-            ViewUtils.showError("Invalid input!");
-        }
-    }
-
-    @FXML
-    public void assignOrderClicked() {
-        try {
-            int orderNumber = Integer.parseInt(orderNumberField.getText());
-            String employeeUsername = employeeUsernameField.getText();
-
-            OrderProcessingController.assignOrderToEmployee(orderNumber, employeeUsername);
-
-            statusLabel.setText("Order assigned to employee successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
