@@ -8,6 +8,10 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.fxml.FXMLLoader?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="851.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -44,7 +48,15 @@
                         <fx:include source="pages/OrderPage.fxml" />
                     </content>
                 </Tab>
-
+                <Tab text="Shipment">
+                    <fx:include source="pages/ShipmentPage.fxml"/>
+                </Tab>
+                <Tab text="Shipment Items">
+                    <fx:include source="pages/ShipmentItemPage.fxml"/>
+                </Tab>
+                <Tab text="Assign Order">
+                    <fx:include source="pages/AssignOrderPage.fxml"/>
+                </Tab>
             </tabs>
         </TabPane>
     </children>

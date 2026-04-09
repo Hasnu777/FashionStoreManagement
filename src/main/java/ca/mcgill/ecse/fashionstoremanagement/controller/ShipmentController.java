@@ -7,6 +7,7 @@ import ca.mcgill.ecse.fashionstoremanagement.model.ShipmentItem;
 import ca.mcgill.ecse.fashionstoremanagement.model.SizedItem;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShipmentController {
@@ -157,5 +158,35 @@ public class ShipmentController {
 
             // If target sized item does not exist
             throw new FashionStoreException("there is no sized item called \"" + itemName + "\" of size \"" + sizeStr + "\"");
+    }
+    // gets all shipments but as TO objects so the view doesnt touch the model
+    public static List<TOShipment> getAllTOShipments() {
+        List<TOShipment> tos = new ArrayList<>();
+        // loop thru all shipments and convert them
+        for (Shipment s : getAllShipments()) {
+            tos.add(new TOShipment(
+                    s.getShipmentNumber(),
+                    s.getDateOrdered(),  // could be null if not ordered yet
+                    s.getDateArrived()   // also could be null
+            ));
+        }
+        return tos;
+    }
+
+    // gets all items in a specific shipment as TOs
+// need the shipment number to know which one
+    public static List<TOShipmentItem> getTOShipmentItems(int shipmentNumber) {
+        List<TOShipmentItem> tos = new ArrayList<>();
+        // go thru each item in the shipment
+        for (ShipmentItem si : getShipmentItems(shipmentNumber)) {
+            tos.add(new TOShipmentItem(
+                    shipmentNumber,
+                    si.getItem().getProductId(),  // product id of the sized item
+                    si.getItem().getItem().getName(),  // item name (yes two getItem calls lol)
+                    si.getItem().getSize().toString(),  // size as string like "M" or "L"
+                    si.getQuantity()  // how many of this item
+            ));
+        }
+        return tos;
     }
 }

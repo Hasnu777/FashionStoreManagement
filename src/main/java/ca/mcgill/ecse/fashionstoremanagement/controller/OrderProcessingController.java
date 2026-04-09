@@ -4,6 +4,7 @@ import ca.mcgill.ecse.fashionstoremanagement.model.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -315,5 +316,52 @@ public class OrderProcessingController {
                 item.setQuantityInInventory(quantityInInv + quantity);
             }
         }
+    }
+    // returns all orders as TOs for the view to display
+// kinda long but it works
+    public static List<TOOrder> getAllTOOrders() {
+        List<TOOrder> tos = new ArrayList<>();
+        for (Order o : OrderController.getAllOrders()) {
+            // need to make a TOCustomer first since TOOrder needs one
+            TOCustomer toCustomer = new TOCustomer(
+                    o.getOrderPlacer().getUser().getUsername(),
+                    o.getOrderPlacer().getUser().getName(),
+                    o.getOrderPlacer().getUser().getPhoneNumber(),
+                    o.getOrderPlacer().getAddress(),
+                    o.getOrderPlacer().getLoyaltyPoints()
+            );
+            // if no assignee just put "None" as the username
+            String assigneeUsername = o.hasOrderAssignee() ?
+                    o.getOrderAssignee().getUser().getUsername() : "None";
+            tos.add(new TOOrder(
+                    o.getOrderNumber(),
+                    o.getDatePlaced(),
+                    o.getDeadline().toString(),
+                    o.getTotalCost(),
+                    o.getFinalCost(),
+                    o.getPointsUsedInPayment(),
+                    o.getPointsAwarded(),
+                    o.getOrderPlacer().getUser().getUsername(),
+                    assigneeUsername,
+                    o.getStateFullName(),  // state like "Placed" or "Pending" etc
+                    toCustomer
+            ));
+        }
+        return tos;
+    }
+
+    // gets all employees as TOs so we can show them in a dropdown
+    public static List<TOEmployee> getAllTOEmployees() {
+        List<TOEmployee> tos = new ArrayList<>();
+        FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
+        // just loop thru all employees and wrap them in a TO
+        for (Employee e : system.getEmployees()) {
+            tos.add(new TOEmployee(
+                    e.getUser().getUsername(),
+                    e.getUser().getName(),
+                    e.getUser().getPhoneNumber()
+            ));
+        }
+        return tos;
     }
 }
