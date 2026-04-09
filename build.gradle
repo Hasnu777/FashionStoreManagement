@@ -52,8 +52,8 @@ tasks.named("test") {
 }
 
 tasks.register('copyResources', Copy) {
-    from "src/main/java/ca/mcgill/ecse/flightmanagementsystem"
-    into "build/classes/java/main/ca/mcgill/ecse/flightmanagementsystem"
+    from "src/main/java/ca/mcgill/ecse/fashionstoremanagement"
+    into "build/classes/java/main/ca/mcgill/ecse/fashionstoremanagement"
     exclude "**/*.java"
 }
 tasks.named('run') {
