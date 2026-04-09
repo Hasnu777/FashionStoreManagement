@@ -6,6 +6,7 @@
  */
 
 plugins {
+    id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.12'
 }
@@ -56,6 +57,7 @@ tasks.register('copyResources', Copy) {
     into "build/classes/java/main/ca/mcgill/ecse/fashionstoremanagement"
     exclude "**/*.java"
 }
+
 tasks.named('run') {
     dependsOn tasks.named('copyResources')
 }

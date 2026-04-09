@@ -5,10 +5,37 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="851.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TabPane prefWidth="851.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab text="Items">
+                    <content>
+                        <fx:include source="pages/ItemPage.fxml" />
+                    </content>
+                </Tab>
+                <Tab text="Customers">
+                    <content>
+                        <fx:include source="pages/CustomerPage.fxml" />
+                    </content>
+                </Tab>
+                <Tab text="Employees">
+                    <content>
+                        <fx:include source="pages/EmployeePage.fxml" />
+                    </content>
+                </Tab>
 
-</AnchorPane>
+                <Tab text="Orders">
+                    <content>
+                        <fx:include source="pages/OrderPage.fxml" />
+                    </content>
+                </Tab>
+
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>
