@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" styleClass="page" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.DashboardController">
+<BorderPane stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" styleClass="page" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.DashboardController">
    <top>
       <Label alignment="CENTER" prefHeight="36.0" prefWidth="Infinity" styleClass="title-label" text="Dashboard" textAlignment="CENTER" />
    </top>

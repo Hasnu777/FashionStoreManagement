@@ -43,19 +43,14 @@
 <!--                        <fx:include source="pages/ItemPage.fxml" />-->
 <!--                    </content>-->
 <!--                </Tab>-->
-<!--                <Tab text="Customers">-->
-<!--                    <content>-->
-<!--                        <fx:include source="pages/CustomerPage.fxml" />-->
-<!--                    </content>-->
-<!--                </Tab>-->
-<!--                <Tab text="User View">-->
-<!--                    <content>-->
-<!--                        <fx:include source="pages/ViewUsersPage.fxml" />-->
-<!--                    </content>-->
-<!--                </Tab>-->
-                <Tab text="Order View">
+                <Tab text="Customers">
                     <content>
-                        <fx:include source="pages/OrderViewPage.fxml" />
+                        <fx:include source="pages/CustomerPage.fxml" />
+                    </content>
+                </Tab>
+                <Tab text="User View">
+                    <content>
+                        <fx:include source="pages/ViewUsersPage.fxml" />
                     </content>
                 </Tab>
 <!--                <Tab text="Employees">-->

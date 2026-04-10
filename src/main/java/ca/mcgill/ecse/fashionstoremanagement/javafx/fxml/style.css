@@ -13,6 +13,7 @@
     -text-on-main: black;
     -text-on-button: black;
     -card-background: #F5E9D8;
+    -card-background-shadow: derive(-card-background, -15%);
 
     -fx-background-color: -background-color;
     -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
@@ -123,7 +124,6 @@
 
 .table-view {
     -fx-background-color: -card-background;
-    -fx-border-color: -accent-soft-color;
 }
 
 .table-view .column-header-background {
@@ -139,12 +139,20 @@
     -fx-text-fill: white;
 }
 
+.table-view .placeholder {
+    -fx-background-color: -card-background;
+}
+
 .table-row-cell:selected {
     -fx-background-color: -accent-soft-color;
 }
 
+.table-row-cell:even {
+    -fx-background-color: card-background;
+}
+
 .table-row-cell:odd {
-    -fx-background-color: derive(-card-background, -2%);
+    -fx-background-color: card-background-shadow;
 }
 
 /* ===============================
@@ -192,9 +200,9 @@
 .pagination {
     -fx-page-information-visible: false;
 }
-
+/*
 .pagination .control-box {
-    -fx-background-color: -primary-color;
+    -fx-background-color: -background-color;
 }
 
 .pagination .button {
@@ -210,7 +218,7 @@
 .pagination .button:pressed {
     -fx-background-color: -accent-soft-color;
 }
-
+*/
 /* ===============================
    CARD PANELS
    =============================== */

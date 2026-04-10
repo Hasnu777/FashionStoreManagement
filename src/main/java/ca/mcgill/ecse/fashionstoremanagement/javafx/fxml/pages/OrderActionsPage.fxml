@@ -3,97 +3,87 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="Infinity"
-      maxWidth="Infinity"
-      xmlns="http://javafx.com/javafx/17.0.12"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.OrderPageController"
->
+<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.OrderActionsController">
     <!-- CREATE ORDER -->
-    <TitledPane text="Create Order" expanded="true">
+    <TitledPane expanded="true" text="Create Order">
         <content>
-            <GridPane hgap="10" vgap="10" maxWidth="Infinity">
+            <GridPane hgap="10" maxWidth="Infinity" vgap="10">
 
                 <columnConstraints>
-                    <ColumnConstraints percentWidth="40"/>
-                    <ColumnConstraints percentWidth="60"/>
+                    <ColumnConstraints percentWidth="40" />
+                    <ColumnConstraints percentWidth="60" />
                 </columnConstraints>
 
-                <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <TextField fx:id="usernameField"
-                           GridPane.rowIndex="0"
-                           GridPane.columnIndex="1"
-                           maxWidth="Infinity"/>
+                <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="usernameField" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Deadline:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <ChoiceBox fx:id="deadlineField"
-                            GridPane.rowIndex="1"
-                            GridPane.columnIndex="1"
-                            maxWidth="Infinity"/>
+                <Label text="Deadline:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <ChoiceBox fx:id="deadlineField" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Button text="Create Order"
-                        GridPane.rowIndex="2"
-                        GridPane.columnIndex="0"
-                        GridPane.columnSpan="2"
-                        maxWidth="Infinity"
-                        styleClass="primary-button"/>
+                <Button maxWidth="Infinity" styleClass="primary-button" text="Create Order" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
         </content>
     </TitledPane>
 
     <!-- MANAGE ITEMS -->
-    <TitledPane text="Manage Order Items" expanded="false">
+    <TitledPane expanded="false" text="Manage Order Items">
         <content>
-            <GridPane hgap="10" vgap="10" maxWidth="Infinity">
+            <GridPane hgap="10" maxWidth="Infinity" vgap="10">
 
                 <columnConstraints>
-                    <ColumnConstraints percentWidth="40"/>
-                    <ColumnConstraints percentWidth="60"/>
+                    <ColumnConstraints percentWidth="40" />
+                    <ColumnConstraints percentWidth="60" />
                 </columnConstraints>
 
-                <Label text="Order ID:" GridPane.rowIndex="0"/>
-                <TextField fx:id="orderNumberField"
-                           GridPane.rowIndex="0"
-                           GridPane.columnIndex="1"/>
+                <Label text="Order ID:" GridPane.rowIndex="0" />
+                <TextField fx:id="orderNumberField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Item Name:" GridPane.rowIndex="1"/>
-                <TextField fx:id="itemNameField"
-                           GridPane.rowIndex="1"
-                           GridPane.columnIndex="1"/>
+                <Label text="Item Name:" GridPane.rowIndex="1" />
+                <TextField fx:id="itemNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label text="Size:" GridPane.rowIndex="2"/>
-                <ChoiceBox fx:id="sizeBox"
-                           GridPane.rowIndex="2"
-                           GridPane.columnIndex="1"/>
+                <Label text="Size:" GridPane.rowIndex="2" />
+                <ChoiceBox fx:id="sizeBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                <Label text="Quantity:" GridPane.rowIndex="3"/>
-                <TextField fx:id="quantityField"
-                           GridPane.rowIndex="3"
-                           GridPane.columnIndex="1"/>
+                <Label text="Quantity:" GridPane.rowIndex="3" />
+                <TextField fx:id="quantityField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                <HBox spacing="10" GridPane.rowIndex="4" GridPane.columnSpan="2">
-                    <Button text="Add Item" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-                    <Button text="Update Item" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <HBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                    <Button maxWidth="Infinity" text="Add Item" HBox.hgrow="ALWAYS" />
+                    <Button maxWidth="Infinity" text="Update Item" HBox.hgrow="ALWAYS" />
                 </HBox>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
 
             </GridPane>
         </content>
     </TitledPane>
 
     <!-- ORDER ACTIONS -->
-    <TitledPane text="Order Actions" expanded="false">
+    <TitledPane expanded="false" text="Order Actions">
         <content>
             <VBox spacing="10">
 
-                <TextField fx:id="orderIdActionField" promptText="Order ID"/>
+                <TextField fx:id="orderIdActionField" promptText="Order ID" />
 
-                <Button text="Checkout" maxWidth="Infinity"/>
-                <Button text="Pay" maxWidth="Infinity"/>
-                <Button text="Deliver" maxWidth="Infinity"/>
-                <Button text="Assign Employee" maxWidth="Infinity"/>
-                <Button text="Cancel Order" maxWidth="Infinity"/>
+                <Button maxWidth="Infinity" text="Checkout" />
+                <CheckBox fx:id="usePointsCheckBox" text="Use Points"/>
+                <Button maxWidth="Infinity" text="Pay" />
+                <Button maxWidth="Infinity" text="Deliver" />
+                <Button maxWidth="Infinity" text="Assign Employee" />
+                <Button maxWidth="Infinity" text="Cancel Order" />
 
             </VBox>
         </content>
     </TitledPane>
+   <Label text="" fx:id="statusLabel"/>
 </VBox>

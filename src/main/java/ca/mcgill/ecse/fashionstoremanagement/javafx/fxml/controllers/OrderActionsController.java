@@ -1,33 +1,17 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
 import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.OrderProcessingController;
+import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import ca.mcgill.ecse.fashionstoremanagement.model.Order;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.List;
+public class OrderActionsController {
+//    @FXML private OrderActionsController actionsPaneController;
 
-public class OrderPageController {
-//    View variables
-    @FXML private TableView<Order> orderTable;
-    @FXML private TableColumn<Order, Integer> colOrderId;
-    @FXML private TableColumn<Order, String>  colCustomer;
-    @FXML private TableColumn<Order, String>  colTotal;
-    @FXML private TableColumn<Order, String>  colDeadline;
-    @FXML private TableColumn<Order, String>  colStatus;
-    @FXML private TableColumn<Order, String>  colAssignee;
-    @FXML
-    Pagination pagination;
-    ObservableList<Order> allOrders;
-
-//    Actions/Management variables
+    //    Actions/Management
     @FXML private TextField orderNumberField;
     @FXML private TextField usernameField;
     @FXML private ChoiceBox<Order.DeliveryDeadline> deadlineField;
@@ -37,21 +21,12 @@ public class OrderPageController {
     @FXML private TextField orderIdActionField;
     @FXML private CheckBox usePointsCheckBox;
     @FXML private Label statusLabel;
-    @FXML private TextField employeeUsernameField;
 
     @FXML
-    public void initialize() {
-        initializeViewPage();
-        initializeActionsPage();
-    }
-
-//    Actions functions
-    @FXML
-    public void initializeActionsPage() {
+    public void initializeView() {
         sizeBox.getItems().addAll("XS", "S", "M", "L", "XL");
         deadlineField.getItems().addAll(Order.DeliveryDeadline.values());
     }
-
     @FXML
     public void createOrderClicked() {
         try {
@@ -62,16 +37,12 @@ public class OrderPageController {
 
             FashionStoreFxmlView.getInstance().refresh(); // refresh page (update view info) !Important
 
-            System.out.println("good");
-
             statusLabel.setText("Order created successfully!");
             statusLabel.setStyle("-fx-text-fill: green;");
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
-            System.out.println(e.getMessage());
         } catch (Exception e) {
             ViewUtils.showError("Invalid input!");
-            System.out.println(e.getMessage());
         }
     }
 
@@ -225,112 +196,5 @@ public class OrderPageController {
         } catch (Exception e) {
             ViewUtils.showError("Invalid input!");
         }
-    }
-
-    @FXML
-    public void assignEmployeeClicked() {
-        try {
-            int orderNumber = Integer.parseInt(orderIdActionField.getText());
-            // assign the order to the employee
-            OrderProcessingController.assignOrderToEmployee(orderNumber, employeeUsernameField.getText());
-            statusLabel.setText("Order assigned successfully!");
-            statusLabel.setStyle("-fx-text-fill: green;");
-        } catch (FashionStoreException e) {
-            ViewUtils.showError(e.getMessage());
-        } catch (NumberFormatException e) {
-            ViewUtils.showError("Please enter a valid order number");
-        }
-    }
-
-
-//    View functions
-@FXML
-public void initializeViewPage() {
-    orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-    // initialize allOrders first before anything else can throw
-    allOrders = FXCollections.observableArrayList();
-
-    setupColumns();
-    loadOrders();
-
-    FashionStoreFxmlView.getInstance().registerRefreshEvent(orderTable);
-    orderTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadOrders());
-
-    pagination.currentPageIndexProperty().addListener((obs, oldVal, newVal) -> showPage(newVal.intValue()));
-}
-
-    public void setupColumns() {
-//        height and colours
-        orderTable.setFixedCellSize(25);
-        orderTable.prefHeightProperty().bind(
-                Bindings.size(orderTable.getItems()).multiply(orderTable.getFixedCellSize()).add(28)
-        );
-
-//        each column 1/6 of width
-        colOrderId.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colCustomer.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colTotal.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colDeadline.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colStatus.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colAssignee.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-
-//        values
-        colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
-        colCustomer.setCellValueFactory(data -> {
-            Order order = data.getValue();
-            String username = "N/A";
-
-            if (order.getOrderPlacer() != null && order.getOrderPlacer().getUser() != null) {
-                username = order.getOrderPlacer().getUser().getUsername();
-            }
-            System.out.println(order.getOrderPlacer().toString());
-            return new javafx.beans.property.SimpleStringProperty(username);
-        });
-        colTotal.setCellValueFactory(data -> {
-            Order order = data.getValue();
-            String total = String.valueOf(order.getTotalCost());
-            return new javafx.beans.property.SimpleStringProperty(total);
-        });
-        colDeadline.setCellValueFactory(data -> {
-            Order order = data.getValue();
-            String deadline = order.getDeadline() != null
-                    ? order.getDeadline().toString()
-                    : "N/A";
-            return new javafx.beans.property.SimpleStringProperty(deadline);
-        });
-        colStatus.setCellValueFactory(data -> {
-            Order order = data.getValue();
-            String state = order.getState() != null
-                    ? order.getState().toString()
-                    : "N/A";
-            return new javafx.beans.property.SimpleStringProperty(state);
-        });
-        colAssignee.setCellValueFactory(data -> {
-            Order order = data.getValue();
-            String assignee = order.getOrderAssignee() != null
-                    ? order.getOrderAssignee().getUser().getName()
-                    : "N/A";
-            return new javafx.beans.property.SimpleStringProperty(assignee);
-        });
-    }
-
-    private void loadOrders() {
-        List<Order> orders = OrderController.getAllOrders();
-        allOrders = FXCollections.observableArrayList(orders != null ? orders : List.of());
-
-        int pageCount = (int) Math.ceil((double) allOrders.size() / 8); // rows per page
-        pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
-        pagination.setCurrentPageIndex(0);
-        showPage(0);
-
-        orderTable.refresh();
-    }
-
-    void showPage(int pageIndex) {
-        int from = pageIndex * 8; // rows per page
-        int to   = Math.min(from + 8, allOrders.size()); // rows per page
-        orderTable.setItems(FXCollections.observableArrayList(
-                allOrders.subList(from, to)));
     }
 }

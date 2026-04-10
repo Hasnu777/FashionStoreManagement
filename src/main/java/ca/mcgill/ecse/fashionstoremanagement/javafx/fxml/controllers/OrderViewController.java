@@ -14,8 +14,8 @@ import javafx.scene.control.Pagination;
 
 import java.util.List;
 
-public class ViewOrdersPageController {
-    private static ViewOrdersPageController instance;
+public class OrderViewController {
+//    private static OrderViewController instance;
 
     @FXML private TableView<Order> orderTable;
     @FXML private TableColumn<Order, Integer> colOrderId;
@@ -30,16 +30,8 @@ public class ViewOrdersPageController {
     ObservableList<Order> allOrders;
 
     @FXML
-    public void initialize() {
+    public void initializeView() {
         orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-//        each column 1/6 of width
-        colOrderId.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colCustomer.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colTotal.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colDeadline.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colStatus.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-        colAssignee.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
 
         // initialize allOrders first before anything else can throw
         allOrders = FXCollections.observableArrayList();
@@ -52,6 +44,14 @@ public class ViewOrdersPageController {
     }
 
     public void setupColumns() {
+//        each column 1/6 of width
+        colOrderId.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colCustomer.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colTotal.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colDeadline.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colStatus.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colAssignee.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         colCustomer.setCellValueFactory(data -> {
             Order order = data.getValue();
