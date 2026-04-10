@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="Infinity"
+      maxWidth="Infinity"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.OrderPageController"
+>
+    <!-- CREATE ORDER -->
+    <TitledPane text="Create Order" expanded="true">
+        <content>
+            <GridPane hgap="10" vgap="10" maxWidth="Infinity">
+
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="40"/>
+                    <ColumnConstraints percentWidth="60"/>
+                </columnConstraints>
+
+                <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="usernameField"
+                           GridPane.rowIndex="0"
+                           GridPane.columnIndex="1"
+                           maxWidth="Infinity"/>
+
+                <Label text="Deadline:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ChoiceBox fx:id="deadlineField"
+                            GridPane.rowIndex="1"
+                            GridPane.columnIndex="1"
+                            maxWidth="Infinity"/>
+
+                <Button text="Create Order"
+                        GridPane.rowIndex="2"
+                        GridPane.columnIndex="0"
+                        GridPane.columnSpan="2"
+                        maxWidth="Infinity"
+                        styleClass="primary-button"/>
+            </GridPane>
+        </content>
+    </TitledPane>
+
+    <!-- MANAGE ITEMS -->
+    <TitledPane text="Manage Order Items" expanded="false">
+        <content>
+            <GridPane hgap="10" vgap="10" maxWidth="Infinity">
+
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="40"/>
+                    <ColumnConstraints percentWidth="60"/>
+                </columnConstraints>
+
+                <Label text="Order ID:" GridPane.rowIndex="0"/>
+                <TextField fx:id="orderNumberField"
+                           GridPane.rowIndex="0"
+                           GridPane.columnIndex="1"/>
+
+                <Label text="Item Name:" GridPane.rowIndex="1"/>
+                <TextField fx:id="itemNameField"
+                           GridPane.rowIndex="1"
+                           GridPane.columnIndex="1"/>
+
+                <Label text="Size:" GridPane.rowIndex="2"/>
+                <ChoiceBox fx:id="sizeBox"
+                           GridPane.rowIndex="2"
+                           GridPane.columnIndex="1"/>
+
+                <Label text="Quantity:" GridPane.rowIndex="3"/>
+                <TextField fx:id="quantityField"
+                           GridPane.rowIndex="3"
+                           GridPane.columnIndex="1"/>
+
+                <HBox spacing="10" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                    <Button text="Add Item" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button text="Update Item" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                </HBox>
+
+            </GridPane>
+        </content>
+    </TitledPane>
+
+    <!-- ORDER ACTIONS -->
+    <TitledPane text="Order Actions" expanded="false">
+        <content>
+            <VBox spacing="10">
+
+                <TextField fx:id="orderIdActionField" promptText="Order ID"/>
+
+                <Button text="Checkout" maxWidth="Infinity"/>
+                <Button text="Pay" maxWidth="Infinity"/>
+                <Button text="Deliver" maxWidth="Infinity"/>
+                <Button text="Assign Employee" maxWidth="Infinity"/>
+                <Button text="Cancel Order" maxWidth="Infinity"/>
+
+            </VBox>
+        </content>
+    </TitledPane>
+</VBox>

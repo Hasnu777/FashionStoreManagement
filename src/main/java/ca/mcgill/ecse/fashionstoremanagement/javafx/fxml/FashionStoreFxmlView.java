@@ -24,8 +24,7 @@ public class FashionStoreFxmlView extends Application{
             var root = (Pane) FXMLLoader.load(getClass().getResource("MainPage.fxml"));
             var scene = new Scene(root);
             primaryStage.setScene(scene);
-            primaryStage.setMinWidth(800);
-            primaryStage.setMinHeight(600);
+            primaryStage.setMaximized(true);
             primaryStage.setTitle("Fashion Store Management");
             primaryStage.show();
             refresh();

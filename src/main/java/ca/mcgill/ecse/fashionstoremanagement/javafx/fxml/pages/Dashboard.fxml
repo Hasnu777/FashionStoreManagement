@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" styleClass="page" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.DashboardController">
+   <top>
+      <Label alignment="CENTER" prefHeight="36.0" prefWidth="Infinity" styleClass="title-label" text="Dashboard" textAlignment="CENTER" />
+   </top>
+   <center>
+      <VBox spacing="20" fillWidth="true">
+         <children>
+            <HBox spacing="20" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox styleClass="card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                     <children>
+                        <Label text="Users" />
+                        <Label fx:id="userCountLabel" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                     <children>
+                        <Label text="Orders" />
+                        <Label fx:id="orderCountLabel" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                     <children>
+                        <Label text="Shipments" />
+                        <Label fx:id="shipmentCountLabel" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="Orders awaiting assignment tableview (&lt;=5" />
+               </children>
+            </HBox>
+            <HBox HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="Recent activity (newest created anything)" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

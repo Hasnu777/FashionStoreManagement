@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.ViewOrdersPageController">
+   <center>
+      <TableView fx:id="orderTable" BorderPane.alignment="CENTER">
+         <columns>
+            <TableColumn fx:id="colOrderId" text="Order ID" />
+            <TableColumn fx:id="colCustomer" text="Customer" />
+            <TableColumn fx:id="colTotal" text="Total" />
+            <TableColumn fx:id="colDeadline" text="Deadline" />
+            <TableColumn fx:id="colStatus" text="Status" />
+            <TableColumn fx:id="colAssignee" text="Assignee" />
+         </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <Pagination fx:id="pagination" prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>

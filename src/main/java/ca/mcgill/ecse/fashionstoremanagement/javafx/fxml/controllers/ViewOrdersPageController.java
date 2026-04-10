@@ -33,6 +33,14 @@ public class ViewOrdersPageController {
     public void initialize() {
         orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+//        each column 1/6 of width
+        colOrderId.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colCustomer.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colTotal.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colDeadline.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colStatus.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+        colAssignee.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+
         // initialize allOrders first before anything else can throw
         allOrders = FXCollections.observableArrayList();
 
