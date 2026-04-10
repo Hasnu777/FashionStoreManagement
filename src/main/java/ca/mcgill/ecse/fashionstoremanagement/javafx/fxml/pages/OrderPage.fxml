@@ -64,7 +64,7 @@
                              </columnConstraints>
          
                              <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                             <TextField fx:id="usernameField" maxWidth="Infinity" GridPane.columnIndex="1" />
+                             <TextField fx:id="usernameField" promptText="Username" maxWidth="Infinity" GridPane.columnIndex="1" />
          
                              <Label text="Deadline:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                              <ChoiceBox fx:id="deadlineField" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -80,7 +80,7 @@
                  </TitledPane>
 
                  <!-- MANAGE ITEMS -->
-                 <TitledPane expanded="false" text="Manage Order Items">
+                 <TitledPane expanded="true" text="Manage Order Items">
                      <content>
                          <GridPane hgap="10" maxWidth="Infinity" vgap="10">
 
@@ -90,7 +90,7 @@
                              </columnConstraints>
 
                              <Label text="Order ID:" GridPane.rowIndex="0" />
-                             <TextField fx:id="orderNumberField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                             <TextField fx:id="orderNumberField" promptText="Order ID" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                              <Label text="Item Name:" GridPane.rowIndex="1" />
                              <TextField fx:id="itemNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -118,7 +118,7 @@
                  </TitledPane>
 
                  <!-- ORDER ACTIONS -->
-                 <TitledPane expanded="false" text="Order Actions">
+                 <TitledPane expanded="true" text="Order Actions">
                      <content>
                          <VBox spacing="10">
 
@@ -137,6 +137,12 @@
                  <Label fx:id="statusLabel" text="" />
              </VBox>
          </children>
+
+          <rowConstraints>
+              <RowConstraints vgrow="ALWAYS"/>
+              <RowConstraints vgrow="NEVER"/>
+          </rowConstraints>
+
       </GridPane>
    </center>
 </BorderPane>

@@ -13,7 +13,7 @@
     -text-on-main: black;
     -text-on-button: black;
     -card-background: #F5E9D8;
-    -card-background-shadow: derive(-card-background, -15%);
+    -card-background-shadow: #F0DCC0;
 
     -fx-background-color: -background-color;
     -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
@@ -143,16 +143,22 @@
     -fx-background-color: -card-background;
 }
 
+.table-row-cell {
+    -fx-border-color: transparent transparent -primary-color transparent;
+    -fx-border-width: 0 0 0.5 0;
+    -fx-border-style: solid;
+}
+
 .table-row-cell:selected {
     -fx-background-color: -accent-soft-color;
 }
 
 .table-row-cell:even {
-    -fx-background-color: card-background;
+    -fx-background-color: -card-background;
 }
 
 .table-row-cell:odd {
-    -fx-background-color: card-background-shadow;
+    -fx-background-color: -card-background-shadow;
 }
 
 /* ===============================
@@ -235,4 +241,33 @@
    =============================== */
 .page {
     -fx-padding: 15 15 15 15;
+}
+
+/* ===============================
+   TITLED PANE (accordion panels)
+   =============================== */
+
+.titled-pane {
+    -fx-text-fill: -text-on-main;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -primary-color;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: -text-on-main;
+}
+
+.titled-pane > .title > .text {
+    -fx-fill: -text-on-main;
+    -fx-font-weight: bold;
+}
+
+/* content inside panel */
+.titled-pane > .content {
+    -fx-background-color: -card-background-shadow;
+    -fx-padding: 15;
+    -fx-border-color: none;
 }

@@ -18,11 +18,11 @@
                         <fx:include source="pages/OrderPage.fxml"/>
                     </content>
                 </Tab>
-<!--                <Tab text="Users">-->
-<!--                    <content>-->
-<!--                        <fx:include source="pages/ViewPage.fxml"/>-->
-<!--                    </content>-->
-<!--                </Tab>-->
+                <Tab text="Users">
+                    <content>
+                        <fx:include source="pages/UserPage.fxml"/>
+                    </content>
+                </Tab>
 <!--                <Tab text="Inventory">-->
 <!--                    <content>-->
 <!--                        <fx:include source="pages/ViewPage.fxml"/>-->
@@ -43,34 +43,11 @@
 <!--                        <fx:include source="pages/ItemPage.fxml" />-->
 <!--                    </content>-->
 <!--                </Tab>-->
-                <Tab text="Customers">
-                    <content>
-                        <fx:include source="pages/CustomerPage.fxml" />
-                    </content>
-                </Tab>
-                <Tab text="User View">
-                    <content>
-                        <fx:include source="pages/ViewUsersPage.fxml" />
-                    </content>
-                </Tab>
-<!--                <Tab text="Employees">-->
-<!--                    <content>-->
-<!--                        <fx:include source="pages/EmployeePage.fxml" />-->
-<!--                    </content>-->
-<!--                </Tab>-->
-<!--                <Tab text="Orders">-->
-<!--                    <content>-->
-<!--                        <fx:include source="pages/OrderActionsPage.fxml" />-->
-<!--                    </content>-->
-<!--                </Tab>-->
 <!--                <Tab text="Shipment">-->
 <!--                    <fx:include source="pages/ShipmentPage.fxml" />-->
 <!--                </Tab>-->
 <!--                <Tab text="Shipment Items">-->
 <!--                    <fx:include source="pages/ShipmentItemPage.fxml" />-->
-<!--                </Tab>-->
-<!--                <Tab text="Assign Order">-->
-<!--                    <fx:include source="pages/AssignOrderPage.fxml" />-->
 <!--                </Tab>-->
             </tabs>
         </TabPane>
