@@ -1,28 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<GridPane hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.ShipmentPageController">
-    <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
-        <ColumnConstraints hgrow="ALWAYS" prefWidth="200.0" />
-        <ColumnConstraints hgrow="SOMETIMES" prefWidth="150.0" />
-    </columnConstraints>
-    <children>
-        <Label text="Shipment Number:" />
-        <TextField fx:id="shipmentNumberField" promptText="Shipment Number" GridPane.columnIndex="1" />
+<BorderPane styleClass="page" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.ShipmentPageController">
+    <top>
+        <Label maxWidth="Infinity" styleClass="title-label" text="Shipment Management" BorderPane.alignment="CENTER" />
+    </top>
+    <bottom>
+        <HBox spacing="20" BorderPane.alignment="CENTER" />
+    </bottom>
+    <center>
+        <GridPane maxHeight="Infinity" BorderPane.alignment="CENTER">
 
-        <Button maxWidth="1.7976931348623157E308" text="Create Shipment" onAction="#createClicked" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" />
-        <Button maxWidth="1.7976931348623157E308" text="Delete Shipment" onAction="#deleteClicked" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.hgrow="ALWAYS" />
+            <columnConstraints>
+                <ColumnConstraints percentWidth="75" />
+                <ColumnConstraints percentWidth="25" />
+            </columnConstraints>
 
-        <Label fx:id="statusLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    </children>
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-</GridPane>
+            <children>
+                <!--             View -->
+                <BorderPane maxHeight="Infinity">
+                    <center>
+                        <TableView fx:id="itemTable" BorderPane.alignment="CENTER">
+                            <columns>
+                                <TableColumn fx:id="colName" text="Name" />
+                                <TableColumn fx:id="colPrice" text="Price" />
+                                <TableColumn fx:id="colPoints" text="Points" />
+                                <TableColumn fx:id="colSize" text="Size" />
+                                <TableColumn fx:id="colQuant" text="Quantity" />
+                            </columns>
+                        </TableView>
+                    </center>
+                    <bottom>
+                        <Pagination fx:id="pagination" prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+                    </bottom>
+                </BorderPane>
+
+                <!--             Actions-->
+                <VBox GridPane.columnIndex="1">
+
+                    <!-- Manage shipment -->
+                    <TitledPane expanded="true" text="Manage Shipment">
+                        <content>
+                            <GridPane hgap="10" maxWidth="Infinity" vgap="10">
+
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="40.0" />
+                                    <ColumnConstraints percentWidth="60.0" />
+                                </columnConstraints>
+
+                                <Label text="Shipment Number:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <TextField fx:id="shipmentNumberField" maxWidth="Infinity" promptText="Shipment Number" GridPane.columnIndex="1" />
+
+                                <HBox maxWidth="Infinity" spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                    <children>
+                                        <Button maxWidth="Infinity" onAction="#createClicked" styleClass="primary-button" text="Create Shipment" HBox.hgrow="ALWAYS" />
+                                        <Button maxWidth="Infinity" onAction="#deleteClicked" styleClass="primary-button" text="Delete Shipment" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <!-- Manage shipment items -->
+                    <TitledPane expanded="true" text="Manage Shipment Items">
+                        <content>
+                            <GridPane hgap="10" maxWidth="Infinity" vgap="10">
+
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="40.0" />
+                                    <ColumnConstraints percentWidth="60.0" />
+                                </columnConstraints>
+
+                                <Label text="Shipment Number:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <TextField fx:id="shipmentNumberUField" maxWidth="Infinity" promptText="Shipment Number" GridPane.columnIndex="1" />
+
+                                <Label text="Item Name:" GridPane.rowIndex="1" />
+                                <TextField fx:id="itemNameField" promptText="Item Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                <Label text="Size:" GridPane.rowIndex="2" />
+                                <ChoiceBox fx:id="sizeField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                <HBox maxWidth="Infinity" spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                                    <children>
+                                        <Button maxWidth="Infinity" onAction="#addItemClicked" styleClass="primary-button" text="Add Item" HBox.hgrow="ALWAYS" />
+                                        <Button maxWidth="Infinity" onAction="#addItemClicked" styleClass="primary-button" text="Remove Item" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
+
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <Label fx:id="statusLabel" text="" />
+                </VBox>
+            </children>
+
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints vgrow="NEVER" />
+            </rowConstraints>
+        </GridPane>
+    </center>
+</BorderPane>

@@ -70,6 +70,7 @@
                              <ChoiceBox fx:id="deadlineField" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          
                              <Button onAction="#createOrderClicked" maxWidth="Infinity" styleClass="primary-button" text="Create Order" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+
                              <rowConstraints>
                                  <RowConstraints />
                                  <RowConstraints />

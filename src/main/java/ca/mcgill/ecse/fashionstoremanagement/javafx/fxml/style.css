@@ -15,6 +15,8 @@
     -card-background: #F5E9D8;
     -card-background-shadow: #F0DCC0;
 
+    -dark-rows: #f7e5cb;
+
     -fx-background-color: -background-color;
     -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
 }
@@ -144,9 +146,8 @@
 }
 
 .table-row-cell {
-    -fx-border-color: transparent transparent -primary-color transparent;
-    -fx-border-width: 0 0 0.5 0;
-    -fx-border-style: solid;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
 
 .table-row-cell:selected {
@@ -158,7 +159,7 @@
 }
 
 .table-row-cell:odd {
-    -fx-background-color: -card-background-shadow;
+    -fx-background-color: -dark-rows;
 }
 
 /* ===============================
