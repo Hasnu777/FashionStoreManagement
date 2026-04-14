@@ -2,8 +2,6 @@ package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
 import ca.mcgill.ecse.fashionstoremanagement.controller.*;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
-import ca.mcgill.ecse.fashionstoremanagement.model.*;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,14 +13,14 @@ import java.util.List;
 
 public class ItemPageController {
 //    View
-    @FXML private TableView<SizedItem> itemTable;
+    @FXML private TableView<TOSizedItem> itemTable;
     @FXML private TableColumn<TOSizedItem, String> colName;
     @FXML private TableColumn<TOSizedItem, String>  colPrice;
     @FXML private TableColumn<TOSizedItem, String>  colPoints;
     @FXML private TableColumn<TOSizedItem, String>  colSize;
     @FXML private TableColumn<TOSizedItem, String>  colQuant;
     @FXML private Pagination                  pagination;
-    private ObservableList<SizedItem> allItems;
+    private ObservableList<TOSizedItem> allItems;
 
 //    Item Actions
     @FXML private Label statusLabel;
@@ -41,6 +39,7 @@ public class ItemPageController {
     public void initialize() {
         pointsField.getItems().addAll("1", "2", "3", "4", "5");
         sizeBox.getItems().addAll("XS", "S", "M", "L", "XL");
+        initializeViewPage();
     }
 
     @FXML
@@ -150,6 +149,14 @@ public class ItemPageController {
 
         loadItems();
 
+        //        each column 1/5 of width
+        colName.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
+        colSize.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
+        colPrice.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
+        colQuant.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
+        colPoints.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
+
+
 //        set up pagination
         int pageCount = (int) Math.ceil((double) allItems.size() / 8); //rows per page
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
@@ -166,7 +173,7 @@ public class ItemPageController {
     }
 
     private void loadItems() {
-        List<SizedItem> items = FashionStoreManagementController.getFashionStoreManagement().getSizedItems();
+        List<TOSizedItem> items = ItemController.getAllTOSizedItem();
         allItems = FXCollections.observableArrayList(items != null ? items : List.of());
 
         int pageCount = (int) Math.ceil((double) allItems.size() / 8);

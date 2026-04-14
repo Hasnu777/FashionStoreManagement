@@ -5,7 +5,6 @@ import ca.mcgill.ecse.fashionstoremanagement.controller.ShipmentController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
 import ca.mcgill.ecse.fashionstoremanagement.controller.TOShipment;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
-import ca.mcgill.ecse.fashionstoremanagement.model.Shipment;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +22,7 @@ public class ShipmentPageController {
     @FXML private TableColumn<TOShipment, String>  colDateOrdered;
     @FXML private TableColumn<TOShipment, String>  colDateArrived;
     @FXML private Pagination                  pagination;
-    private ObservableList<Shipment> allShipments;
+    private ObservableList<TOShipment> allShipments;
 
 //    management
     @FXML private TextField shipmentNumberField;
@@ -34,6 +33,7 @@ public class ShipmentPageController {
     @FXML
     public void initialize() {
         sizeField.getItems().addAll("XS", "S", "M", "L", "XL");
+        initializeViewPage();
     }
 
     @FXML
@@ -129,6 +129,11 @@ public class ShipmentPageController {
 
         loadShipments();
 
+        //        each column 1/3 of width
+        colNumber.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
+        colDateOrdered.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
+        colDateArrived.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
+
 //        set up pagination
         int pageCount = (int) Math.ceil((double) allShipments.size() / 8); //rows per page
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
@@ -145,7 +150,7 @@ public class ShipmentPageController {
     }
 
     private void loadShipments() {
-        List<Shipment> shipments = FashionStoreManagementController.getFashionStoreManagement().getShipments();
+        List<TOShipment> shipments = ShipmentController.getAllTOShipments();
         allShipments = FXCollections.observableArrayList(shipments != null ? shipments : List.of());
 
         int pageCount = (int) Math.ceil((double) allShipments.size() / 8);

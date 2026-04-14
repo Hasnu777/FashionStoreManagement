@@ -2,8 +2,10 @@ package ca.mcgill.ecse.fashionstoremanagement.controller;
 
 import ca.mcgill.ecse.fashionstoremanagement.model.FashionStoreManagement;
 import ca.mcgill.ecse.fashionstoremanagement.model.Item;
+import ca.mcgill.ecse.fashionstoremanagement.model.Shipment;
 import ca.mcgill.ecse.fashionstoremanagement.model.SizedItem;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
 
@@ -56,44 +58,6 @@ public class ItemController {
 			}
 			system.addSizedItem(SizedItem.Size.valueOf(sizeStr.toUpperCase()), quantity, existingItem);
 		}
-
-//	// Get FashionStoreManagement instance to perform operations on it
-//	FashionStoreManagement system = FashionStoreManagementController.getFashionStoreManagement();
-//	Item existingItem = Item.getWithName(name);
-//	boolean newSizeForItem = false;
-//	if (existingItem != null) {
-//		List<SizedItem> sizedItems = existingItem.getSizedItems();
-//		for (SizedItem sizedItem : sizedItems) {
-//			if (sizedItem.getSize().equals(SizedItem.Size.valueOf(sizeStr.toUpperCase()))) {
-//				throw new FashionStoreException("an item called \"" + name + "\" already exists");
-//			}
-//		}
-//		newSizeForItem = true;
-//	}
-//	if (name.isEmpty()) {
-//		throw new FashionStoreException("name is required");
-//	}
-//	if (price <= 0) {
-//		throw new FashionStoreException("price must be positive");
-//	}
-//	if (points < 1 || points > 5) {
-//		throw new FashionStoreException("points must be between one and five");
-//	}
-//	if (quantity < 0) {
-//		throw new FashionStoreException("quantity must be non-negative");
-//	}
-//	// Item must be created prior to a SizedItem
-//	Item itemToAdd = null;
-//	if (!newSizeForItem) {
-//		itemToAdd = new Item(name, price, points, system);
-//	}
-//	else {
-//		itemToAdd = Item.getWithName(name);
-//	}
-//	// Create SizedItem, in-line execution of acquiring Size enum
-//	SizedItem sizedItemToAdd = system.addSizedItem(SizedItem.Size.valueOf(sizeStr.toUpperCase()), quantity, itemToAdd);
-//	// Insert new SizedItem object into FashionStoreManagement instance
-//	system.addSizedItem(sizedItemToAdd);
 	}
 
 	public static void updateItemPrice(String name, double newPrice) {
@@ -130,4 +94,19 @@ public class ItemController {
 		}
 		itemToDelete.delete();
 	}
+
+		public static List<TOSizedItem> getAllTOSizedItem() {
+			List<TOSizedItem> tos = new ArrayList<>();
+			// loop thru all shipments and convert them
+			for (SizedItem i : FashionStoreManagementController.getFashionStoreManagement().getSizedItems()) {
+				tos.add(new TOSizedItem(
+						i.getProductId(),
+						i.getItem().getName(),
+						i.getSize().toString(),
+						i.getQuantityInInventory(),
+						new TOItem(i.getItem().getName(), i.getItem().getPrice(), i.getItem().getLoyaltyPoints())
+				));
+			}
+			return tos;
+		}
 }
