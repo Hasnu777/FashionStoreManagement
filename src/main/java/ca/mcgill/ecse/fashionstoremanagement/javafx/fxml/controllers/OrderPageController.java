@@ -1,10 +1,7 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
-import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.OrderProcessingController;
+import ca.mcgill.ecse.fashionstoremanagement.controller.*;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
-import ca.mcgill.ecse.fashionstoremanagement.model.Order;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,25 +9,23 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.List;
-
 public class OrderPageController {
 //    View variables
-    @FXML private TableView<Order> orderTable;
-    @FXML private TableColumn<Order, Integer> colOrderId;
-    @FXML private TableColumn<Order, String>  colCustomer;
-    @FXML private TableColumn<Order, String>  colTotal;
-    @FXML private TableColumn<Order, String>  colDeadline;
-    @FXML private TableColumn<Order, String>  colStatus;
-    @FXML private TableColumn<Order, String>  colAssignee;
+    @FXML private TableView<TOOrder> orderTable;
+    @FXML private TableColumn<TOOrder, Integer> colOrderId;
+    @FXML private TableColumn<TOOrder, String>  colCustomer;
+    @FXML private TableColumn<TOOrder, String>  colTotal;
+    @FXML private TableColumn<TOOrder, String>  colDeadline;
+    @FXML private TableColumn<TOOrder, String>  colStatus;
+    @FXML private TableColumn<TOOrder, String>  colAssignee;
     @FXML
     Pagination pagination;
-    ObservableList<Order> allOrders;
+    ObservableList<TOOrder> allOrders;
 
 //    Actions/Management variables
     @FXML private TextField orderNumberField;
     @FXML private TextField usernameField;
-    @FXML private ChoiceBox<Order.DeliveryDeadline> deadlineField;
+    @FXML private ChoiceBox<String> deadlineField;
     @FXML private TextField itemNameField;
     @FXML private ChoiceBox<String> sizeBox;
     @FXML private TextField quantityField;
@@ -49,7 +44,7 @@ public class OrderPageController {
     @FXML
     public void initializeActionsPage() {
         sizeBox.getItems().addAll("XS", "S", "M", "L", "XL");
-        deadlineField.getItems().addAll(Order.DeliveryDeadline.values());
+        deadlineField.getItems().addAll("SameDay", "InOneDay", "InTwoDays", "InThreeDays");
     }
 
     @FXML
@@ -278,46 +273,52 @@ public void initializeViewPage() {
 //        values
         colOrderId.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         colCustomer.setCellValueFactory(data -> {
-            Order order = data.getValue();
+            TOOrder order = data.getValue();
             String username = "N/A";
 
-            if (order.getOrderPlacer() != null && order.getOrderPlacer().getUser() != null) {
-                username = order.getOrderPlacer().getUser().getUsername();
+            if (order.getOrderPlacer() != null && order.getOrderPlacer() != null) {
+                username = order.getOrderPlacer().getUsername();
             }
             System.out.println(order.getOrderPlacer().toString());
             return new javafx.beans.property.SimpleStringProperty(username);
         });
         colTotal.setCellValueFactory(data -> {
-            Order order = data.getValue();
+            TOOrder order = data.getValue();
             String total = String.valueOf(order.getTotalCost());
             return new javafx.beans.property.SimpleStringProperty(total);
         });
         colDeadline.setCellValueFactory(data -> {
-            Order order = data.getValue();
+            TOOrder order = data.getValue();
             String deadline = order.getDeadline() != null
-                    ? order.getDeadline().toString()
+                    ? order.getDeadline()
                     : "N/A";
             return new javafx.beans.property.SimpleStringProperty(deadline);
         });
         colStatus.setCellValueFactory(data -> {
-            Order order = data.getValue();
-            String state = order.getState() != null
-                    ? order.getState().toString()
+            TOOrder order = data.getValue();
+            String state = order.getStatus() != null
+                    ? order.getStatus().toString()
                     : "N/A";
             return new javafx.beans.property.SimpleStringProperty(state);
         });
         colAssignee.setCellValueFactory(data -> {
-            Order order = data.getValue();
+            TOOrder order = data.getValue();
             String assignee = order.getOrderAssignee() != null
-                    ? order.getOrderAssignee().getUser().getName()
+                    ? order.getOrderAssignee().getName()
                     : "N/A";
             return new javafx.beans.property.SimpleStringProperty(assignee);
         });
     }
 
     private void loadOrders() {
-        List<Order> orders = OrderController.getAllOrders();
-        allOrders = FXCollections.observableArrayList(orders != null ? orders : List.of());
+        allOrders = FXCollections.observableArrayList(
+                FashionStoreManagementController
+                        .getFashionStoreManagement()
+                        .getOrders()
+                        .stream()
+                        .map(TOMapper::toTOOrder)
+                        .toList()
+        );
 
         int pageCount = (int) Math.ceil((double) allOrders.size() / 8); // rows per page
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);

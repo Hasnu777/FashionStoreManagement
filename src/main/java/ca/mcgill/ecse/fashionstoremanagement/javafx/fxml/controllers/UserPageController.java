@@ -1,8 +1,6 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.UserController;
+import ca.mcgill.ecse.fashionstoremanagement.controller.*;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import ca.mcgill.ecse.fashionstoremanagement.model.User;
 import javafx.collections.FXCollections;
@@ -12,17 +10,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.collections.ObservableList;
 
-import java.util.List;
-
 public class UserPageController {
 //    View
-    @FXML private TableView<User> userTable;
-    @FXML private TableColumn<User, String>  colUsername;
-    @FXML private TableColumn<User, String>  colName;
-    @FXML private TableColumn<User, String>  colNumber;
-    @FXML private TableColumn<User, String>  colRole;
+    @FXML private TableView<TOUser> userTable;
+    @FXML private TableColumn<TOUser, String>  colUsername;
+    @FXML private TableColumn<TOUser, String>  colName;
+    @FXML private TableColumn<TOUser, String>  colNumber;
+    @FXML private TableColumn<TOUser, String>  colRole;
     @FXML private Pagination                  pagination;
-    private ObservableList<User> allUsers;
+    private ObservableList<TOUser> allUsers;
 
 //    Employee
     @FXML private TextField usernameField;
@@ -144,7 +140,7 @@ public class UserPageController {
 //        columns
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colName.setCellValueFactory(data -> {
-            User user = data.getValue();
+            TOUser user = data.getValue();
 
             String username = user.getName() != null
                     ? user.getName()
@@ -152,21 +148,37 @@ public class UserPageController {
             return new javafx.beans.property.SimpleStringProperty(username);
         });
         colNumber.setCellValueFactory(data -> {
-            User user = data.getValue();
+            TOUser user = data.getValue();
             String number = user.getName() != null
                     ? user.getPhoneNumber()
                     : "N/A";
             return new javafx.beans.property.SimpleStringProperty(number);
         });
         colRole.setCellValueFactory(data -> {
-            User user = data.getValue();
-            if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            String username = data.getValue().getUsername();
+
+            try {
+                boolean isCustomer =
+                        FashionStoreManagementController.getFashionStoreManagement().getCustomers().contains(username);
+
+                boolean isEmployee =
+                        FashionStoreManagementController.getFashionStoreManagement().getEmployees().contains(username);
+
+                StringBuilder roles = new StringBuilder();
+
+                if (isCustomer) roles.append("Customer");
+                if (isEmployee) {
+                    if (!roles.isEmpty()) roles.append(", ");
+                    roles.append("Employee");
+                }
+
+                return new javafx.beans.property.SimpleStringProperty(
+                        roles.length() > 0 ? roles.toString() : "N/A"
+                );
+
+            } catch (Exception e) {
                 return new javafx.beans.property.SimpleStringProperty("N/A");
             }
-            String roles = user.getRoles().stream()
-                    .map(role -> role.getClass().getSimpleName()) // gets "Customer", "Employee", "Manager" etc.
-                    .collect(java.util.stream.Collectors.joining(", "));
-            return new javafx.beans.property.SimpleStringProperty(roles);
         });
 
         loadUsers();
@@ -187,8 +199,14 @@ public class UserPageController {
     }
 
     private void loadUsers() {
-        List<User> users = FashionStoreManagementController.getFashionStoreManagement().getUsers();
-        allUsers = FXCollections.observableArrayList(users != null ? users : List.of());
+        allUsers = FXCollections.observableArrayList(
+                FashionStoreManagementController
+                        .getFashionStoreManagement()
+                        .getUsers()
+                        .stream()
+                        .map(TOMapper::toTOUser)
+                        .toList()
+        );
 
         int pageCount = (int) Math.ceil((double) allUsers.size() / 8);
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
