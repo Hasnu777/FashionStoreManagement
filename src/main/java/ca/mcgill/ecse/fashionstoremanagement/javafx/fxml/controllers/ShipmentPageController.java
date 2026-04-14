@@ -1,23 +1,29 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
+import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.ShipmentController;
 import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
+import ca.mcgill.ecse.fashionstoremanagement.controller.TOShipment;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
-import ca.mcgill.ecse.fashionstoremanagement.model.User;
+import ca.mcgill.ecse.fashionstoremanagement.model.Shipment;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShipmentPageController {
 //    View
-    @FXML private TableView<User> shipmentTable;
-    @FXML private TableColumn<User, String> colNumber;
-    @FXML private TableColumn<User, String>  colItems;
-    @FXML private TableColumn<User, String>  colPoints;
-    @FXML private TableColumn<User, String>  colSize;
-    @FXML private TableColumn<User, String>  colQuant;
+    @FXML private TableView<TOShipment> shipmentTable;
+    @FXML private TableColumn<TOShipment, String> colNumber;
+    @FXML private TableColumn<TOShipment, String>  colDateOrdered;
+    @FXML private TableColumn<TOShipment, String>  colDateArrived;
     @FXML private Pagination                  pagination;
-    private ObservableList<User> allUsers;
+    private ObservableList<Shipment> allShipments;
 
 //    management
     @FXML private TextField shipmentNumberField;
@@ -94,5 +100,66 @@ public class ShipmentPageController {
         } catch (NumberFormatException e) {
             ViewUtils.showError("Please enter valid numbers");
         }
+    }
+
+    // view functions
+    public void initializeViewPage() {
+        shipmentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        allShipments = FXCollections.observableArrayList();
+
+//        columns
+        colNumber.setCellValueFactory(new PropertyValueFactory<>("Shipment No."));
+        colDateArrived.setCellValueFactory(data -> {
+            TOShipment shipment = data.getValue();
+
+            String items = shipment.getDateArrived() != null
+                    ? shipment.getDateArrived().toString()
+                    : "N/A";
+            return new SimpleStringProperty(items);
+        });
+        colDateOrdered.setCellValueFactory(data -> {
+            TOShipment shipment = data.getValue();
+
+            String items = shipment.getDateOrdered() != null
+                    ? shipment.getDateOrdered().toString()
+                    : "N/A";
+            return new SimpleStringProperty(items);
+        });
+
+        loadShipments();
+
+//        set up pagination
+        int pageCount = (int) Math.ceil((double) allShipments.size() / 8); //rows per page
+        pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
+        pagination.setCurrentPageIndex(0);
+
+        // Show the correct slice of users whenever the page changes
+        pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) ->
+                showPage(newIndex.intValue()));
+
+        showPage(0); // show first page immediately
+
+        FashionStoreFxmlView.getInstance().registerRefreshEvent(shipmentTable);
+        shipmentTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadShipments());
+    }
+
+    private void loadShipments() {
+        List<Shipment> shipments = FashionStoreManagementController.getFashionStoreManagement().getShipments();
+        allShipments = FXCollections.observableArrayList(shipments != null ? shipments : List.of());
+
+        int pageCount = (int) Math.ceil((double) allShipments.size() / 8);
+        pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
+        pagination.setCurrentPageIndex(0);
+        showPage(0);
+
+        shipmentTable.refresh();
+    }
+
+    private void showPage(int pageIndex) {
+        int from = pageIndex * 8; // rows per page
+        int to   = Math.min(from + 8, allShipments.size()); // rows per page
+        shipmentTable.setItems(FXCollections.observableArrayList(
+        ));
     }
 }

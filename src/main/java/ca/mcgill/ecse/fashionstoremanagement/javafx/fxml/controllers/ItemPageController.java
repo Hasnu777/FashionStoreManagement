@@ -1,14 +1,10 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.ItemController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
-import ca.mcgill.ecse.fashionstoremanagement.controller.OrderController;
+import ca.mcgill.ecse.fashionstoremanagement.controller.*;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
-import ca.mcgill.ecse.fashionstoremanagement.model.Item;
-import ca.mcgill.ecse.fashionstoremanagement.model.Order;
-import ca.mcgill.ecse.fashionstoremanagement.model.User;
+import ca.mcgill.ecse.fashionstoremanagement.model.*;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,14 +15,14 @@ import java.util.List;
 
 public class ItemPageController {
 //    View
-    @FXML private TableView<User> itemTable;
-    @FXML private TableColumn<User, String> colName;
-    @FXML private TableColumn<User, String>  colPrice;
-    @FXML private TableColumn<User, String>  colPoints;
-    @FXML private TableColumn<User, String>  colSize;
-    @FXML private TableColumn<User, String>  colQuant;
+    @FXML private TableView<SizedItem> itemTable;
+    @FXML private TableColumn<TOSizedItem, String> colName;
+    @FXML private TableColumn<TOSizedItem, String>  colPrice;
+    @FXML private TableColumn<TOSizedItem, String>  colPoints;
+    @FXML private TableColumn<TOSizedItem, String>  colSize;
+    @FXML private TableColumn<TOSizedItem, String>  colQuant;
     @FXML private Pagination                  pagination;
-    private ObservableList<User> allItems;
+    private ObservableList<SizedItem> allItems;
 
 //    Item Actions
     @FXML private Label statusLabel;
@@ -109,5 +105,81 @@ public class ItemPageController {
         } catch (FashionStoreException e) {
             ViewUtils.showError(e.getMessage());
         }
+    }
+
+    // view functions
+    public void initializeViewPage() {
+        itemTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        allItems = FXCollections.observableArrayList();
+
+//        columns
+        colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        colPrice.setCellValueFactory(data -> {
+            TOSizedItem item = data.getValue();
+
+            String items = String.valueOf(item.getItem().getPrice()) != null
+                    ? String.valueOf(item.getItem().getPrice())
+                    : "N/A";
+            return new SimpleStringProperty(items);
+        });
+        colPoints.setCellValueFactory(data -> {
+            TOSizedItem item = data.getValue();
+
+            String items = String.valueOf(item.getItem().getLoyaltyPoints()) != null
+                    ? String.valueOf(item.getItem().getLoyaltyPoints())
+                    : "N/A";
+            return new SimpleStringProperty(items);
+        });
+        colSize.setCellValueFactory(data -> {
+            TOSizedItem item = data.getValue();
+
+            String items = item.getSize() != null
+                    ? item.getSize()
+                    : "N/A";
+            return new SimpleStringProperty(items);
+        });
+        colQuant.setCellValueFactory(data -> {
+            TOSizedItem item = data.getValue();
+
+            String items = String.valueOf(item.getQuantityInInventory()) != null
+                    ? String.valueOf(item.getQuantityInInventory())
+                    : "N/A";
+            return new SimpleStringProperty(items);
+        });
+
+        loadItems();
+
+//        set up pagination
+        int pageCount = (int) Math.ceil((double) allItems.size() / 8); //rows per page
+        pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
+        pagination.setCurrentPageIndex(0);
+
+        // Show the correct slice of users whenever the page changes
+        pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) ->
+                showPage(newIndex.intValue()));
+
+        showPage(0); // show first page immediately
+
+        FashionStoreFxmlView.getInstance().registerRefreshEvent(itemTable);
+        itemTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadItems());
+    }
+
+    private void loadItems() {
+        List<SizedItem> items = FashionStoreManagementController.getFashionStoreManagement().getSizedItems();
+        allItems = FXCollections.observableArrayList(items != null ? items : List.of());
+
+        int pageCount = (int) Math.ceil((double) allItems.size() / 8);
+        pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
+        pagination.setCurrentPageIndex(0);
+        showPage(0);
+
+        itemTable.refresh();
+    }
+
+    private void showPage(int pageIndex) {
+        int from = pageIndex * 8; // rows per page
+        int to   = Math.min(from + 8, allItems.size()); // rows per page
+        itemTable.setItems(FXCollections.observableArrayList(allItems.subList(from, to)));
     }
 }

@@ -22,13 +22,11 @@
                 <!--             View -->
                 <BorderPane maxHeight="Infinity">
                     <center>
-                        <TableView fx:id="itemTable" BorderPane.alignment="CENTER">
+                        <TableView fx:id="shipmentTable" BorderPane.alignment="CENTER">
                             <columns>
-                                <TableColumn fx:id="colName" text="Name" />
-                                <TableColumn fx:id="colPrice" text="Price" />
-                                <TableColumn fx:id="colPoints" text="Points" />
-                                <TableColumn fx:id="colSize" text="Size" />
-                                <TableColumn fx:id="colQuant" text="Quantity" />
+                                <TableColumn fx:id="colNumber" text="Shipment No." />
+                                <TableColumn fx:id="colDateOrdered" text="Date Ordered" />
+                                <TableColumn fx:id="colDateArrived" text="Date Arrived" />
                             </columns>
                         </TableView>
                     </center>
