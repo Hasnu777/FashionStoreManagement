@@ -100,9 +100,9 @@ public class ShipmentPageController {
      */
     @FXML
     public void removeItemClicked() {
+        System.out.println("removing item");
         try {
             int shipmentNumber = Integer.parseInt(shipmentNumberUField.getText());
-            int quantity = Integer.parseInt(quantityField.getText());
             // setting quantity to 0 removes the item
             ShipmentController.updateQuantityInShipment(shipmentNumber, itemNameField.getText(), sizeField.getValue(), 0);
             FashionStoreFxmlView.getInstance().refresh();

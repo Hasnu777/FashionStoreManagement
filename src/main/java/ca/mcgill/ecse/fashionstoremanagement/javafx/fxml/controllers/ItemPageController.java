@@ -41,6 +41,7 @@ public class ItemPageController {
     @FXML
     public void initialize() {
         pointsField.getItems().addAll("1", "2", "3", "4", "5");
+        pointsUField.getItems().addAll("1", "2", "3", "4", "5");
         sizeBox.getItems().addAll("XS", "S", "M", "L", "XL");
         initializeViewPage();
     }
