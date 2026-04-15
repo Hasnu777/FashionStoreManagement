@@ -89,7 +89,7 @@
                                 <HBox maxWidth="Infinity" spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="3">
                                     <children>
                                         <Button maxWidth="Infinity" onAction="#addItemClicked" styleClass="primary-button" text="Add Item" HBox.hgrow="ALWAYS" />
-                                        <Button maxWidth="Infinity" onAction="#addItemClicked" styleClass="primary-button" text="Remove Item" HBox.hgrow="ALWAYS" />
+                                        <Button maxWidth="Infinity" onAction="#removeItemClicked" styleClass="primary-button" text="Remove Item" HBox.hgrow="ALWAYS" />
                                     </children>
                                 </HBox>
 

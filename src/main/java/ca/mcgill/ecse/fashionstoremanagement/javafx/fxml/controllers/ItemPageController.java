@@ -113,7 +113,7 @@ public class ItemPageController {
         allItems = FXCollections.observableArrayList();
 
 //        columns
-        colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         colPrice.setCellValueFactory(data -> {
             TOSizedItem item = data.getValue();
 

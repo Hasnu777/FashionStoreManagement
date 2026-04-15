@@ -109,7 +109,7 @@ public class ShipmentPageController {
         allShipments = FXCollections.observableArrayList();
 
 //        columns
-        colNumber.setCellValueFactory(new PropertyValueFactory<>("Shipment No."));
+        colNumber.setCellValueFactory(new PropertyValueFactory<>("shipmentNumber"));
         colDateArrived.setCellValueFactory(data -> {
             TOShipment shipment = data.getValue();
 
@@ -165,6 +165,7 @@ public class ShipmentPageController {
         int from = pageIndex * 8; // rows per page
         int to   = Math.min(from + 8, allShipments.size()); // rows per page
         shipmentTable.setItems(FXCollections.observableArrayList(
-        ));
+                allShipments.subList(from, to))
+        );
     }
 }
