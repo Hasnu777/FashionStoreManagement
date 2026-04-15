@@ -106,6 +106,8 @@
                                  <Button onAction="#addItemToOrderClicked" maxWidth="Infinity" text="Add Item" HBox.hgrow="ALWAYS" />
                                  <Button onAction="#updateOrderItemQuantityClicked" maxWidth="Infinity" text="Update Item" HBox.hgrow="ALWAYS" />
                              </HBox>
+
+                             <Button onAction="#deleteOrderClicked" maxWidth="Infinity" text="Delete Order" HBox.hgrow="ALWAYS" GridPane.columnSpan="2" GridPane.rowIndex="5"/>
                              <rowConstraints>
                                  <RowConstraints />
                                  <RowConstraints />
@@ -128,6 +130,7 @@
                              <Button onAction="#checkOutClicked" maxWidth="Infinity" text="Checkout" />
                              <CheckBox fx:id="usePointsCheckBox" text="Use Points" />
                              <Button onAction="#payForOrderClicked" maxWidth="Infinity" text="Pay" />
+                             <Button onAction="#finishAssemblyClicked" maxWidth="Infinity" text="Finished Assembly" />
                              <Button onAction="#deliverOrderClicked" maxWidth="Infinity" text="Deliver" />
                              <Button onAction="#assignEmployeeClicked" maxWidth="Infinity" text="Assign Employee" />
                              <Button onAction="#cancelOrderClicked" maxWidth="Infinity" text="Cancel Order" />
