@@ -125,8 +125,8 @@
                                 </HBox>
 
                                   <Button maxWidth="Infinity" onAction="#updateNameClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                  <Button maxWidth="Infinity" onAction="#updatePhoneClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                  <Button maxWidth="Infinity" onAction="#updateAddressClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                  <Button maxWidth="Infinity" onAction="#updatePhoneClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                  <Button maxWidth="Infinity" onAction="#updateAddressClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 
                                 <rowConstraints>
                                     <RowConstraints />
