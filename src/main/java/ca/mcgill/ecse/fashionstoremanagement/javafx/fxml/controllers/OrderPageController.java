@@ -80,7 +80,12 @@ public class OrderPageController {
     @FXML
     public void deleteOrderClicked() {
         try {
-            int orderNumber = Integer.parseInt(orderIdActionField.getText());
+            int orderNumber = Integer.parseInt(orderNumberField.getText());
+
+            System.out.println(orderNumber);
+
+            System.out.println(orderNumber + 1);
+
             OrderController.deleteOrder(orderNumber);
 
             FashionStoreFxmlView.getInstance().refresh();
