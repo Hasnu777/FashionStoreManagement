@@ -1,9 +1,6 @@
 package ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers;
 
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreManagementController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.ShipmentController;
-import ca.mcgill.ecse.fashionstoremanagement.controller.FashionStoreException;
-import ca.mcgill.ecse.fashionstoremanagement.controller.TOShipment;
+import ca.mcgill.ecse.fashionstoremanagement.controller.*;
 import ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.FashionStoreFxmlView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -21,6 +18,7 @@ public class ShipmentPageController {
     @FXML private TableColumn<TOShipment, String> colNumber;
     @FXML private TableColumn<TOShipment, String>  colDateOrdered;
     @FXML private TableColumn<TOShipment, String>  colDateArrived;
+    @FXML private TableColumn<TOShipment, String> colItems;
     @FXML private Pagination                  pagination;
     private ObservableList<TOShipment> allShipments;
 
@@ -126,7 +124,25 @@ public class ShipmentPageController {
         allShipments = FXCollections.observableArrayList();
 
         //columns
-        colNumber.setCellValueFactory(new PropertyValueFactory<>("shipmentNumber"));
+        colNumber.setCellValueFactory(data -> {
+            TOShipment shipment = data.getValue();
+            return new SimpleStringProperty(String.valueOf(shipment.getShipmentNumber()));
+        });
+
+        colItems.setCellValueFactory(data -> {
+            TOShipment shipment = data.getValue();
+            List<TOShipmentItem> items = ShipmentController.getTOShipmentItems(shipment.getShipmentNumber());
+
+            if (items == null || items.isEmpty()) {
+                return new SimpleStringProperty("No items");
+            }
+
+            String itemSummary = items.stream()
+                    .map(i -> i.getItemName() + " (" + i.getSize() + ") x" + i.getQuantity())
+                    .collect(Collectors.joining(", "));
+
+            return new SimpleStringProperty(itemSummary);
+        });
         colDateArrived.setCellValueFactory(data -> {
             TOShipment shipment = data.getValue();
 
@@ -147,9 +163,10 @@ public class ShipmentPageController {
         loadShipments();
 
         //each column 1/3 of width
-        colNumber.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
-        colDateOrdered.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
-        colDateArrived.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
+        colNumber.prefWidthProperty().bind(shipmentTable.widthProperty().divide(4));
+        colDateOrdered.prefWidthProperty().bind(shipmentTable.widthProperty().divide(4));
+        colDateArrived.prefWidthProperty().bind(shipmentTable.widthProperty().divide(4));
+        colItems.prefWidthProperty().bind(shipmentTable.widthProperty().divide(4));
 
         //set up pagination
         int pageCount = (int) Math.ceil((double) allShipments.size() / 8); //rows per page

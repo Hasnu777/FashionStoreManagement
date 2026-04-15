@@ -25,6 +25,7 @@
                         <TableView fx:id="shipmentTable" BorderPane.alignment="CENTER">
                             <columns>
                                 <TableColumn fx:id="colNumber" text="Shipment No." />
+                                <TableColumn fx:id="colItems" text="Items" />
                                 <TableColumn fx:id="colDateOrdered" text="Date Ordered" />
                                 <TableColumn fx:id="colDateArrived" text="Date Arrived" />
                             </columns>
