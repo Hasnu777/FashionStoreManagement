@@ -2,6 +2,10 @@ package ca.mcgill.ecse.fashionstoremanagement.controller;
 
 import ca.mcgill.ecse.fashionstoremanagement.model.*;
 
+/**
+ * TOMapper is the class used to map an Order to an order transfer object
+ */
+
 public class TOMapper {
 
     // order mapping

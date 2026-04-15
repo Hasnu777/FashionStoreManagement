@@ -35,13 +35,18 @@ public class ItemPageController {
     @FXML private TextField priceUField;
     @FXML private ChoiceBox<String> pointsUField;
 
+    /**
+     * This method initializes the frontend page
+     */
     @FXML
     public void initialize() {
         pointsField.getItems().addAll("1", "2", "3", "4", "5");
         sizeBox.getItems().addAll("XS", "S", "M", "L", "XL");
         initializeViewPage();
     }
-
+    /**
+     * This method adds the selected item
+     */
     @FXML
     public void addItemClicked() {
         try {
@@ -60,7 +65,9 @@ public class ItemPageController {
             ViewUtils.showError("Invalid input!");
         }
     }
-
+    /**
+     * This method updates the price of the selected item
+     */
     @FXML
     public void updatePriceClicked() {
         try {
@@ -77,6 +84,9 @@ public class ItemPageController {
         }
     }
 
+    /**
+     * This method updates the loyalty points of the selected item
+     */
     @FXML
     public void updatePointsClicked() {
         try {
@@ -93,6 +103,9 @@ public class ItemPageController {
         }
     }
 
+    /**
+     * This method deletes the selected item
+     */
     @FXML
     public void deleteItemClicked() {
         try {
@@ -106,13 +119,15 @@ public class ItemPageController {
         }
     }
 
-    // view functions
+    /**
+     * This method initializes the table view
+     */
     public void initializeViewPage() {
         itemTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         allItems = FXCollections.observableArrayList();
 
-//        columns
+        //columns
         colName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         colPrice.setCellValueFactory(data -> {
             TOSizedItem item = data.getValue();
@@ -149,7 +164,7 @@ public class ItemPageController {
 
         loadItems();
 
-        //        each column 1/5 of width
+        //each column 1/5 of width
         colName.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
         colSize.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
         colPrice.prefWidthProperty().bind(itemTable.widthProperty().divide(5));

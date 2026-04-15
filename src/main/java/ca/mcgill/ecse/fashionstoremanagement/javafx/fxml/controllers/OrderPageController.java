@@ -40,13 +40,18 @@ public class OrderPageController {
         initializeActionsPage();
     }
 
-//    Actions functions
+    /**
+     * This method initializes the frontend page
+     */
     @FXML
     public void initializeActionsPage() {
         sizeBox.getItems().addAll("XS", "S", "M", "L", "XL");
         deadlineField.getItems().addAll("SameDay", "InOneDay", "InTwoDays", "InThreeDays");
     }
 
+    /**
+     * This method creates a new order
+     */
     @FXML
     public void createOrderClicked() {
         try {
@@ -69,7 +74,9 @@ public class OrderPageController {
             System.out.println(e.getMessage());
         }
     }
-
+    /**
+     * This method deletes the selected order
+     */
     @FXML
     public void deleteOrderClicked() {
         try {
@@ -89,6 +96,9 @@ public class OrderPageController {
         }
     }
 
+    /**
+     * This method adds an item to the selected order
+     */
     @FXML
     public void addItemToOrderClicked() {
         try {
@@ -109,7 +119,9 @@ public class OrderPageController {
             ViewUtils.showError("Invalid input!");
         }
     }
-
+    /**
+     * This method updates the quantity of an item in the selected order
+     */
     @FXML
     public void updateOrderItemQuantityClicked() {
         try {
@@ -135,6 +147,9 @@ public class OrderPageController {
         }
     }
 
+    /**
+     * This method checks out the seleted order
+     */
     @FXML
     public void checkOutClicked() {
         try {
@@ -152,6 +167,9 @@ public class OrderPageController {
         }
     }
 
+    /**
+     * This method pays for the selected order
+     */
     @FXML
     public void payForOrderClicked() {
         try {
@@ -171,6 +189,9 @@ public class OrderPageController {
         }
     }
 
+    /**
+     * This method finishes the assembly of the selected order
+     */
     @FXML
     public void finishAssemblyClicked() {
         try {
@@ -188,6 +209,9 @@ public class OrderPageController {
         }
     }
 
+    /**
+     * This method delivers the selected order
+     */
     @FXML
     public void deliverOrderClicked() {
         try {
@@ -205,6 +229,9 @@ public class OrderPageController {
         }
     }
 
+    /**
+     * This method cancels the selected order
+     */
     @FXML
     public void cancelOrderClicked() {
         try {
@@ -221,7 +248,9 @@ public class OrderPageController {
             ViewUtils.showError("Invalid input!");
         }
     }
-
+    /**
+     * This method assigns an order to the selected employee
+     */
     @FXML
     public void assignEmployeeClicked() {
         try {
@@ -238,22 +267,24 @@ public class OrderPageController {
     }
 
 
-//    View functions
-@FXML
-public void initializeViewPage() {
-    orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    /**
+     * This method initializes the table view
+     */
+    @FXML
+    public void initializeViewPage() {
+        orderTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-    // initialize allOrders first before anything else can throw
-    allOrders = FXCollections.observableArrayList();
+        // initialize allOrders first before anything else can throw
+        allOrders = FXCollections.observableArrayList();
 
-    setupColumns();
-    loadOrders();
+        setupColumns();
+        loadOrders();
 
-    FashionStoreFxmlView.getInstance().registerRefreshEvent(orderTable);
-    orderTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadOrders());
+        FashionStoreFxmlView.getInstance().registerRefreshEvent(orderTable);
+        orderTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadOrders());
 
-    pagination.currentPageIndexProperty().addListener((obs, oldVal, newVal) -> showPage(newVal.intValue()));
-}
+        pagination.currentPageIndexProperty().addListener((obs, oldVal, newVal) -> showPage(newVal.intValue()));
+    }
 
     public void setupColumns() {
 //        height and colours

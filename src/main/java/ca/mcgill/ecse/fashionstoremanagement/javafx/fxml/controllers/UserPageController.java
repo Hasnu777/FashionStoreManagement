@@ -35,12 +35,18 @@ public class UserPageController {
     @FXML private TextField addressUField;
     @FXML private Label statusLabel;
 
+    /**
+     * This method initializes the frontend page
+     */
     @FXML
     public void initialize() {
         initializeViewPage();
     }
 
 //    Customer actions
+    /**
+     * This method registers the selected customer
+     */
     @FXML
     public void registerCustomerClicked() {
         try {
@@ -56,6 +62,9 @@ public class UserPageController {
         }
     }
 
+    /**
+     * This method updates the address of the selected customer
+     */
     @FXML
     public void updateAddressClicked() {
         try {
@@ -68,6 +77,9 @@ public class UserPageController {
         }
     }
 
+    /**
+     * This method deletes the selected customer
+     */
     @FXML
     public void deleteCustomerClicked() {
         try {
@@ -82,6 +94,9 @@ public class UserPageController {
 
 
 //    Employee actions
+    /**
+     * This method registers the selected employee
+     */
     @FXML
     public void registerEmployeeClicked() {
         try {
@@ -93,7 +108,9 @@ public class UserPageController {
             ViewUtils.showError(e.getMessage());
         }
     }
-
+    /**
+     * This method deletes the selected employee
+     */
     @FXML
     public void deleteEmployeeClicked() {
         try {
@@ -107,6 +124,9 @@ public class UserPageController {
     }
 
 //    General actions
+    /**
+     * This method updates the username of the selected user
+     */
     @FXML
     public void updateNameClicked() {
         try {
@@ -119,6 +139,9 @@ public class UserPageController {
         }
     }
 
+    /**
+     * This method updates the phone number of the selected user
+     */
     @FXML
     public void updatePhoneClicked() {
         try {
@@ -132,6 +155,9 @@ public class UserPageController {
     }
 
 //    View functions
+    /**
+     * This method initializes the table view
+     */
     public void initializeViewPage() {
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -198,6 +224,9 @@ public class UserPageController {
         userTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadUsers());
     }
 
+    /**
+     * This method lodas all the current existing users
+     */
     private void loadUsers() {
         allUsers = FXCollections.observableArrayList(
                 FashionStoreManagementController

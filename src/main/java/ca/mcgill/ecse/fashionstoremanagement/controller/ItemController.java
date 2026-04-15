@@ -94,7 +94,10 @@ public class ItemController {
 		}
 		itemToDelete.delete();
 	}
-
+		/**
+		 * This method gets all sized item transfer objects
+		 * @return the list of all the sized items as tranasfer objects
+		 */
 		public static List<TOSizedItem> getAllTOSizedItem() {
 			List<TOSizedItem> tos = new ArrayList<>();
 			// loop thru all shipments and convert them

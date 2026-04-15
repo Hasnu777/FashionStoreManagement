@@ -27,15 +27,23 @@ public class ShipmentPageController {
 //    management
     @FXML private TextField shipmentNumberField;
     @FXML private Label statusLabel;
-
     @FXML private ChoiceBox<String> sizeField;
+    @FXML private TextField shipmentNumberUField;
+    @FXML private TextField itemNameField;
+    @FXML private TextField quantityField;
 
+    /**
+     * This method initializes the frontend page
+     */
     @FXML
     public void initialize() {
         sizeField.getItems().addAll("XS", "S", "M", "L", "XL");
         initializeViewPage();
     }
 
+    /**
+     * This method creates a new shipment
+     */
     @FXML
     public void createClicked() {
         try {
@@ -49,6 +57,9 @@ public class ShipmentPageController {
         }
     }
 
+    /**
+     * This method deletes the selected shipment
+     */
     @FXML
     public void deleteClicked() {
         try {
@@ -65,10 +76,11 @@ public class ShipmentPageController {
         }
     }
 
-    @FXML private TextField shipmentNumberUField;
-    @FXML private TextField itemNameField;
-    @FXML private TextField quantityField;
 
+
+    /**
+     * This method adds an item to the selected shipment
+     */
     @FXML
     public void addItemClicked() {
         try {
@@ -85,6 +97,9 @@ public class ShipmentPageController {
         }
     }
 
+    /**
+     * This removes the selected shipment
+     */
     @FXML
     public void removeItemClicked() {
         try {
@@ -102,13 +117,15 @@ public class ShipmentPageController {
         }
     }
 
-    // view functions
+    /**
+     * This method initializes the table view
+     */
     public void initializeViewPage() {
         shipmentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         allShipments = FXCollections.observableArrayList();
 
-//        columns
+        //columns
         colNumber.setCellValueFactory(new PropertyValueFactory<>("shipmentNumber"));
         colDateArrived.setCellValueFactory(data -> {
             TOShipment shipment = data.getValue();
@@ -129,12 +146,12 @@ public class ShipmentPageController {
 
         loadShipments();
 
-        //        each column 1/3 of width
+        //each column 1/3 of width
         colNumber.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
         colDateOrdered.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
         colDateArrived.prefWidthProperty().bind(shipmentTable.widthProperty().divide(3));
 
-//        set up pagination
+        //set up pagination
         int pageCount = (int) Math.ceil((double) allShipments.size() / 8); //rows per page
         pagination.setPageCount(pageCount == 0 ? 1 : pageCount);
         pagination.setCurrentPageIndex(0);
@@ -149,6 +166,9 @@ public class ShipmentPageController {
         shipmentTable.addEventHandler(FashionStoreFxmlView.REFRESH_EVENT, e -> loadShipments());
     }
 
+    /**
+     * This helper method loads the current existing shipments
+     */
     private void loadShipments() {
         List<TOShipment> shipments = ShipmentController.getAllTOShipments();
         allShipments = FXCollections.observableArrayList(shipments != null ? shipments : List.of());
@@ -161,6 +181,9 @@ public class ShipmentPageController {
         shipmentTable.refresh();
     }
 
+    /**
+     * This helper method shows the shipments across several pages
+     */
     private void showPage(int pageIndex) {
         int from = pageIndex * 8; // rows per page
         int to   = Math.min(from + 8, allShipments.size()); // rows per page
