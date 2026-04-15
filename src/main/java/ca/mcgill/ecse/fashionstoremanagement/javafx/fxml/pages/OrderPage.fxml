@@ -130,7 +130,7 @@
                              <Button onAction="#checkOutClicked" maxWidth="Infinity" text="Checkout" />
                              <CheckBox fx:id="usePointsCheckBox" text="Use Points" />
                              <Button onAction="#payForOrderClicked" maxWidth="Infinity" text="Pay" />
-                             <Button onAction="#finishAssemblyClicked" maxWidth="Infinity" text="Finished Assembly" />
+                             <Button onAction="#finishAssemblyClicked" maxWidth="Infinity" text="Finish Assembly" />
                              <Button onAction="#deliverOrderClicked" maxWidth="Infinity" text="Deliver" />
                              <Button onAction="#assignEmployeeClicked" maxWidth="Infinity" text="Assign Employee" />
                              <Button onAction="#cancelOrderClicked" maxWidth="Infinity" text="Cancel Order" />

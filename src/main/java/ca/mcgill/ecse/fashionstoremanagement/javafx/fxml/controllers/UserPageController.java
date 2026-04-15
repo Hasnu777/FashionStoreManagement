@@ -163,7 +163,7 @@ public class UserPageController {
 
         allUsers = FXCollections.observableArrayList();
 
-//        columns
+        //columns
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colName.setCellValueFactory(data -> {
             TOUser user = data.getValue();

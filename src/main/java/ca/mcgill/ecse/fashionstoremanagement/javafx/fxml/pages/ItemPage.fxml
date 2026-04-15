@@ -65,7 +65,7 @@
                                 <Label text="Quantity:" GridPane.rowIndex="4" />
                                 <TextField fx:id="quantityField" promptText="Quantity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-                                <Button maxWidth="Infinity" onAction="#addItemClicked" styleClass="primary-button" text="Register Customer" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                                <Button maxWidth="Infinity" onAction="#addItemClicked" styleClass="primary-button" text="Create Item" GridPane.columnSpan="2" GridPane.rowIndex="5" />
 
                                 <rowConstraints>
                                     <RowConstraints />
