@@ -1,0 +1,274 @@
+/* ===============================
+   VARIABLES
+   =============================== */
+
+.root {
+    /* Primary palette */
+    -primary-color: #FCB7C7;
+    -accent-color: #CA6180;
+    -accent-soft-color: #9ED3DC;
+    -background-color: #F5E9D8;
+
+    /* Derived colors */
+    -text-on-main: black;
+    -text-on-button: black;
+    -card-background: #F5E9D8;
+    -card-background-shadow: #F0DCC0;
+
+    -dark-rows: #f7e5cb;
+
+    -fx-background-color: -background-color;
+    -fx-font-family: "Segoe UI", "Helvetica", "Arial", sans-serif;
+}
+
+/* ===============================
+   LAYOUT CONTAINERS
+   =============================== */
+.border-pane,
+.vbox,
+.hbox,
+.anchor-pane {
+    -fx-background-color: -background-color;
+}
+
+/* Header / navigation bars */
+.header,
+.top-bar {
+    -fx-background-color: -primary-color;
+}
+
+.choice-box {
+    -fx-background-color: white;
+    -fx-border-color: -accent-soft-color;
+}
+
+.choice-box:focused {
+    -fx-border-color: -accent-color;
+}
+
+/* ===============================
+   TAB PANE
+   =============================== */
+
+.tab-pane {
+    -fx-background-color: -background-color;
+}
+
+/* tab header area (top strip) */
+.tab-pane .tab-header-area {
+    -fx-background-color: -primary-color;
+}
+
+/* individual tabs */
+.tab-pane .tab {
+    -fx-background-color: -primary-color;
+}
+
+/* selected tab */
+.tab-pane .tab:selected {
+    -fx-background-color: -accent-soft-color;
+}
+
+/* tab text */
+.tab-pane .tab-label {
+    -fx-text-fill: -text-on-main;
+}
+
+
+/* ===============================
+   BUTTONS
+   =============================== */
+
+.button {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -text-on-button;
+    -fx-background-radius: 8px;
+    -fx-padding: 6 14 6 14;
+}
+
+.button:hover {
+    -fx-background-color: -accent-color;
+}
+
+.button:pressed {
+    -fx-background-color: -accent-soft-color;
+    -fx-text-fill: -primary-color;
+}
+
+/* Accent buttons */
+.accent-button {
+    -fx-background-color: -accent-color;
+    -fx-text-fill: white;
+}
+
+.accent-button:hover {
+    -fx-background-color: -accent-soft-color;
+    -fx-text-fill: -primary-color;
+}
+
+/* ===============================
+   TEXT
+   =============================== */
+
+.label {
+    -fx-text-fill: -text-on-main;
+}
+
+.title-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-on-main;
+}
+
+/* ===============================
+   TABLES
+   =============================== */
+
+.table-view {
+    -fx-background-color: -card-background;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -primary-color;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: -primary-color;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+}
+
+.table-view .placeholder {
+    -fx-background-color: -card-background;
+}
+
+.table-row-cell {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: -accent-soft-color;
+}
+
+.table-row-cell:even {
+    -fx-background-color: -card-background;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: -dark-rows;
+}
+
+/* ===============================
+   INPUT FIELDS
+   =============================== */
+
+.text-field,
+.text-area {
+    -fx-background-color: white;
+    -fx-border-color: -accent-soft-color;
+    -fx-border-radius: 6px;
+}
+
+.text-field:focused,
+.text-area:focused {
+    -fx-border-color: -accent-color;
+}
+
+/* ===============================
+   COMBO BOX/CHOICE BOX
+   =============================== */
+
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: -accent-soft-color;
+}
+
+.combo-box:focused {
+    -fx-border-color: -accent-color;
+}
+
+.choice-box {
+    -fx-background-color: white;
+    -fx-border-color: -accent-soft-color;
+}
+
+.choice-box:focused {
+    -fx-border-color: -accent-color;
+}
+
+/* ===============================
+   PAGINATION
+   =============================== */
+
+.pagination {
+    -fx-page-information-visible: false;
+}
+/*
+.pagination .control-box {
+    -fx-background-color: -background-color;
+}
+
+.pagination .button {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: -text-on-button;
+    -fx-background-radius: 8px;
+}
+
+.pagination .button:hover {
+    -fx-background-color: -accent-color;
+}
+
+.pagination .button:pressed {
+    -fx-background-color: -accent-soft-color;
+}
+*/
+/* ===============================
+   CARD PANELS
+   =============================== */
+
+.card {
+    -fx-background-color: -card-background;
+    -fx-background-radius: 10px;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}
+
+/* ===============================
+   PADDING
+   =============================== */
+.page {
+    -fx-padding: 15 15 15 15;
+}
+
+/* ===============================
+   TITLED PANE (accordion panels)
+   =============================== */
+
+.titled-pane {
+    -fx-text-fill: -text-on-main;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -primary-color;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: -text-on-main;
+}
+
+.titled-pane > .title > .text {
+    -fx-fill: -text-on-main;
+    -fx-font-weight: bold;
+}
+
+/* content inside panel */
+.titled-pane > .content {
+    -fx-background-color: -card-background-shadow;
+    -fx-padding: 15;
+    -fx-border-color: none;
+}

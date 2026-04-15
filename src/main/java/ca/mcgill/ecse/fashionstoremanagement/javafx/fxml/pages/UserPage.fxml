@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane styleClass="page" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.fashionstoremanagement.javafx.fxml.controllers.UserPageController">
+    <top>
+        <Label maxWidth="Infinity" styleClass="title-label" text="User Management" BorderPane.alignment="CENTER" />
+    </top>
+    <bottom>
+        <HBox spacing="20" BorderPane.alignment="CENTER" />
+    </bottom>
+    <center>
+        <GridPane maxHeight="Infinity" BorderPane.alignment="CENTER">
+
+            <columnConstraints>
+                <ColumnConstraints percentWidth="75" />
+                <ColumnConstraints percentWidth="25" />
+            </columnConstraints>
+
+            <children>
+                <!--             View -->
+                <BorderPane maxHeight="Infinity">
+                    <center>
+                        <TableView fx:id="userTable" BorderPane.alignment="CENTER">
+                            <columns>
+                                <TableColumn fx:id="colUsername" text="Username" />
+                                <TableColumn fx:id="colName" text="Name" />
+                                <TableColumn fx:id="colNumber" text="Phone Number" />
+                                <TableColumn fx:id="colRole" text="Roles" />
+                            </columns>
+                        </TableView>
+                    </center>
+                    <bottom>
+                        <Pagination fx:id="pagination" prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+                    </bottom>
+                </BorderPane>
+
+                <!--             Actions-->
+                <VBox GridPane.columnIndex="1">
+
+                    <!-- REGISTER CUSTOMER -->
+                    <TitledPane expanded="true" text="Register Customer">
+                        <content>
+                            <GridPane hgap="10" maxWidth="Infinity" vgap="10">
+
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="40.0" />
+                                    <ColumnConstraints percentWidth="60.0" />
+                                </columnConstraints>
+
+                                <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <TextField fx:id="usernameCField" maxWidth="Infinity" promptText="Username" GridPane.columnIndex="1" />
+
+                                <Label text="Password:" GridPane.rowIndex="1" />
+                                <PasswordField fx:id="passwordField" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                <Label text="Address:" GridPane.rowIndex="2" />
+                                <TextField fx:id="addressField" promptText="Address" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                <Button maxWidth="Infinity" onAction="#registerCustomerClicked" styleClass="primary-button" text="Register Customer" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <!-- REGISTER EMPLOYEE -->
+                    <TitledPane expanded="true" text="Register Employee">
+                        <content>
+                            <GridPane hgap="10" maxWidth="Infinity" vgap="10">
+
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="40.0" />
+                                    <ColumnConstraints percentWidth="60.0" />
+                                </columnConstraints>
+
+                                <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <TextField fx:id="usernameField" maxWidth="Infinity" promptText="Username" GridPane.columnIndex="1" />
+
+                                <Button maxWidth="Infinity" onAction="#registerEmployeeClicked" styleClass="primary-button" text="Register Employee" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <!-- UPDATE USERS -->
+                    <TitledPane expanded="true" text="Manage Users">
+                        <content>
+                            <GridPane hgap="10" maxWidth="Infinity" prefWidth="425.0" vgap="10">
+
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="20.0" />
+                                    <ColumnConstraints percentWidth="40.0" />
+                                    <ColumnConstraints percentWidth="40.0" />
+                                </columnConstraints>
+
+                                <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <TextField fx:id="usernameUField" maxWidth="Infinity" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <TextField fx:id="nameField" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                <Label text="Phone:" GridPane.rowIndex="2" />
+                                <TextField fx:id="phoneField" promptText="(xxx) xxx-xxxx" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                <Label text="Address:" GridPane.rowIndex="3" />
+                                <TextField fx:id="addressUField" promptText="Address" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                <HBox maxWidth="Infinity" spacing="10" GridPane.columnSpan="3" GridPane.rowIndex="4">
+                                   <children>
+                                       <Button maxWidth="Infinity" onAction="#deleteCustomerClicked" styleClass="primary-button" text="Delete Customer" HBox.hgrow="ALWAYS" />
+                                       <Button maxWidth="Infinity" onAction="#deleteEmployeeClicked" styleClass="primary-button" text="Delete Employee" HBox.hgrow="ALWAYS" />
+                                   </children>
+                                </HBox>
+
+                                  <Button maxWidth="Infinity" onAction="#updateNameClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                  <Button maxWidth="Infinity" onAction="#updatePhoneClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                  <Button maxWidth="Infinity" onAction="#updateAddressClicked" styleClass="primary-button" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                   <RowConstraints />
+                                   <RowConstraints />
+                                   <RowConstraints />
+                                   <RowConstraints />
+                                </rowConstraints>
+
+                            </GridPane>
+                        </content>
+                    </TitledPane>
+
+                    <Label fx:id="statusLabel" text="" />
+                </VBox>
+            </children>
+
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="NEVER"/>
+            </rowConstraints>
+        </GridPane>
+    </center>
+</BorderPane>
